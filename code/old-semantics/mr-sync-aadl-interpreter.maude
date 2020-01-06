@@ -1,0 +1,32 @@
+load smt/smt.maude
+load smt/smt-interface.maude
+load smt/smt-condition.maude
+
+set include BOOL on .
+load real-time-maude
+set include BOOL off .
+
+load timeDomain.maude
+
+--- Syntax
+load identifiers.maude
+load data-value.maude
+
+load input-adaptor-syntax.maude
+load aadl-property.maude
+load behAnnexSyntax.maude
+
+load connection.maude
+load features.maude
+load components.maude
+
+load symTranslation.maude 
+
+--- semantics
+load behAnnexSemantics.maude
+load transfer-data.maude
+load component-dynamics.maude
+
+load input-adaptor-semantics.maude
+load flatten-singlerate.maude
+load synchronous-rule.maude

@@ -1,0 +1,42 @@
+==========================================
+reduce in SMT-TRANS : tr('`[_`]['-_['s_['0.Zero]]]) .
+rewrites: 6
+result Constant: '-1/1.Real
+==========================================
+reduce in SMT-TRANS : tr('_<_['_+_['`[_`]['_/_['s_^9['0.Zero],'s_^4['0.Zero]]],
+    '-_['r['0.Zero]]],'`[_`]['0.Zero]]) .
+rewrites: 34
+result Term: '_<_['_+_['9/4.Real,'-_['V##0:Real]],'0/1.Real]
+==========================================
+reduce in SMT-TRANS : tr('_?_:_['_>_['r['s_['0.Zero]],'r['s_['0.Zero]]],'_/_[
+    '`[_`]['_/_['s_^2['0.Zero],'s_^5['0.Zero]]],'`[_`]['0.Zero]],'_+_['_*_[
+    '`[_`]['s_['0.Zero]],'`[_`]['_/_['s_^3['0.Zero],'s_^4['0.Zero]]]],'_*_[
+    '`[_`]['s_^2['0.Zero]],'r['s_['0.Zero]]]]]) .
+rewrites: 68
+result Term: '_?_:_['_>_['V##1:Real,'V##1:Real],'_/_['2/5.Real,'0/1.Real],'_+_[
+    '_*_['1/1.Real,'3/4.Real],'_*_['2/1.Real,'V##1:Real]]]
+==========================================
+reduce in SMT-CHECKSAT : tr(upTerm(r("a.b.c", 1) < [2] and b("e.f", 1))) .
+rewrites: 48
+result Term: '_and_['_<_['V#"a.b.c"#1:Real,'2/1.Real],'V#"e.f"#1:Boolean]
+==========================================
+reduce in SMT-CHECKSAT : check-sat(r(0) < [3] and r(0) > [1/2]) .
+rewrites: 45
+result Bool: true
+==========================================
+reduce in SMT-CHECKSAT : check-sat(r(0) < [3/7] and r(0) > [1/2]) .
+rewrites: 35
+result Bool: false
+==========================================
+reduce in SMT-CHECKSAT : check-sat(r("a.b", 0) < [3] and r("a.b", 0) > [1/2]) .
+rewrites: 42
+result Bool: true
+==========================================
+reduce in SMT-CHECKSAT : check-sat(r("a", 0) < [3/7] and r("b", 0) > [1/2]) .
+rewrites: 57
+result Bool: true
+==========================================
+reduce in SMT-CHECKSAT : check-sat(r("a", 0) < [3/7] and r("a", 0) > [1/2]) .
+rewrites: 27
+result Bool: false
+Bye.

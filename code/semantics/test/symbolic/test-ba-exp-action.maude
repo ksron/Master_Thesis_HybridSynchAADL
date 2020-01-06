@@ -1,0 +1,108 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-ba-semantics
+
+
+---------------------------------------------------
+select TEST-BEHAVIOR-EXPRESSION-SEMANTICS .
+
+red eval([[true]], bcf) .
+red eval([[1.2]],  bcf) .
+red eval(v[x],  bcf) .
+red eval(p[TimingProperties::Period],  bcf) .
+red eval(f[a],  bcf) .
+red eval(count(a),  bcf) .
+red eval(fresh(a),  bcf) .
+red eval(c[cr], bcf) .
+red eval([[1.2]] + [[2.3]], bcf) .
+red eval(v[x] * p[TimingProperties::Period], bcf) .
+red eval((abs(f[a]) > v[x]) or (count(a) > c[cr]), bcf) .
+
+
+---------------------------------------------------
+select TEST-BEHAVIOR-ACTION-SEMANTICS .
+
+red execAction({(v{x} := [[4]] + [[6]]) ; skip}, bcf) .
+
+search execAction( 
+      {
+          if (v[x] > [[3]]) {
+              (f{a} := (v[x] - [[1]])) ;
+              (b !)
+          }
+          else
+              f{a} := (v[x] + [[1]])
+          end if
+          ;
+          v{y} := (v[y] * v[x]) + [[1]]
+      }
+,
+    bcf') =>+ CF:BehaviorConf .
+
+
+search execAction( 
+      {
+          if (v[x] > [[3]])
+              v{x} := (v[x] - [[1]])
+          else
+              v{x} := (v[x] + [[1]])
+          end if
+          ;
+          v{y} := (v[y] * v[x]) + [[1]]
+      }
+,
+    bcf') =>+ CF:BehaviorConf .
+
+search execAction( 
+    {
+        if (v[x] > [[3]])
+            (v{x} := v[x] - [[1]])
+        (elsif (v[y] < [[4]])
+            (v{y} := v[x] + [[3]]))
+        else
+            (v{x} := v[x] + [[1]])
+        end if
+        ;
+        (v{y} := v[y] + f[a])
+        ;
+        (v{x} := f[a] + p[TimingProperties::Period])
+    }
+, 
+    bcf') =>+ CF:BehaviorConf .
+
+search execAction( 
+    {
+        while (v[x] > [[5]]) {
+            (v{x} := v[x] - [[1]])
+            ;
+            (v{y} := v[y] + [[2]])
+        }
+        ;
+        (v{y} := v[y] + f[a])
+        ;
+        (v{x} := f[a] + p[TimingProperties::Period])
+    }
+, 
+    bcf') =>+ CF:BehaviorConf .
+
+search execAction( 
+    {
+        while (v[x] > [[5]]) {
+            while (v[y] < [[10]]) {
+                (c{cr} := v[x] + [[1]])
+                ;
+                (v{y} := v[y] + [[2]])
+            }
+            ;
+            (v{x} := v[x] - [[1]])
+        }
+        ;
+        (v{y} := v[y] + f[a])
+        ;
+        (v{x} := f[a] + p[TimingProperties::Period])
+    }
+, 
+    bcf') =>+ CF:BehaviorConf .

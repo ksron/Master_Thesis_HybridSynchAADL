@@ -1,0 +1,41 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-ba-semantics
+
+---------------------------------------------------
+select TEST-FEATURE-OPERATION .
+
+red readFeature(
+    < a :  DataInPort | content : (r(0) # [false]), cache : (r(1) # [false]) >
+    < b :  DataInPort | content : (r(0) # [true]),   cache : (r(1) # [true])  >
+    < c :  DataInPort | content : (r(0) # b(0)),    cache : (r(0) # b(1))    >
+    < d : DataOutPort | content : (* # b(0)) >
+    < e : DataOutPort | content : ([0] # [false]) >
+  ) .
+
+red writeFeature(
+    (d |-> (* # [true]), e |-> (r(1) # b(1)))
+,
+    < a :  DataInPort | content : (r(0) # [false]), cache : (r(1) # [false]) >
+    < b :  DataInPort | content : (r(0) # [true]),  cache : (r(1) # [true])  >
+    < c :  DataInPort | content : (r(0) # b(0)),    cache : (r(0) # b(1))    >
+    < d : DataOutPort | content : (* # b(0)) >
+    < e : DataOutPort | content : ([0] # [false]) >
+  ) .
+
+
+---------------------------------------------------
+select TEST-DATA-OPERATION .
+
+red readData(
+    < c1 : Data | value : [3/4] # b(1), features : none, subcomponents : none, connections : empty, properties : none >
+    < c2 : Data | value : r(0) # [true], features : none, subcomponents : none, connections : empty, properties : none >) .
+
+red writeData((c1 |=> [0] # [true], c2 |=> [1] # b(1)),
+    < c1 : Data | value : [3/4] # b(1), features : none, subcomponents : none, connections : empty, properties : none >
+    < c2 : Data | value : r(0) # [true], features : none, subcomponents : none, connections : empty, properties : none >) .
+
+

@@ -1,0 +1,208 @@
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(r(0) + [1], r(0) + [1], < "a.b",1,0 >,
+    < "a.b",1,0 >) .
+rewrites: 2
+result ResultExpMerge: {r(0) + [1],[true],[true],< "a.b",1,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(r(0) + [1], [1], < "a.b",1,0 >, <
+    "a.b",1,0 >) .
+rewrites: 6
+result ResultExpMerge: {r("a.b", 1),r("a.b", 1) === r(0) + [1],r("a.b", 1) ===
+    [1],< "a.b",2,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(b(0) and [true], b(0) and [true], <
+    "a.b",0,1 >, < "a.b",0,1 >) .
+rewrites: 2
+result ResultExpMerge: {b(0) and [true],[true],[true],< "a.b",0,1 >}
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(b(0) and [true], b(0), < "a.b",0,1 >, <
+    "a.b",0,1 >) .
+rewrites: 6
+result ResultExpMerge: {b("a.b", 1),b("a.b", 1) === (b(0) and [true]),b("a.b",
+    1) === b(0),< "a.b",0,2 >}
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(*, *, < "a.b",0,0 >, < "a.b",0,0 >) .
+rewrites: 2
+result ResultExpMerge: {*,[true],[true],< "a.b",0,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(r(1), r(0) + [1], < "a.b",2,0 >, <
+    "a.b",1,0 >) .
+rewrites: 9
+result ResultExpMerge: {r(1),[true],r(1) === r(0) + [1],< "a.b",2,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-EXP : symMerge(b(1), b(0) and [true], < "a.b",0,2 >, <
+    "a.b",0,1 >) .
+rewrites: 9
+result ResultExpMerge: {b(1),[true],b(1) === (b(0) and [true]),< "a.b",0,2 >}
+==========================================
+reduce in TEST-SYM-MERGE-LOCATION : symMerge(loc(r(0)), loc(r(0)), < "a.b",1,0
+    >, < "a.b",1,0 >) .
+rewrites: 2
+result ResultLocationMerge: {loc(r(0)),[true],[true],< "a.b",1,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-LOCATION : symMerge(loc([1]), loc(r(0)), < "a.b",1,0
+    >, < "a.b",1,0 >) .
+rewrites: 7
+result ResultLocationMerge: {loc(r("a.b", 1)),r("a.b", 1) === [1],r("a.b", 1)
+    === r(0),< "a.b",2,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-LOCATION : symMerge(loc(r(0)), loc([1]), < "a.b",1,0
+    >, < "a.b",1,0 >) .
+rewrites: 10
+result ResultLocationMerge: {loc(r("a.b", 1)),r("a.b", 1) === r(0),r("a.b", 1)
+    === [1],< "a.b",2,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-LOCATION : symMerge(loc(r(0)), loc([1]), < "a.b",1,0
+    >, < "a.b",0,0 >) .
+rewrites: 10
+result ResultLocationMerge: {loc(r(0)),[true],r(0) === [1],< "a.b",1,0 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-CONTENT : symMerge([1] # b(0), [1] # b(0), <
+    "a.b",0,1 >, < "a.b",0,1 >) .
+rewrites: 2
+result ResultDataContentMerge: {[1] # b(0),[true],[true],< "a.b",0,1 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-CONTENT : symMerge([true] # b(0), b(1) # b(0), <
+    "a.b",0,2 >, < "a.b",0,2 >) .
+rewrites: 9
+result ResultDataContentMerge: {b("a.b", 2) # b(0),[true] and b("a.b", 2) === [
+    true],[true] and b("a.b", 2) === b(1),< "a.b",0,3 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-CONTENT : symMerge([1] # b(0), [1] # b(1), <
+    "a.b",0,2 >, < "a.b",0,2 >) .
+rewrites: 12
+result ResultDataContentMerge: {[1] # b("a.b", 2),[true] and b("a.b", 2) === b(
+    0),[true] and b("a.b", 2) === b(1),< "a.b",0,3 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-CONTENT : symMerge([1] # b(0), r(0) # b(1), <
+    "a.b",1,2 >, < "a.b",1,2 >) .
+rewrites: 16
+result ResultDataContentMerge: {r("a.b", 1) # b("a.b", 2),b("a.b", 2) === b(0)
+    and r("a.b", 1) === [1],b("a.b", 2) === b(1) and r("a.b", 1) === r(0),<
+    "a.b",2,3 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-CONTENT : symMerge(b(1) # b(0), [true] # b(0), <
+    "a.b",0,2 >, < "a.b",0,1 >) .
+rewrites: 12
+result ResultDataContentMerge: {b(1) # b(0),[true] and [true],[true] and b(1)
+    === [true],< "a.b",0,2 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-CONTENT : symMerge(r(0) # b(1), [1] # b(0), <
+    "a.b",1,2 >, < "a.b",0,1 >) .
+rewrites: 19
+result ResultDataContentMerge: {r(0) # b(1),[true] and [true],b(1) === b(0) and
+    r(0) === [1],< "a.b",1,2 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP-CONTENT : symMerge([1] # b(0) : b(1), [1]
+    # b(0) : b(1), < "a.b",0,2 >, < "a.b",0,2 >) .
+rewrites: 2
+result ResultFeatureMapContentMerge: {[1] # b(0) : b(1),[true],[true],< "a.b",
+    0,2 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP-CONTENT : symMerge(r(0) # b(0) : [false],
+    [1] # b(0) : b(1), < "a.b",1,2 >, < "a.b",1,2 >) .
+rewrites: 19
+result ResultFeatureMapContentMerge: {r("a.b", 1) # b(0) : b("a.b", 2),[true]
+    and b("a.b", 2) === [false] and r("a.b", 1) === r(0),[true] and b("a.b", 2)
+    === b(1) and r("a.b", 1) === [1],< "a.b",2,3 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP-CONTENT : symMerge([1] # b(1) : b(1), [1]
+    # b(0) : b(1), < "a.b",1,2 >, < "a.b",1,2 >) .
+rewrites: 15
+result ResultFeatureMapContentMerge: {[1] # b("a.b", 2) : b(1),[true] and [
+    true] and b("a.b", 2) === b(1),[true] and [true] and b("a.b", 2) === b(0),<
+    "a.b",1,3 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP-CONTENT : symMerge([true] # b(0) : [
+    false], b(1) # b(2) : b(3), < "a.b",0,4 >, < "a.b",0,4 >) .
+rewrites: 23
+result ResultFeatureMapContentMerge: {b("a.b", 4) # b("a.b", 5) : b("a.b", 6),
+    b("a.b", 4) === [true] and b("a.b", 5) === b(0) and b("a.b", 6) === [
+    false],b("a.b", 4) === b(1) and b("a.b", 5) === b(2) and b("a.b", 6) === b(
+    3),< "a.b",0,7 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP-CONTENT : symMerge([1] # b(1) : b(1), [1]
+    # b(0) : b(0), < "a.b",0,2 >, < "a.b",0,1 >) .
+rewrites: 22
+result ResultFeatureMapContentMerge: {[1] # b(1) : b(1),[true] and [true] and [
+    true],[true] and b(1) === b(0) and b(1) === b(0),< "a.b",0,2 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP-CONTENT : symMerge(r(1) # b(1) : [false],
+    [1/2] # b(0) : [true], < "a.b",2,2 >, < "a.b",1,1 >) .
+rewrites: 26
+result ResultFeatureMapContentMerge: {r(1) # b(1) : b("a.b", 2),[true] and [
+    true] and b("a.b", 2) === [false],b(1) === b(0) and r(1) === [1/2] and b(
+    "a.b", 2) === [true],< "a.b",2,3 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP : symMerge((a |-> (r(1) # [false] : [
+    false]), b |-> (r(0) # [true] : [true]), c |-> (r(0) # (b(0) or b(1)) : b(
+    0)), d |-> [0] # [false], e |-> [0] # [false]), (a |-> (r(1) # [false] : b(
+    0)), b |-> (r(0) # b(1) : [true]), c |-> (r(0) # b(2) : b(3)), d |-> r(2) #
+    [false], e |-> [0] # [false]), < "a.b",3,4 >, < "a.b",3,4 >) .
+rewrites: 57
+result ResultFeatureMapMerge: {a |-> (r(1) # [false] : b("a.b", 4)), b |-> (r(
+    0) # b("a.b", 5) : [true]), c |-> (r(0) # b("a.b", 6) : b("a.b", 7)), d |->
+    r("a.b", 3) # [false], e |-> [0] # [false],[true] and [true] and [true] and
+    [true] and [true] and [true] and b("a.b", 4) === [false] and b("a.b", 5)
+    === [true] and b("a.b", 6) === (b(0) or b(1)) and b("a.b", 7) === b(0) and
+    r("a.b", 3) === [0],[true] and [true] and [true] and [true] and [true] and
+    [true] and b("a.b", 4) === b(0) and b("a.b", 5) === b(1) and b("a.b", 6)
+    === b(2) and b("a.b", 7) === b(3) and r("a.b", 3) === r(2),< "a.b",4,8 >}
+==========================================
+reduce in TEST-SYM-MERGE-FEATURE-MAP : symMerge((a |-> (r(1) # [false] : b(0)),
+    b |-> (r(0) # b(1) : [true]), c |-> (r(0) # b(2) : b(3)), d |-> r(2) # [
+    false], e |-> [0] # [false]), (a |-> (r(1) # [false] : [false]), b |-> (r(
+    0) # [true] : [true]), c |-> (r(0) # (b(0) or b(1)) : b(0)), d |-> [0] # [
+    false], e |-> [0] # [false]), < "a.b",3,4 >, < "a.b",2,3 >) .
+rewrites: 69
+result ResultFeatureMapMerge: {a |-> (r(1) # [false] : b("a.b", 4)), b |-> (r(
+    0) # b("a.b", 5) : [true]), c |-> (r(0) # b("a.b", 6) : b(3)), d |-> r(2) #
+    [false], e |-> [0] # [false],[true] and [true] and [true] and [true] and [
+    true] and [true] and [true] and [true] and b("a.b", 4) === b(0) and b(
+    "a.b", 5) === b(1) and b("a.b", 6) === b(2),[true] and [true] and [true]
+    and [true] and [true] and [true] and b(3) === b(0) and r(2) === [0] and b(
+    "a.b", 4) === [false] and b("a.b", 5) === [true] and b("a.b", 6) === (b(0)
+    or b(1)),< "a.b",3,7 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-VALUATION : symMerge((c1 |=> [3/4] # b(1), c2 |=>
+    r(0) # b(2), c3 |=> [true] # b(2)), (c1 |=> r(1) # b(1), c2 |=> r(0) # [
+    false], c3 |=> [true] # b(2)), < "a.b",2,3 >, < "a.b",2,3 >) .
+rewrites: 27
+result ResultDataValuationMerge: {c1 |=> r("a.b", 2) # b(1), c2 |=> r(0) # b(
+    "a.b", 3), c3 |=> [true] # b(2),[true] and [true] and [true] and b("a.b",
+    3) === b(2) and r("a.b", 2) === [3/4],[true] and [true] and [true] and b(
+    "a.b", 3) === [false] and r("a.b", 2) === r(1),< "a.b",3,4 >}
+==========================================
+reduce in TEST-SYM-MERGE-DATA-VALUATION : symMerge((c1 |=> r(1) # b(1), c2 |=>
+    r(0) # [false], c3 |=> [true] # b(2)), (c1 |=> [3/4] # b(1), c2 |=> r(0) #
+    b(0), c3 |=> [true] # b(0)), < "a.b",2,3 >, < "a.b",1,2 >) .
+rewrites: 39
+result ResultDataValuationMerge: {c1 |=> r(1) # b(1), c2 |=> r(0) # b("a.b",
+    3), c3 |=> [true] # b(2),[true] and [true] and [true] and [true] and [true]
+    and [true] and b("a.b", 3) === [false],[true] and [true] and [true] and [
+    true] and b(2) === b(0) and r(1) === [3/4] and b("a.b", 3) === b(0),<
+    "a.b",2,4 >}
+==========================================
+reduce in TEST-SYM-MERGE-TRANSITION-RESULT : symMerge((loc(r(2)) | a |-> (r(1)
+    # [false] : b(0)), b |-> (r(0) # b(1) : [true]), c |-> (r(0) # b(2) : b(
+    3)), d |-> r(2) # [false], e |-> [0] # [false] | c1 |=> r(1) # b(1), c2 |=>
+    r(0) # [false], c3 |=> [true] # b(2) | b("b", 0) | < "a.b",3,4 >) ;; loc(b(
+    0) ? r(0) : r(1)) | a |-> (r(1) # [false] : [false]), b |-> (r(0) # [true]
+    : [true]), c |-> (r(0) # (b(0) or b(1)) : b(0)), d |-> [0] # [false], e |->
+    [0] # [false] | c1 |=> [3/4] # b(1), c2 |=> r(0) # b(2), c3 |=> [true] # b(
+    2) | b("a", 0) | < "a.b",2,3 >) .
+rewrites: 115
+result BATransResult: loc(r("a.b", 3)) | a |-> (r(1) # [false] : b("a.b", 4)),
+    b |-> (r(0) # b("a.b", 5) : [true]), c |-> (r(0) # b("a.b", 6) : b("a.b",
+    7)), d |-> r("a.b", 4) # [false], e |-> [0] # [false] | c1 |=> r("a.b", 5)
+    # b(1), c2 |=> r(0) # b("a.b", 8), c3 |=> [true] # b(2) | [true] and [true]
+    and [true] and [true] and [true] and [true] and [true] and [true] and [
+    true] and b("a.b", 4) === b(0) and b("a.b", 5) === b(1) and b("a.b", 6) ===
+    b(2) and b("a.b", 7) === b(3) and b("a.b", 8) === [false] and r("a.b", 3)
+    === r(2) and r("a.b", 4) === r(2) and r("a.b", 5) === r(1) and b("b", 0) or
+    [true] and [true] and [true] and [true] and [true] and [true] and [true]
+    and [true] and [true] and b("a.b", 4) === [false] and b("a.b", 5) === [
+    true] and b("a.b", 6) === (b(0) or b(1)) and b("a.b", 7) === b(0) and b(
+    "a.b", 8) === b(2) and r("a.b", 3) === (b(0) ? r(0) : r(1)) and r("a.b", 4)
+    === [0] and r("a.b", 5) === [3/4] and b("a", 0) | < "a.b",6,9 >
+Bye.

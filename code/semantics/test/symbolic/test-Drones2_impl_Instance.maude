@@ -1,0 +1,30 @@
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load ../syntax/Drones2_impl_Instance.maude
+
+mod TEST-DRONE2-SYSTEM is
+  including DRONES2_IMPL_INSTANCE-MODEL-SYMBOLIC .
+
+  op initConst : -> BoolExp .
+  eq initConst = [true] .
+
+  op initState : -> Object .
+  eq initState = initialize(initial) .
+
+  op cinitState : -> Object .
+  eq cinitState = initialize(collapse(initial)) .
+
+
+  eq @m@ = ['DRONES2_IMPL_INSTANCE-MODEL-SYMBOLIC] .
+endm
+
+red initState .
+
+search {initConst || initState, 0, 150} =>+ C:GlobalSystem .
+
+search {initConst || initState, 0, 150} =>+ C:GlobalSystem .
+
+search {initConst || cinitState,0, 150} =>+ C:GlobalSystem .
+
+search {initConst || cinitState,0, 150} =>+ C:GlobalSystem .

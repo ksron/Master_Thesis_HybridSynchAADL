@@ -1,0 +1,12 @@
+/Airplane_nondet_Instance.maude
+/Drones2_impl_Instance.maude
+/SimpleTherm_impl_Instance.maude
+/Thermostat1Con_impl_Instance.maude
+/Thermostat2Con_impl_Instance.maude
+/module-thermostat-event-data-noparam.maude
+/module-thermostat-event-data.maude
+/module-thermostat-hie.maude
+/module-thermostat-noparam.maude
+/module-thermostat.maude
+/module-transfer-data.maude
+/test-thermostat-hie.maude

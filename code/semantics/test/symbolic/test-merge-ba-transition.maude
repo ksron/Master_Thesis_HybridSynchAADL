@@ -1,0 +1,22 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-ba-semantics.maude
+
+
+-------------------------------------------------
+mod TEST-BEHAVIOR-TRANSITION-SEMANTICS-META is
+  including TEST-BEHAVIOR-TRANSITION-SEMANTICS .
+  including MERGE-BEHAVIOR-TRANSITION-SEMANTICS .
+
+  eq @m@ = ['TEST-BEHAVIOR-TRANSITION-SEMANTICS-META] .
+endm
+
+
+red execTransMerge(location(loc([0])) complete(loc([0])) trans(trans1) bcf) .
+
+red execTransMerge(location(loc([0])) complete(loc([0])) trans(trans2) bcf) .
+
+red execTransMerge(location(loc([0])) complete(loc([0])) trans(trans3) bcf) .

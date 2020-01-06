@@ -1,0 +1,88 @@
+#!/bin/bash
+TESTER=tester
+
+function cleanData {
+     sed -i "s/.result:states://g" $1
+     sed -i "s/rewrites:.*in//g" $1
+     sed -i "s/cpu.*//g" $1
+     sed -i "s/Drones/Drones_/g" $1
+     sed -i "s/TwoRoomTherm/Therm_2/g" $1
+     sed -i "s/ThreeRoomTherm/Therm_3/g" $1
+     sed -i "s/FourRoomTherm/Therm_4/g" $1
+     sed -i "s/Instance/model/g" $1
+     sed -i "s/_/ /g" $1
+}
+
+mkdir -p ./result
+
+if [ "$#" -eq 0 ]; then
+  ./extractResult 1
+  ./extractResult 2
+  ./extractResult 3
+else
+if [ "$1" -eq 1 ]; then
+     cd ./t1-symVSrand
+     # rand result
+     > ../result/t1-rand
+     > ../result/t1-sym
+
+     for F in ./randResult/*.result
+     do
+       {
+         read SOLUTION
+         read SEARCHEDSTATES
+         read RUNS
+         read EXECTIME
+       } < $F
+       echo "$F : $SOLUTION $RUNS $SEARCHEDSTATES $EXECTIME" >> ../result/t1-rand
+     done
+     sed -i "s/.\/randResult\/test-//g" ../result/t1-rand
+     sed -i "s/.result//g" ../result/t1-rand
+     sed -i "s/_Instance//g" ../result/t1-rand
+     sed -i "s/SEARCHED_//g" ../result/t1-rand
+     sed -i "s/EXEC_//g" ../result/t1-rand
+     cleanData "../result/t1-rand"
+
+     # sym result
+     for F in ./symResult/*.result
+     do
+       {
+         read SOLUTION
+         read SEARCHEDSTATES
+         read EXECTIME
+       } < $F
+       echo "$F : $SOLUTION $SEARCHEDSTATES $EXECTIME" >> ../result/t1-sym
+     done
+     sed -i "s/.\/symResult\/test-//g" ../result/t1-sym
+     sed -i "s/.result//g" ../result/t1-sym
+     sed -i "s/_Instance//g" ../result/t1-sym
+     sed -i "s/SEARCHED_//g" ../result/t1-sym
+     sed -i "s/EXEC_//g" ../result/t1-sym
+     cleanData "../result/t1-sym"
+elif [ "$1" -eq 2 ]; then
+     cd ./t2-symVSdist
+     # dist result
+     grep "states" distResult/*.result > ../result/t2-dist
+     sed -i "s/distResult\/test-//g" ../result/t2-dist
+     cleanData "../result/t2-dist"
+
+     # sym result
+     grep "states" symResult/*.result > ../result/t2-sym
+     sed -i "s/symResult\/test-//g" ../result/t2-sym
+     cleanData "../result/t2-sym"
+elif [ "$1" -eq 3 ]; then
+     cd ./t3-mergeVSnon
+     for i in {true,false}
+     do
+       # concrete result
+       grep "states" result/*_${i}_*.result > ../result/t3-${i}-con
+       sed -i "s/result\/test-//g" ../result/t3-${i}-con
+       cleanData "../result/t3-${i}-con"
+     
+       # param result
+       grep "states" result_param/*_${i}_*.result > ../result/t3-${i}-param
+       sed -i "s/result_param\/test-//g" ../result/t3-${i}-param
+       cleanData "../result/t3-${i}-param"
+     done
+fi
+fi

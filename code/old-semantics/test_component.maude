@@ -1,0 +1,29 @@
+load real-time-maude
+load timeDomain.maude
+
+--- Syntax
+load identifiers.maude
+load data-value.maude
+
+load input-adaptor-syntax.maude
+load aadl-property.maude
+load behAnnexSyntax.maude
+
+load connection.maude
+load features.maude
+load components.maude
+
+--- eval test
+(fmod COMPONENT-TEST is
+  including DATA-COMPONENT .
+
+  vars PHI PHI' : SymExpr .
+  vars CONF CONF' : Configuration .
+
+endfm)
+
+***(
+(red in COMPONENT-TEST : ((i(3)) ; CONF) (([4] > i(2)) ; CONF') .)
+(red in COMPONENT-TEST : ((i(1) > [0]) ; CONF) CONF' .)
+(red in COMPONENT-TEST : CONF' ((i(1) > [0]) ; CONF)  .)
+)

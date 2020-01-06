@@ -1,0 +1,56 @@
+#!/bin/bash
+
+SYM_RESULT_DIR=./symResult
+RAND_RESULT_DIR=./randResult
+
+A_DIR=./analysis
+BASE_DIR=../basic
+
+echo "TEST1 : Job started on: " `date`
+
+mkdir -p -- ${A_DIR}
+mkdir -p -- ${SYM_RESULT_DIR}
+mkdir -p -- ${RAND_RESULT_DIR}
+
+  # FOR EVERY INSTANCE FILE, RUN ANALYSIS
+  for fileName in $(find ${BASE_DIR} -name "test-Drones3*rendezvous*Instance.maude" -type f -exec basename {}  \; | sort | uniq )
+  do
+    echo $fileName
+    symfile=${BASE_DIR}/sym/${fileName}
+    randfile=${BASE_DIR}/rand/${fileName}
+    
+    for model in 3
+    do
+    
+    # LOOP WITHIN DEPTH
+    for depth in 200
+    do
+      for ANAL_FILE in $(find . -maxdepth 1 -type f -name "${fileName%.*}_search_sym_req*.maude" -exec basename {} \;)
+      do
+      # SYMBOLIC RUN
+        for mf in true
+        do
+          ANAL=${A_DIR}/${ANAL_FILE%.*}_${model}_${mf}_${depth}.anal
+          MERGE=${A_DIR}/${fileName%.*}${model}_sym_${mf}.maude
+          sed "s/&&&/${depth}/g" ${ANAL_FILE} > ${ANAL}
+          sed "s/#/${model}/" ${symfile} | sed "s/TFTF/${mf}/g" > ${MERGE}
+          ./symSingleTester ${MERGE} ${ANAL} ${SYM_RESULT_DIR} &
+#          srun -N1 -n1 -c1 --exclusive ./symSingleTester ${MERGE} ${ANAL} ${SYM_RESULT_DIR} &
+        done 
+      done
+      
+      # RUN RANDOM ANALYSIS
+      for ANAL_FILE in $(find . -maxdepth 1 -type f -name "${fileName%.*}_search_rand_*.maude" -exec basename {} \;)
+      do
+        RAND=${A_DIR}/${ANAL_FILE%.*}_${model}.maude
+        sed "s/#/${model}/" ${randfile} > ${RAND}
+#       ./randSingleTester ${RAND} ${ANAL_FILE} ${depth} ${RAND_RESULT_DIR} & 
+#        srun -N1 -n1 -c1 --exclusive ./randSingleTester ${RAND} ${ANAL_FILE} ${depth} ${RAND_RESULT_DIR} &
+      done
+
+    done
+    done
+  done
+wait
+
+echo "TEST1 : Job finished on: " `date`

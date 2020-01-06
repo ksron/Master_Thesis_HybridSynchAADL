@@ -1,0 +1,143 @@
+==========================================
+reduce in TEST-THREAD-DYNAMICS : finalConst(obj1) .
+rewrites: 4
+result SMTBoolValue: [true]
+==========================================
+reduce in TEST-THREAD-DYNAMICS : finalConst(obj2) .
+rewrites: 4
+result SMTBoolValue: [true]
+==========================================
+search in TEST-THREAD-DYNAMICS : executeStep([true], obj1 transIn(r(4) # [
+    true], c1 .. inp), false) =>* C:ConstConfig .
+
+Solution 1 (state 2)
+states: 3  rewrites: 312
+C:ConstConfig --> r(4) < r(1) + [1] || < c1 : Thread | properties : none,
+    features : (< inp : DataInPort | properties : none,content : [0] # [false],
+    cache : r(4) # [true] > < outp : DataOutPort | properties : none,content :
+    r(4) + [2] # [true] >),subcomponents : (< x : Data | properties : none,
+    features : none,subcomponents : none,connections : empty,value : r(1) + [1]
+    # [true] > < y : Data | properties : none,features : none,subcomponents :
+    none,connections : empty,value : r(4) # [true] >),connections : empty,
+    varGen : < "c1",1,2 >,currState : loc([0]),completeStates : loc([0]),
+    variables : ((a : Real) ; b : Real),transitions : ((loc([0]) -[on
+    dispatch]-> loc([1]) {(c{x} := (c[x] + [[1]])) ; (v{a} := f[inp]) ; c{y} :=
+    v[a]}) ; loc([1]) -[c[x] > c[y]]-> loc([0]) {(v{b} := (c[y] + [[1]])) ; f{
+    outp} := (v[b] + [[1]])}),loopBound : 10,transBound : 10 >
+
+No more solutions.
+states: 3  rewrites: 312
+==========================================
+search in TEST-THREAD-DYNAMICS : executeStep([true], obj1 transIn(r(4) # [
+    true], c1 .. inp), true) =>* C:ConstConfig .
+
+Solution 1 (state 0)
+states: 1  rewrites: 329
+C:ConstConfig --> r(4) < r(1) + [1] || < c1 : Thread | properties : none,
+    features : (< inp : DataInPort | properties : none,content : [0] # [false],
+    cache : r(4) # [true] > < outp : DataOutPort | properties : none,content :
+    r(4) + [2] # [true] >),subcomponents : (< x : Data | properties : none,
+    features : none,subcomponents : none,connections : empty,value : r(1) + [1]
+    # [true] > < y : Data | properties : none,features : none,subcomponents :
+    none,connections : empty,value : r(4) # [true] >),connections : empty,
+    varGen : < "c1",1,2 >,currState : loc([0]),completeStates : loc([0]),
+    variables : ((a : Real) ; b : Real),transitions : ((loc([0]) -[on
+    dispatch]-> loc([1]) {(c{x} := (c[x] + [[1]])) ; (v{a} := f[inp]) ; c{y} :=
+    v[a]}) ; loc([1]) -[c[x] > c[y]]-> loc([0]) {(v{b} := (c[y] + [[1]])) ; f{
+    outp} := (v[b] + [[1]])}),loopBound : 10,transBound : 10 >
+
+No more solutions.
+states: 1  rewrites: 329
+==========================================
+search in TEST-THREAD-DYNAMICS : executeStep([true], obj2 transIn(r(5) # [
+    true], c2 .. inp), false) =>* C:ConstConfig .
+
+Solution 1 (state 4)
+states: 5  rewrites: 400
+C:ConstConfig --> (not [2] < r(5) * [1/2] and [0] < r(5)) || < c2 : Thread |
+    properties : none,features : (< inp : DataInPort | properties : none,
+    content : [0] # [false],cache : r(5) # [true] > < outp : DataOutPort |
+    properties : none,content : [-2] + r(5) * [1/2] # [true] >),subcomponents :
+    < z : Data | properties : none,features : none,subcomponents : none,
+    connections : empty,value : r(5) * [1/2] # [true] >,connections : empty,
+    varGen : < "c2",10,20 >,currState : loc([2]),completeStates : (loc([0])
+    loc([2])),variables : a : Real,transitions : ((loc([0]) -[on dispatch]->
+    loc([1]) {(v{a} := f[inp]) ; if(v[a] > [[0]])c{z} := (v[a] * [[5.0e-1]])
+    end if}) ; (loc([1]) -[otherwise]-> loc([2]) {f{outp} := (c[z] - [[2]])}) ;
+    (loc([1]) -[c[z] > [[2]]]-> loc([2]) {f{outp} := (c[z] + [[1]])}) ; loc([
+    2]) -[on dispatch]-> loc([0]) {skip}),loopBound : 10,transBound : 10 >
+
+Solution 2 (state 5)
+states: 6  rewrites: 523
+C:ConstConfig --> ([0] < r(5) and [2] < r(5) * [1/2]) || < c2 : Thread |
+    properties : none,features : (< inp : DataInPort | properties : none,
+    content : [0] # [false],cache : r(5) # [true] > < outp : DataOutPort |
+    properties : none,content : [1] + r(5) * [1/2] # [true] >),subcomponents :
+    < z : Data | properties : none,features : none,subcomponents : none,
+    connections : empty,value : r(5) * [1/2] # [true] >,connections : empty,
+    varGen : < "c2",10,20 >,currState : loc([2]),completeStates : (loc([0])
+    loc([2])),variables : a : Real,transitions : ((loc([0]) -[on dispatch]->
+    loc([1]) {(v{a} := f[inp]) ; if(v[a] > [[0]])c{z} := (v[a] * [[5.0e-1]])
+    end if}) ; (loc([1]) -[otherwise]-> loc([2]) {f{outp} := (c[z] - [[2]])}) ;
+    (loc([1]) -[c[z] > [[2]]]-> loc([2]) {f{outp} := (c[z] + [[1]])}) ; loc([
+    2]) -[on dispatch]-> loc([0]) {skip}),loopBound : 10,transBound : 10 >
+
+Solution 3 (state 6)
+states: 7  rewrites: 702
+C:ConstConfig --> (not [0] < r(5) and not [2] < r(3)) || < c2 : Thread |
+    properties : none,features : (< inp : DataInPort | properties : none,
+    content : [0] # [false],cache : r(5) # [true] > < outp : DataOutPort |
+    properties : none,content : r(3) + [-2] # [true] >),subcomponents : < z :
+    Data | properties : none,features : none,subcomponents : none,connections :
+    empty,value : r(3) # [true] >,connections : empty,varGen : < "c2",10,20 >,
+    currState : loc([2]),completeStates : (loc([0]) loc([2])),variables : a :
+    Real,transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(v{a} := f[inp]) ;
+    if(v[a] > [[0]])c{z} := (v[a] * [[5.0e-1]]) end if}) ; (loc([1]) -[
+    otherwise]-> loc([2]) {f{outp} := (c[z] - [[2]])}) ; (loc([1]) -[c[z] > [[
+    2]]]-> loc([2]) {f{outp} := (c[z] + [[1]])}) ; loc([2]) -[on dispatch]->
+    loc([0]) {skip}),loopBound : 10,transBound : 10 >
+
+Solution 4 (state 7)
+states: 8  rewrites: 821
+C:ConstConfig --> (not [0] < r(5) and [2] < r(3)) || < c2 : Thread | properties
+    : none,features : (< inp : DataInPort | properties : none,content : [0] # [
+    false],cache : r(5) # [true] > < outp : DataOutPort | properties : none,
+    content : r(3) + [1] # [true] >),subcomponents : < z : Data | properties :
+    none,features : none,subcomponents : none,connections : empty,value : r(3)
+    # [true] >,connections : empty,varGen : < "c2",10,20 >,currState : loc([
+    2]),completeStates : (loc([0]) loc([2])),variables : a : Real,transitions :
+    ((loc([0]) -[on dispatch]-> loc([1]) {(v{a} := f[inp]) ; if(v[a] > [[0]])c{
+    z} := (v[a] * [[5.0e-1]]) end if}) ; (loc([1]) -[otherwise]-> loc([2]) {f{
+    outp} := (c[z] - [[2]])}) ; (loc([1]) -[c[z] > [[2]]]-> loc([2]) {f{outp}
+    := (c[z] + [[1]])}) ; loc([2]) -[on dispatch]-> loc([0]) {skip}),loopBound
+    : 10,transBound : 10 >
+
+No more solutions.
+states: 8  rewrites: 841
+==========================================
+search in TEST-THREAD-DYNAMICS : executeStep([true], obj2 transIn(r(5) # [
+    true], c2 .. inp), true) =>* C:ConstConfig .
+
+Solution 1 (state 0)
+states: 1  rewrites: 1118
+C:ConstConfig --> ((not [0] < r(5) and not [2] < r(3) and r("c2", 10) === r(3)
+    + [-2] or not [0] < r(5) and r("c2", 10) === r(3) + [1] and [2] < r(3)) and
+    r("c2", 11) === r(3) or not [2] < r(5) * [1/2] and r("c2", 10) === [-2] +
+    r(5) * [1/2] and r("c2", 11) === r(5) * [1/2] and [0] < r(5) or r("c2", 10)
+    === [1] + r(5) * [1/2] and r("c2", 11) === r(5) * [1/2] and [0] < r(5) and
+    [2] < r(5) * [1/2]) || < c2 : Thread | properties : none,features : (< inp
+    : DataInPort | properties : none,content : [0] # [false],cache : r(5) # [
+    true] > < outp : DataOutPort | properties : none,content : r("c2", 10) # [
+    true] >),subcomponents : < z : Data | properties : none,features : none,
+    subcomponents : none,connections : empty,value : r("c2", 11) # [true] >,
+    connections : empty,varGen : < "c2",12,20 >,currState : loc([2]),
+    completeStates : (loc([0]) loc([2])),variables : a : Real,transitions : ((
+    loc([0]) -[on dispatch]-> loc([1]) {(v{a} := f[inp]) ; if(v[a] > [[0]])c{z}
+    := (v[a] * [[5.0e-1]]) end if}) ; (loc([1]) -[otherwise]-> loc([2]) {f{
+    outp} := (c[z] - [[2]])}) ; (loc([1]) -[c[z] > [[2]]]-> loc([2]) {f{outp}
+    := (c[z] + [[1]])}) ; loc([2]) -[on dispatch]-> loc([0]) {skip}),loopBound
+    : 10,transBound : 10 >
+
+No more solutions.
+states: 1  rewrites: 1118
+Bye.

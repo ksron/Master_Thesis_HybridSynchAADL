@@ -1,0 +1,46 @@
+==========================================
+reduce in TEST-FEATURE-OPERATION : readFeature((((< d : DataOutPort | content :
+    * # b(0) > < e : DataOutPort | content : [0] # [false] >) < c : DataInPort
+    | content : r(0) # b(0),cache : r(0) # b(1) >) < b : DataInPort | content :
+    r(0) # [true],cache : r(1) # [true] >) < a : DataInPort | content : r(0) #
+    [false],cache : r(1) # [false] >) .
+rewrites: 35
+result FeatureReadResult: {< a : DataInPort | content : [0] # [false],cache :
+    r(0) # [false] > < b : DataInPort | content : [0] # [false],cache : r(0) #
+    [true] > < c : DataInPort | content : [0] # [false],cache : r(0) # b(0) > <
+    d : DataOutPort | content : * # b(0) > < e : DataOutPort | content : [0] #
+    [false] >,a |-> (([false] ? r(0) : r(1)) # [false] : [false]), b |-> (([
+    true] ? r(0) : r(1)) # [true] : [true]), c |-> ((b(0) ? r(0) : r(0)) # (b(
+    0) or b(1)) : b(0)), d |-> * # [false], e |-> [0] # [false]}
+==========================================
+reduce in TEST-FEATURE-OPERATION : writeFeature((d |-> * # [true], e |-> r(1) #
+    b(1)), (((< d : DataOutPort | content : * # b(0) > < e : DataOutPort |
+    content : [0] # [false] >) < c : DataInPort | content : r(0) # b(0),cache :
+    r(0) # b(1) >) < b : DataInPort | content : r(0) # [true],cache : r(1) # [
+    true] >) < a : DataInPort | content : r(0) # [false],cache : r(1) # [false]
+    >) .
+rewrites: 4
+result Configuration: < a : DataInPort | content : r(0) # [false],cache : r(1)
+    # [false] > < b : DataInPort | content : r(0) # [true],cache : r(1) # [
+    true] > < c : DataInPort | content : r(0) # b(0),cache : r(0) # b(1) > < d
+    : DataOutPort | content : * # [true] > < e : DataOutPort | content : r(1) #
+    b(1) >
+==========================================
+reduce in TEST-DATA-OPERATION : readData(< c1 : Data | value : [3/4] # b(1),
+    features : none,subcomponents : none,properties : none,connections : empty
+    > < c2 : Data | value : r(0) # [true],features : none,subcomponents : none,
+    properties : none,connections : empty >) .
+rewrites: 6
+result DataValuation: c1 |=> [3/4] # b(1), c2 |=> r(0) # [true]
+==========================================
+reduce in TEST-DATA-OPERATION : writeData((c1 |=> [0] # [true], c2 |=> [1] # b(
+    1)), < c1 : Data | value : [3/4] # b(1),features : none,subcomponents :
+    none,properties : none,connections : empty > < c2 : Data | value : r(0) # [
+    true],features : none,subcomponents : none,properties : none,connections :
+    empty >) .
+rewrites: 4
+result Configuration: < c1 : Data | properties : none,features : none,
+    subcomponents : none,connections : empty,value : [0] # [true] > < c2 : Data
+    | properties : none,features : none,subcomponents : none,connections :
+    empty,value : [1] # b(1) >
+Bye.

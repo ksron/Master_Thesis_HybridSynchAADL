@@ -1,0 +1,25 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load module-component-dynamics.maude
+
+-------------------------------------------------------
+mod TEST-ENV-DYNAMICS is
+  including TEST-ENV-DYNAMICS-MOD .
+  eq @m@ = ['TEST-ENV-DYNAMICS-MOD] .
+endm
+
+
+red finalConst(env1) .
+
+red finalConst(env2) .
+
+search executeStep([true], env1, false) =>* C:ConstConfig .
+
+search executeStep([true], env1, true) =>* C:ConstConfig .
+
+search executeStep([true], env2, false) =>* C:ConstConfig .
+
+search executeStep([true], env2, true) =>* C:ConstConfig .
+

@@ -1,0 +1,58 @@
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load ../syntax/module-thermostat.maude
+
+---------------------------------------------
+mod TEST-THERMOSTAT-SYSTEM-MOD is
+  including THERMOSTAT-SYSTEM .
+  including MODEL-TRANSITION-SYSTEM .
+  including SPECIFICATION-LANGUAGE-SEMANTICS .
+
+  op initState : -> Object [memo] .
+  eq initState = initialize(model) .
+
+  ops initCond goalCond : -> PropSpec .
+  eq initCond =
+    (top . environment | ((c[e] < [[1]]) and (c[e] > [[0]]))) or 
+    (not (top . controller | (c[lower] < [[20]]))) .
+
+  eq goalCond =
+    top | ((controller | c[curr]) > (environment | c[x])) .
+endm
+
+
+mod TEST-THERMOSTAT-SYSTEM is
+  including TEST-THERMOSTAT-SYSTEM-MOD .
+
+  eq @m@ = ['TEST-THERMOSTAT-SYSTEM-MOD] .
+endm
+
+
+--- red initState .
+
+red initCond .
+
+red goalCond .
+
+red normalize(nilComponentRef, initCond) .
+
+   
+red eval([[true]], initState) .
+red eval([[false]], initState) .
+
+red eval(top . controller | (c[lower] < [[20]]), initState) .
+red eval(top . controller | (c[lower] > [[20]]), initState) .
+red eval(top . environment | ((c[e] < [[1]]) and (c[e] > [[0]])), initState) .
+
+red eval(initCond, initState) .
+
+red eval(goalCond, initState) .
+
+
+search [1,5]
+  { eval(initCond, initState) || initState, false } =>* { B:BoolExp || OBJ:Object, false } 
+  such that
+  check-sat(B:BoolExp and eval(goalCond, OBJ:Object)) .
+
+

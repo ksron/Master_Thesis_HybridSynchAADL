@@ -1,0 +1,52 @@
+
+(tomod BUILTIN-INPUT-ADAPTOR-SEMANTICS is
+  including COMPONENT-DYNAMICS .
+
+  var OTMA : OneToManyInputAdaptor .  var MTOA : OneToManyInputAdaptor .  
+  var NZ : NzNat .  vars N M : Nat .  vars I1 I2 : Int . vars F1 F2 : Float .  
+  var D : DataContent . var DL : List{DataContent} . var NDL : NeList{DataContent} .
+
+--- one-to-many adaptors
+  op adaptor : OneToManyInputAdaptor DataContent Nat NeList{DataContent} -> NeList{DataContent} [format (m! o)] .
+  eq adaptor(OTMA, D, NZ) = adaptor(OTMA, D, NZ, nil) .
+  eq adaptor(OTMA, D, 0, NDL) = NDL .
+
+  eq adaptor(repeat input, D, s(N), DL) 
+   = adaptor(repeat input, D,    N, DL D) .
+
+  eq adaptor(use in first iteration, D, N, DL) 
+   = adaptor(use in iteration 1,     D, N, DL) .
+
+  eq adaptor(use in last iteration,  D, N, DL) 
+   = adaptor(use in iteration N,     D, N, DL) .
+
+  eq adaptor(use in iteration s(s(M)), D, s(N), DL) = adaptor(use in iteration s(M), D, N, DL bot) .
+  eq adaptor(use in iteration s(0),    D, s(N), DL) = adaptor(use in iteration 0,    D, N, DL D) .
+  eq adaptor(use in iteration 0,       D, s(N), DL) = adaptor(use in iteration 0,    D, N, DL bot) .
+
+--- many to one adaptors
+  op numAdap : ManyToOneInputAdaptor DataContent List{DataContent} -> DataContent [format (m! o)] .
+
+  eq adaptor(first,   D DL, 1) = D .
+  eq adaptor(last,    DL D, 1) = D .
+
+  eq adaptor(max, D DL, 1)       = numAdap(max, D, DL) .
+  eq numAdap(max, [I1], nil)     = [I1] .
+  eq numAdap(max, [F1], nil)     = [F1] .
+  eq numAdap(max, [I1], [I2] DL) = numAdap(max, [max(I1,I2)], DL) .
+  eq numAdap(max, [F1], [F2] DL) = numAdap(max, [max(F1,F2)], DL) .
+
+  eq adaptor(min, D DL, 1)       = numAdap(min, D, DL) .
+  eq numAdap(min, [I1], nil)     = [I1] .
+  eq numAdap(min, [F1], nil)     = [F1] .
+  eq numAdap(min, [I1], [I2] DL) = numAdap(min, [min(I1,I2)], DL) .
+  eq numAdap(min, [F1], [F2] DL) = numAdap(min, [min(F1,F2)], DL) .
+
+  eq adaptor(sum, D DL, 1)       = numAdap(sum, D, DL) .
+  eq numAdap(sum, [I1], nil)     = [I1] .
+  eq numAdap(sum, [F1], nil)     = [F1] .
+  eq numAdap(sum, [I1], [I2] DL) = numAdap(sum, [I1 + I2], DL) .
+  eq numAdap(sum, [F1], [F2] DL) = numAdap(sum, [F1 + F2], DL) .
+
+  eq adaptor(average, NDL, 1) = [float(adaptor(sum, NDL, 1)) / float(size(NDL))] .
+endtom)

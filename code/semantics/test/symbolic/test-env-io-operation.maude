@@ -1,0 +1,31 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-env-semantics.maude
+
+
+----------------------------------------
+select TEST-ENV-FEATURE-OPERATION .
+
+red readEnvFeature(
+    < a :  EnvInPort | content : ([0] # [true]),    envCache : ([0] # [true]), target : cr1 >
+    < b :  EnvInPort | content : ([true] # b(0)),   envCache : (b(1) # b(0)), target : cr1  >
+    < c :  EnvInPort | content : (r(1) # b(1)),     envCache : (r(2) # b(2)), target : cr1    >
+    < d : EnvOutPort | content : ([0] # [false]) ,  envCache : (r(3) # b(3)), target : cr1 >
+    < e : EnvOutPort | content : ([true] # [true]), envCache : (r(4) # b(4)), target : cr2 >
+,
+  < "G", 5, 5 >) .
+
+
+red writeEnvFeature(
+    (e |-> (r(1) # b(1)))
+,
+    < a :  EnvInPort | content : ([0] # [true]),    envCache : ([0] # [true]), target : cr1 >
+    < b :  EnvInPort | content : ([true] # b(0)),   envCache : (b(1) # b(0)), target : cr1  >
+    < c :  EnvInPort | content : (r(1) # b(1)),     envCache : (r(2) # b(2)), target : cr1 >
+    < d : EnvOutPort | content : ([0] # [false]) ,  envCache : (r(3) # b(3)), target : cr1 >
+    < e : EnvOutPort | content : ([true] # [true]), envCache : (r(4) # b(4)), target : cr2 >
+,
+  < "G", 5, 5 >) .

@@ -1,0 +1,28 @@
+
+set show timing off .
+
+load ../../interpreter-random.maude
+load ../syntax/module-thermostat-noparam.maude 
+
+-------------------------------------------------------
+mod TEST-THREAD-DYNAMICS is
+  including THERMOSTAT-SYSTEM-NOPARAM .
+  including MODEL-INIT .
+  including THREAD-DYNAMICS .
+  including TRANSFER-INPUT .
+  including TRANSFER-RESULTS .
+  including CONC-REAL-EXP .
+
+  op thread : -> Object .
+  eq thread = initialize(objC) .
+endm
+
+red execSample({thread, 0}) .
+red execResponse({thread, 0}) .
+
+red executeStep({thread, 0}) .  --- kind
+
+red executeStep({transIn(real(10) # bool(true), controller .. temp) thread, 0}) .
+red executeStep({transIn(real(0) #  bool(true), controller .. temp) thread, 0}) .
+red executeStep({transIn(real(50) # bool(true), controller .. temp) thread, 0}) .
+

@@ -1,0 +1,18 @@
+load ../../../code/semantics/interpreter-random.maude
+load ../../model/drones/Drones3_rendezvous_Instance#.maude
+
+mod TEST-DRONE3-SYSTEM is
+  including DRONES3_RENDEZVOUS_INSTANCE-MODEL .
+  including MODEL-TRANSITION-SYSTEM .
+  including SPECIFICATION-LANGUAGE-SEMANTICS .
+
+  op initConst : -> BoolExp .
+  eq initConst = [true] .
+
+  op initState : -> Object .
+  eq initState = initialize(initial) .
+
+  op cinitState : -> Object .
+  eq cinitState = initialize(collapse(initial)) .
+
+endm

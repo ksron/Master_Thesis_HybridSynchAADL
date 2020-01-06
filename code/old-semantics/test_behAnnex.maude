@@ -1,0 +1,141 @@
+
+load real-time-maude
+load timeDomain.maude
+
+--- Syntax
+load identifiers.maude
+load data-value.maude
+
+load input-adaptor-syntax.maude
+load aadl-property.maude
+load behAnnexSyntax.maude
+
+load connection.maude
+load features.maude
+load components.maude
+
+--- semantics
+load behAnnexSemantics.maude
+
+--- eval test
+(fmod EXPRESSION-TEST is
+  including BEHAVIOR-EXPRESSION-SEMANTICS .
+
+  var LCF : LocalBehaviorConf .
+  var GCF : GlobalBehaviorConf .
+  var VAL : VarValuation .
+  var VI : VarId .
+  var PI : FeatureId .
+  var DC : DataContent .
+  var FMAP : FeatureMap .
+  var COMPS : Configuration .
+  var PROPS : PropertyAssociation .
+  vars PHI PHI' : SymExpr .
+  var E E' E'' E''' : Expression .
+  var CR : ComponentRef .
+
+  var X : VarId .
+endfm)
+
+--- concrete tests
+(red in EXPRESSION-TEST : eval([5.5] > [4], LCF) .)
+(red in EXPRESSION-TEST : eval([5.5] = [4], LCF) .)
+(red in EXPRESSION-TEST : eval([false] or [true], LCF) .)
+
+--- symbolic tests
+(red in EXPRESSION-TEST : eval(i("x",3) + [4], LCF) .)
+(red in EXPRESSION-TEST : eval(i("x",3) * i("x",2), LCF) .)
+
+--- variable tests
+(red in EXPRESSION-TEST : eval(([X] > [3]), (X |-> [4]) ; VAL  | GCF ) .)
+(red in EXPRESSION-TEST : eval([X], (X |-> i("x",3)) ; VAL | GCF ) .)
+
+--- execAction test
+(fmod BEHACTION-TEST is
+  including BEHAVIOR-ACTION-SEMANTICS .
+
+  var LCF : LocalBehaviorConf .
+  var VAL : VarValuation .
+  var VI : VarId .
+  var PI : FeatureId .
+  var DC : DataContent .
+  var FMAP : FeatureMap .
+  var COMPS : Configuration .
+  var PROPS : PropertyAssociation .
+  vars PHI PHI' : SymExpr .
+  var E E' E'' E''' : Expression .
+  var CR : ComponentRef .
+
+  ops x y z : -> VarId .
+
+  op valuation : -> VarValuation .
+  eq valuation = (x |-> i("x",2)) ; (y |-> i("x",1)) ; (z |-> [5.5]) .
+
+endfm)
+
+---sort testing
+(red in BEHACTION-TEST : {({x} := ([4] + [6]))} .)
+(red in BEHACTION-TEST : {({x} := ([4] + [6])) ; ({y} := ([5]))} .)
+(red in BEHACTION-TEST : {({x} := ([4] + [6])) ; ({y} := ([5])) ; skip} .)
+
+---execAction testing
+(red in BEHACTION-TEST : execAction({({x} := ([4] + [6])) ; skip}, (PHI | valuation | FMAP | COMPS | PROPS)) .)
+(red in BEHACTION-TEST : execAction({({x} := ([4] + [6]))}, (PHI | valuation | FMAP | COMPS | PROPS)) .)
+(rew execAction( if ([x] > [3])
+                   ({x} := ([x] - [1]))
+                  else
+                   ({x} := ([x] + [1]))
+                  end if , ([true] | valuation | FMAP | COMPS | PROPS)) .)
+(red in BEHACTION-TEST : execAction({({y}:=[5]) ; skip},
+                    ([true]and not(i("x",2)>[3])) |
+                    ((x |->(i("x",2)+[1]));(y |->[4]); z |->[5.5]) | FMAP | COMPS | PROPS) .)
+(search execAction( {if ([x] > [3])
+                      ({x} := ([x] - [1]))
+                     else
+                      ({x} := ([x] + [1]))
+                     end if ;
+                      ({y} := ([y] + [1])) }, ([true] | valuation | FMAP | COMPS | PROPS) ) =>* (PHI' | LCF) .)
+(search execAction( {if ([x] > [3])
+                      ({x} := ([x] - [1]))
+                    (elsif ([y] < [4])
+                      ({y} := ([x] + [3])))
+                     else
+                      ({x} := ([x] + [1]))
+                     end if ;
+                      ({y} := ([y] + [1])) ;
+                      ({x} := ([x] + [1]))}, ([true] | valuation | FMAP | COMPS | PROPS)) =>* (PHI' | LCF) .)
+
+--- execAction test
+(fmod BEHTRANSITION-TEST is
+  including BEHAVIOR-TRANSITION-SEMANTICS .
+
+  vars VAL VAL' : VarValuation .
+  var FMAP : FeatureMap .
+  vars COMPS : Configuration .
+  var PROPS : PropertyAssociation .
+  vars GCF GCF' : GlobalBehaviorConf .
+  var LCF : LocalBehaviorConf .
+  vars TRS TRS' ETRS : Set{Transition} .
+  var GUARD : TransGuard .
+  var ACTION : ActionBlock .
+  var E : SymExpr .
+  vars L L' L'' : Location .
+  var LS : Set{Location} .
+  var RESULT : LocalBehaviorConf .
+  var PHI PHI' PHI'' : SymExpr .
+
+  ops x y z : -> VarId .
+
+  op valuation : -> VarValuation .
+  eq valuation = (x |-> i("x",2)) ; (y |-> i("x",1)) ; (z |-> [5.5]) .
+
+  ops init st1 st2 st3 st4 : -> Location .
+  ops transition1 transition2 : -> Set{Transition} .
+  eq transition1 = (((init) -[ on dispatch ]-> (st1) {({x} := ([x] + [1]))}) ;
+                    ((st1) -[ [x] > [3] ]-> (init) {(skip)})) .
+  eq transition2 = (((init) -[ on dispatch ]-> (init) {({x} := ([x] + [1]))})) .
+
+endfm)
+
+(rew execTransSystem((init), (init), transition2, valuation, FMAP | COMPS | PROPS, PHI) .)
+(search execTransSystem((init), (init), transition1, valuation, FMAP | COMPS | PROPS, PHI) =>* (PHI' | L | FMAP | COMPS) .)

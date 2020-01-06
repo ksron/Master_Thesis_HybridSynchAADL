@@ -1,0 +1,145 @@
+==========================================
+reduce in TEST-THREAD-DYNAMICS : execSample({thread,0}) .
+rewrites: 69
+result ConfigWithRand: {< controller : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features :
+    (< on : DataOutPort | properties : none,content : * # [(false).Bool] > <
+    off : DataOutPort | properties : none,content : * # [(false).Bool] > < temp
+    : DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [1.0e+1] # [(true).Bool] > < upper : Data |
+    properties : DataModel::InitialValue => {{30}},features : none,
+    subcomponents : none,connections : empty,value : [3.0e+1] # [(true).Bool] >
+    < curr : Data | properties : DataModel::InitialValue => {{0}},features :
+    none,subcomponents : none,connections : empty,value : [0.0] # [(true).Bool]
+    >),connections : empty,varGen : < "top.controller" >,currState : l1,
+    completeStates : l1,variables : x : Real,transitions : ((l1 -[on
+    dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[
+    lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; l2
+    -[otherwise]-> l1 {skip}),loopBound : 0,transBound : 2 >,0}
+==========================================
+reduce in TEST-THREAD-DYNAMICS : execResponse({thread,0}) .
+rewrites: 69
+result ConfigWithRand: {< controller : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features :
+    (< on : DataOutPort | properties : none,content : * # [(false).Bool] > <
+    off : DataOutPort | properties : none,content : * # [(false).Bool] > < temp
+    : DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [1.0e+1] # [(true).Bool] > < upper : Data |
+    properties : DataModel::InitialValue => {{30}},features : none,
+    subcomponents : none,connections : empty,value : [3.0e+1] # [(true).Bool] >
+    < curr : Data | properties : DataModel::InitialValue => {{0}},features :
+    none,subcomponents : none,connections : empty,value : [0.0] # [(true).Bool]
+    >),connections : empty,varGen : < "top.controller" >,currState : l1,
+    completeStates : l1,variables : x : Real,transitions : ((l1 -[on
+    dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[
+    lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; l2
+    -[otherwise]-> l1 {skip}),loopBound : 0,transBound : 2 >,0}
+==========================================
+reduce in TEST-THREAD-DYNAMICS : executeStep({thread,0}) .
+rewrites: 148
+result [ConfigWithRand]: execThread(< controller : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features :
+    (< on : DataOutPort | properties : none,content : * # [(false).Bool] > <
+    off : DataOutPort | properties : none,content : * # [(false).Bool] > < temp
+    : DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [1.0e+1] # [(true).Bool] > < upper : Data |
+    properties : DataModel::InitialValue => {{30}},features : none,
+    subcomponents : none,connections : empty,value : [3.0e+1] # [(true).Bool] >
+    < curr : Data | properties : DataModel::InitialValue => {{0}},features :
+    none,subcomponents : none,connections : empty,value : [0.0] # [(true).Bool]
+    >),connections : empty,varGen : < "top.controller" >,currState : l1,
+    completeStates : l1,variables : x : Real,transitions : ((l1 -[on
+    dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[
+    lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; l2
+    -[otherwise]-> l1 {skip}),loopBound : 0,transBound : 2 >, < on :
+    DataOutPort | properties : none,content : * # [(false).Bool] > < off :
+    DataOutPort | properties : none,content : * # [(false).Bool] > < temp :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] >, execTStep(x |-> [0.0] # [(false).Bool], location(
+    l2) trans((l1 -[on dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]]))
+    ; if(v[x] < c[lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr}
+    := v[x]}) ; l2 -[otherwise]-> l1 {skip}) execAction({if(v[x] < c[lower])(on
+    !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}, execVarAssign(
+    x, [0.0] # [(false).Bool], local(x |-> [0.0] # [(false).Bool]) feature((on
+    |-> * # [(false).Bool], off |-> * # [(false).Bool], temp |-> ([0.0] # [(
+    false).Bool] : [(false).Bool]))) data((lower |=> [1.0e+1] # [(true).Bool],
+    upper |=> [3.0e+1] # [(true).Bool], curr |=> [0.0] # [(true).Bool])) prop((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}) complete(
+    l1)))), 0)
+==========================================
+reduce in TEST-THREAD-DYNAMICS : executeStep({thread transIn(real(10) # bool(
+    true), controller .. temp),0}) .
+rewrites: 232
+result ConfigWithRand: {< controller : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features :
+    (< on : DataOutPort | properties : none,content : * # [(true).Bool] > < off
+    : DataOutPort | properties : none,content : * # [(false).Bool] > < temp :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    1.0e+1] # [(true).Bool] >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [1.0e+1] # [(true).Bool] > < upper : Data |
+    properties : DataModel::InitialValue => {{30}},features : none,
+    subcomponents : none,connections : empty,value : [3.0e+1] # [(true).Bool] >
+    < curr : Data | properties : DataModel::InitialValue => {{0}},features :
+    none,subcomponents : none,connections : empty,value : [5.0] # [(true).Bool]
+    >),connections : empty,varGen : < "top.controller" >,currState : l1,
+    completeStates : l1,variables : x : Real,transitions : ((l1 -[on
+    dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[
+    lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; l2
+    -[otherwise]-> l1 {skip}),loopBound : 0,transBound : 2 >,0}
+==========================================
+reduce in TEST-THREAD-DYNAMICS : executeStep({thread transIn(real(0) # bool(
+    true), controller .. temp),0}) .
+rewrites: 232
+result ConfigWithRand: {< controller : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features :
+    (< on : DataOutPort | properties : none,content : * # [(true).Bool] > < off
+    : DataOutPort | properties : none,content : * # [(false).Bool] > < temp :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(true).Bool] >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [1.0e+1] # [(true).Bool] > < upper : Data |
+    properties : DataModel::InitialValue => {{30}},features : none,
+    subcomponents : none,connections : empty,value : [3.0e+1] # [(true).Bool] >
+    < curr : Data | properties : DataModel::InitialValue => {{0}},features :
+    none,subcomponents : none,connections : empty,value : [0.0] # [(true).Bool]
+    >),connections : empty,varGen : < "top.controller" >,currState : l1,
+    completeStates : l1,variables : x : Real,transitions : ((l1 -[on
+    dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[
+    lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; l2
+    -[otherwise]-> l1 {skip}),loopBound : 0,transBound : 2 >,0}
+==========================================
+reduce in TEST-THREAD-DYNAMICS : executeStep({thread transIn(real(50) # bool(
+    true), controller .. temp),0}) .
+rewrites: 291
+result ConfigWithRand: {< controller : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::SamplingTime => {{
+    0.0 .. 2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features :
+    (< on : DataOutPort | properties : none,content : * # [(false).Bool] > <
+    off : DataOutPort | properties : none,content : * # [(false).Bool] > < temp
+    : DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    5.0e+1] # [(true).Bool] >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [1.0e+1] # [(true).Bool] > < upper : Data |
+    properties : DataModel::InitialValue => {{30}},features : none,
+    subcomponents : none,connections : empty,value : [3.0e+1] # [(true).Bool] >
+    < curr : Data | properties : DataModel::InitialValue => {{0}},features :
+    none,subcomponents : none,connections : empty,value : [2.5e+1] # [(
+    true).Bool] >),connections : empty,varGen : < "top.controller" >,currState
+    : l1,completeStates : l1,variables : x : Real,transitions : ((l1 -[on
+    dispatch]-> l2 {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[
+    lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; l2
+    -[otherwise]-> l1 {skip}),loopBound : 0,transBound : 2 >,0}
+Bye.

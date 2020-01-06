@@ -1,0 +1,15 @@
+mod TEST is
+  including MODEL-TRANSITION-SYSTEM .
+  
+  var T : Time .
+  var NT : NzTime .
+  var OBJ : Object .
+
+  sort Gsys .
+  op {_,_} : Configuration Time -> Gsys [ctor] .
+  
+  crl [imp] : {OBJ, T} => {OBJ, T + NT}
+  if NT := mte(OBJ) .
+
+endm
+

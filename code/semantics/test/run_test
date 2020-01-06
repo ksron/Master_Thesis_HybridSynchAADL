@@ -1,0 +1,19 @@
+#!/bin/bash
+MAUDESMT_DIR=/home/ksron/maude-z3
+MAUDESMT_BIN=maude
+
+MAUDESMT_COM="$MAUDESMT_DIR/$MAUDESMT_BIN -no-advise -no-prelude -no-banner $MAUDESMT_DIR/prelude.maude $MAUDESMT_DIR/smt.maude"
+
+if [ "$1" == "-gen" ]; then
+    for file in $(find . -name "test-*.maude")
+    do
+        echo Running $file ...
+        echo "quit" | $MAUDESMT_COM  $file > ${file%.*}.expected
+    done
+else
+    for file in $(find . -name "test-*.maude") 
+    do
+        echo Testing $file ...
+        echo "quit" | $MAUDESMT_COM  $file | diff ${file%.*}.expected -
+    done
+fi

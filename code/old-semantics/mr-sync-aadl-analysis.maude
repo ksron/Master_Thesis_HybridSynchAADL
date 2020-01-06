@@ -1,0 +1,120 @@
+
+--- Define standard atomic propositions to make LTL model checking
+--- possible without knowing the Real-Time Maude representation of an AADL model.
+
+(tomod AADL-LTL-PROPOSITION is
+  including MODEL-TRANSITION-SYSTEM .
+  including TIMED-MODEL-CHECKER .
+
+  var CR : ComponentRef .   var P : FeatureId .
+  vars COMPS PORTS PORTS' REST : Configuration .
+  var FMAP : FeatureMap .  var PROPS : PropertyAssociation .
+  var PATH : ComponentRef .  var L : Location .
+  var E : SymExpr .  var V : SymExpr . var DCL : List{DataContent} .
+
+--- component data expressions
+  op _|_ : ComponentRef SymExpr -> Prop [ctor] .
+
+  eq {< CR : Ensemble | subcomponents : COMPS >} |= PATH | E
+   = lookupExp(COMPS, PATH, E) .
+
+  op lookupExp : Configuration ComponentRef SymExpr -> Bool .
+  eq lookupExp(< CR : Ensemble | subcomponents : COMPS > REST, CR . PATH, E)
+   = lookupExp(COMPS, PATH, E) .
+  eq lookupExp(< CR : Component | features : PORTS,
+                                 subcomponents : COMPS, properties : PROPS > REST, CR, E)
+   = eval(E, empty | feedbackOutputs(PORTS,empty) | COMPS | PROPS) == [true] .
+  eq lookupExp(REST, PATH, E) = false [owise] .
+
+  --- return the last value in a given feedback output port
+  --- TODO: need to have some function??
+  op feedbackOutputs : Configuration FeatureMap -> FeatureMap [format (m! o)] .
+  eq feedbackOutputs(< P : OutPort | content : DCL V > PORTS, FMAP)
+   = feedbackOutputs(PORTS, insert(P, V, FMAP)) .
+  eq feedbackOutputs(PORTS, FMAP) = FMAP [owise] .
+
+
+--- thread states
+  op _@_ : ComponentRef Location -> Prop [ctor] .
+  eq {< CR : Ensemble | subcomponents : COMPS >} |= PATH @ L
+   = lookupState(COMPS, PATH, L) .
+
+  op lookupState : Configuration ComponentRef Location -> Bool .
+  eq lookupState(< CR : Ensemble | subcomponents : COMPS > REST, CR . PATH, L)
+   = lookupState(COMPS, PATH, L) .
+  eq lookupState(< CR : Thread | currState : L > REST, CR, L) = true .
+  eq lookupState(REST, PATH, L) = false [owise] .
+endtom)
+
+
+(tomod AADL-SIMPLE-COUNTEREXAMPLE is
+  including AADL-LTL-PROPOSITION .
+  including MAP{ComponentRef,DataContent} * (op _|->_ to _<-_) .
+
+  vars OBJ : Object .  vars REST PORTS COMPS : Configuration .  var CIS : CounterExampleItemSet .
+  vars CR CR' : ComponentRef . var P : FeatureId . var L : Location .
+  var DC : DataContent . var NDL : NeList{DataContent} .  var T : Time . var RN : RuleName .
+
+--- simplified counter example information
+  sorts CounterExampleItem .
+  op _->`[_`] : ComponentRef CounterExampleItemSet -> CounterExampleItem [ctor format(r o d n++i d --)] .
+  op variables:_ : Map{ComponentRef,DataContent} -> CounterExampleItem [ctor prec 124 format(b o d)] .
+  op outputs:_ : FeatureMap -> CounterExampleItem [ctor prec 124 format(b o d)] .
+  op currState:_ : Location -> CounterExampleItem [ctor format(b o d)] .
+
+  sort CounterExampleItemSet .
+  subsort CounterExampleItem < CounterExampleItemSet .
+  op none : -> CounterExampleItemSet [ctor] .
+  op __ : CounterExampleItemSet CounterExampleItemSet -> CounterExampleItemSet [ctor comm assoc id: none format(d ni d) prec 126] .
+
+  sort TimedCounterExampleItemSet .
+  op _in`time_ : CounterExampleItemSet Time -> TimedCounterExampleItemSet [ctor format (o nig g y o) prec 127] .
+
+  --- new counterexample transition
+  op `{_`,_`} : CounterExampleItemSet RuleName -> Transition [ctor format(n d d d d d)] .
+  op `{_`,_`} : TimedCounterExampleItemSet RuleName -> Transition [ctor format(n d d d d d)] .
+
+  --- removes redundant information
+  eq CR ->[(variables: empty) CIS] = CR ->[CIS] .
+  eq CR ->[(outputs: empty) CIS]   = CR ->[CIS] .
+  eq CR ->[ CR' -> [CIS] ] = CR . CR' -> [CIS] .
+
+  --- simplify rules
+  eq {{< CR : Ensemble | subcomponents : COMPS >}, RN}
+   = {simplify(COMPS), RN} .  --- simplify transition
+
+  eq {global({< CR : Ensemble | subcomponents : COMPS >} in time T), RN}
+   = {simplify(COMPS) in time T, RN} .  --- simplify transition
+
+  --- need to deal with "transformed" models in Real-Time Maude
+  op global : ClockedSystem -> ClockedSystem .
+
+--- simplify
+  op simplify : Configuration -> CounterExampleItemSet .
+  eq simplify(< CR : Ensemble | > REST) = (CR ->[ simplifyEnsemble(< CR : Ensemble | >) ]) simplify(REST) .
+  eq simplify(< CR : Thread | > REST) = (CR ->[ simplifyThread(< CR : Thread | >) ]) simplify(REST) .
+  eq simplify(REST) = none [owise] .
+
+--- simplify ensemble
+  op simplifyEnsemble : Object -> CounterExampleItemSet .
+  eq simplifyEnsemble(< CR : Ensemble | subcomponents : COMPS, features : PORTS >)
+   = (outputs: simplifyFeatures(PORTS)) simplify(COMPS) .
+
+--- simplify thread
+  op simplifyThread : Object -> CounterExampleItem .
+  eq simplifyThread(< CR : Thread | subcomponents : COMPS, features : PORTS, currState : L >)
+   = (variables: simplifyData(COMPS)) (outputs: simplifyFeatures(PORTS)) (currState: L) .
+  eq simplifyThread(OBJ) = none [owise] .
+
+--- simplify data components
+  op simplifyData : Configuration -> Map{ComponentRef,DataContent} .
+  eq simplifyData(< CR : Data | value : DC > REST) = (CR <- DC), simplifyData(REST) .
+  eq simplifyData(REST) = empty [owise] .
+
+--- simplify features, showing only output (feedback) port values
+  op simplifyFeatures : Configuration -> FeatureMap .
+  eq simplifyFeatures(< P : OutPort | content : NDL > REST) = (P |-> {NDL}), simplifyFeatures(REST) .
+  eq simplifyFeatures(REST) = empty [owise] .
+
+  op `{_`} : List{DataContent} -> DataContent [ctor] .
+endtom)

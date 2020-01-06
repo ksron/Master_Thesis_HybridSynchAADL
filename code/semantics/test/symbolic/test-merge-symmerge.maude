@@ -1,0 +1,177 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+-------------------------------------------------
+fmod TEST-SYM-MERGE-EXP is
+  pr SYM-MERGE-EXP .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+endfm
+
+red symMerge([1] + r(0), [1] + r(0), < "a.b", 1, 0 >, < "a.b", 1, 0 >) .
+red symMerge([1] + r(0), [1], < "a.b", 1, 0 >, < "a.b", 1, 0 >) .
+red symMerge([true] and b(0), [true] and b(0), < "a.b", 0, 1 >, < "a.b", 0, 1 >) .
+red symMerge([true] and b(0), b(0), < "a.b", 0, 1 >, < "a.b", 0, 1 >) .
+red symMerge(*, *, < "a.b", 0, 0 >, < "a.b", 0, 0 >) .
+
+red symMerge(r(1), [1] + r(0),      < "a.b", 2, 0 >, < "a.b", 1, 0 >) .
+red symMerge(b(1), [true] and b(0), < "a.b", 0, 2 >, < "a.b", 0, 1 >) .
+
+
+-------------------------------------------------
+fmod TEST-SYM-MERGE-LOCATION is
+  pr SYM-MERGE-LOCATION .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+endfm
+
+red symMerge(loc(r(0)), loc(r(0)), < "a.b", 1, 0 >, < "a.b", 1, 0 >) .
+red symMerge(loc([1]),  loc(r(0)), < "a.b", 1, 0 >, < "a.b", 1, 0 >) .
+red symMerge(loc(r(0)), loc([1]), < "a.b", 1, 0 >, < "a.b", 1, 0 >) .
+red symMerge(loc(r(0)), loc([1]), < "a.b", 1, 0 >, < "a.b", 0, 0 >) .
+
+
+-------------------------------------------------
+fmod TEST-SYM-MERGE-DATA-CONTENT is
+  pr SYM-MERGE-DATA-CONTENT .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+endfm
+
+red symMerge([1] # b(0), [1] # b(0), < "a.b", 0, 1 >, < "a.b", 0, 1 >) .
+red symMerge([true] # b(0), b(1) # b(0), < "a.b", 0, 2 >, < "a.b", 0, 2 >) .
+red symMerge([1] # b(0), [1] # b(1), < "a.b", 0, 2 >, < "a.b", 0, 2 >) .
+red symMerge([1] # b(0), r(0) # b(1), < "a.b", 1, 2 >, < "a.b", 1, 2 >) .
+
+red symMerge(b(1) # b(0), [true] # b(0), < "a.b", 0, 2 >, < "a.b", 0, 1 >) .
+red symMerge(r(0) # b(1), [1] # b(0), < "a.b", 1, 2 >, < "a.b", 0, 1 >) .
+
+
+-------------------------------------------------
+fmod TEST-SYM-MERGE-FEATURE-MAP-CONTENT is
+  pr SYM-MERGE-FEATURE-MAP-CONTENT .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+endfm
+
+red symMerge([1] # b(0) : b(1), [1] # b(0) : b(1), < "a.b", 0, 2 >, < "a.b", 0, 2 >) .
+red symMerge(r(0) # b(0) : [false], [1] # b(0) : b(1), < "a.b", 1, 2 >, < "a.b", 1, 2 >) .
+red symMerge([1] # b(1) : b(1), [1] # b(0) : b(1), < "a.b", 1, 2 >, < "a.b", 1, 2 >) .
+red symMerge([true] # b(0) : [false], b(1) # b(2) : b(3), < "a.b", 0, 4 >, < "a.b", 0, 4 >) .
+
+red symMerge([1] # b(1) : b(1), [1] # b(0) : b(0), < "a.b", 0, 2 >, < "a.b", 0, 1 >) .
+red symMerge(r(1) # b(1) : [false], [1/2] # b(0) : [true], < "a.b", 2, 2 >, < "a.b", 1, 1 >) .
+
+
+-------------------------------------------------
+fmod TEST-SYM-MERGE-FEATURE-MAP is
+  including SYM-MERGE-FEATURE-MAP .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+  ops a b c d e : -> FeatureId .
+endfm
+
+
+red symMerge(
+    (a |-> (r(1) # [false] : [false]), 
+     b |-> (r(0) # [true] : [true]), 
+     c |-> (r(0) # (b(0) or b(1)) : b(0)), 
+     d |-> [0] # [false], 
+     e |-> [0] # [false])
+,
+    (a |-> (r(1) # [false] : b(0)), 
+     b |-> (r(0) # b(1) : [true]), 
+     c |-> (r(0) # b(2) : b(3)), 
+     d |-> r(2) # [false], 
+     e |-> [0] # [false])
+,
+    < "a.b",3,4 >, < "a.b",3,4 >) .
+
+red symMerge(
+    (a |-> (r(1) # [false] : b(0)), 
+     b |-> (r(0) # b(1) : [true]), 
+     c |-> (r(0) # b(2) : b(3)), 
+     d |-> r(2) # [false], 
+     e |-> [0] # [false])
+,
+    (a |-> (r(1) # [false] : [false]), 
+     b |-> (r(0) # [true] : [true]), 
+     c |-> (r(0) # (b(0) or b(1)) : b(0)), 
+     d |-> [0] # [false], 
+     e |-> [0] # [false])
+,
+    < "a.b",3,4 >, < "a.b",2,3 >) .
+
+
+-------------------------------------------------
+mod TEST-SYM-MERGE-DATA-VALUATION is
+  including SYM-MERGE-DATA-VALUATION .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+
+  ops c1 c2 c3 : -> ComponentRef .
+endm
+
+red symMerge(
+    (c1 |=> [3/4] # b(1), c2 |=> r(0) # b(2), c3 |=> [true] # b(2))
+,
+    (c1 |=> r(1) # b(1), c2 |=> r(0) # [false], c3 |=> [true] # b(2))
+,
+    < "a.b",2,3 >, < "a.b",2,3 >) .
+    
+red symMerge(
+    (c1 |=> r(1) # b(1), c2 |=> r(0) # [false], c3 |=> [true] # b(2))
+,
+    (c1 |=> [3/4] # b(1), c2 |=> r(0) # b(0), c3 |=> [true] # b(0))
+,
+    < "a.b",2,3 >, < "a.b",1,2 >) .
+
+
+-------------------------------------------------
+mod TEST-SYM-MERGE-TRANSITION-RESULT is
+  including SYM-MERGE-TRANSITION-RESULT .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+
+  ops c1 c2 c3 : -> ComponentRef .
+  ops a b c d e : -> FeatureId .
+endm
+
+red symMerge(
+(
+    loc(r(2)) 
+| 
+    (a |-> (r(1) # [false] : b(0)), 
+     b |-> (r(0) # b(1) : [true]), 
+     c |-> (r(0) # b(2) : b(3)), 
+     d |-> r(2) # [false], 
+     e |-> [0] # [false])
+|
+    (c1 |=> r(1) # b(1),
+     c2 |=> r(0) # [false],
+     c3 |=> [true] # b(2))
+|
+    b("b",0)
+|
+    < "a.b",3,4 >)
+;;
+(    
+    loc(b(0) ? r(0) : r(1)) 
+| 
+    (a |-> (r(1) # [false] : [false]), 
+     b |-> (r(0) # [true] : [true]), 
+     c |-> (r(0) # (b(0) or b(1)) : b(0)), 
+     d |-> [0] # [false], 
+     e |-> [0] # [false])
+|
+    (c1 |=> [3/4] # b(1), 
+     c2 |=> r(0) # b(2), 
+     c3 |=> [true] # b(2))
+|
+    b("a",0)
+|
+    < "a.b",2,3 >)
+) .
+

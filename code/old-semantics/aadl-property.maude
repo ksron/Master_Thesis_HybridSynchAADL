@@ -1,0 +1,61 @@
+--- This file specifies default properties that are used in our Real-Time
+--- Maude semantics (and MR-SynchAADL) .
+
+--- default property values.
+(fmod AADL-PROPERTY-VALUE is
+  including CONCRETE-VALUE .
+
+  sort PropertyValue .
+
+  op `{_`} : Bool -> PropertyValue [ctor] .
+  op `{_`} : Int -> PropertyValue [ctor] .
+  op `{_`} : Float -> PropertyValue [ctor] .
+  op `{_`} : String -> PropertyValue [ctor] .
+
+  --- This should be defined for each property values that can be used in the behavior annex.
+  op value : PropertyValue -> Value [format (m! o)] .
+  eq value({B:Bool})   = [B:Bool] .
+  eq value({I:Int})    = [I:Int] .
+  eq value({F:Float})  = [F:Float] .
+  eq value({S:String}) = [S:String] .
+endfm)
+
+(fmod AADL-PROPERTY is
+  including PROPERTY-ID .
+  including AADL-PROPERTY-VALUE .
+
+  sorts Property .
+  op _=>_ : PropertyId PropertyValue -> Property [ctor] .
+endfm)
+
+(view Property from TRIV to AADL-PROPERTY is
+  sort Elt to Property .
+endv)
+
+(fmod AADL-PROPERTY-ASSOCIATION is
+  including SET{Property} * (sort Set{Property} to PropertyAssociation,
+                             sort NeSet{Property} to NePropertyAssociation,
+                             op _`,_ to _;_,
+                             op empty to none) .
+endfm)
+
+--------------------------------
+--- Supported AADL properties
+--------------------------------
+
+--- default aadl properties, cetegorized according to the AADL book.
+(fmod DEFAULT-PROPERTIES is
+  including AADL-PROPERTY .
+
+  op TimingProperties::Period : -> PropertyId [ctor] .
+endfm)
+
+--- the Hybrid-SynchAADL properties
+(fmod SYNCHAADL-PROPERTIES is
+  including BUILTIN-INPUT-ADAPTORS .
+  including AADL-PROPERTY .
+
+  ops HybridAADL::Synchronous  HybridAADL::Nondeterministic  HybridAADL::InputAdaptor : -> PropertyId [ctor] .
+
+  op `{_`} : BuiltinInputAdaptor -> PropertyValue [ctor] .
+endfm)

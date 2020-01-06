@@ -1,0 +1,42 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-env-semantics.maude
+
+
+-------------------------------------------------
+mod TEST-ENV-TRANSITION-SEMANTICS-META is
+  including TEST-ENV-TRANSITION-SEMANTICS .
+  including MERGE-ENV-TRANSITION-SEMANTICS .
+
+  eq @m@ = ['TEST-ENV-TRANSITION-SEMANTICS] .
+endm
+
+red
+  execEnvMerge(time([0])
+          mode(loc(r("mode",0)))
+          vargen(< "G", 5, 5 >)
+          sampling(((cr1 : (0,1))))
+          response(((cr1 : (4/7,3))))
+          jumps(
+            (loc([0]) -[  on1 ]-> loc([1])) ;
+            (loc([1]) -[ off1 ]-> loc([0])))
+          flows(
+            (loc([0])[(x(t) = c[x] - (v[t] * [[0.1]]))]) ;
+            (loc([1])[(x(t) = c[x] + (v[t] * [[0.2]]))]))
+          envcon(conx,envports)
+          bcf) .
+
+red
+  execEnvMerge(time([0])
+          mode(loc(r("mode",0)))
+          vargen(< "G", 5, 5 >)
+          sampling(((cr1 : (0,1)),   (cr2 : (3/2,5/2))))
+          response(((cr1 : (4/7,3)), (cr2 : (13/4,4))))
+          jumps(trans)
+          flows(flows)
+          envcon(conx,envports)
+          bcf) .
+

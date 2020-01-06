@@ -1,0 +1,35 @@
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load ../syntax/module-transfer-data.maude
+
+-------------------------------------
+select TEST-CONX-TABLE .
+
+red inner-tb (conn) .
+red outer-tb (conn) .
+
+
+-------------------------------------
+mod TEST is
+  pr TEST-TRANSFER-DATA .
+  pr SMT-REAL-EXP .
+endm
+
+red < e : System | 
+        features : ports transIn(r("########",0) # b(1), c1 .. i3),
+        subcomponents : comps,
+        connections : conn,
+        properties : none > .
+
+red < e : System | 
+        features : ports,
+        subcomponents : comps transOut(r("########",0) # b(1), ei1),
+        connections : conn,
+        properties : none > .
+
+
+red transferInputs(system) .
+
+red transferResults(system) .
+

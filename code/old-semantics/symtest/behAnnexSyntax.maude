@@ -1,0 +1,214 @@
+--- Defines the syntax of the behavior annex language in AADL.
+--- This is intended for the MR-SynchAADL, so some features are
+--- not defined, such as nontrivial dispatch conditions, events,
+--- delays, required_subprogram_access_feature, etc. Also, arrays
+--- and for/forAll loops are not supported yet, either.
+
+fmod BEHAVIOR-EXPRESSION-SYNTAX is
+  including BEHAVIOR-VAR-ID .
+  including FEATURE-ID .
+  including PROPERTY-ID .
+  including COMPONENT-REF .
+  including SYM-BASIC-VAR .
+  including CONCRETE-VALUE .
+
+  sort Expression .
+  subsort SymExpr < Expression .
+
+--- access feature/port/local-var names..
+  sort VarExpression .
+  subsort VarExpression < Expression .
+  op `[_`] : FeatureId -> Expression [ctor] .     --- reference
+  op `[_`] : VarId -> Expression [ctor] .         --- reference
+  op `[_`] : ComponentRef -> Expression [ctor] .  --- reference
+  op `[_`] : PropertyId -> Expression [ctor] .    --- reference
+
+  op count : FeatureId -> VarExpression [ctor] .    --- p'count
+  op fresh : FeatureId -> VarExpression [ctor] .    --- p'fresh
+
+--- binary operators
+  op _and_ : Expression Expression -> Expression [ctor] .
+  op _or_ : Expression Expression -> Expression [ctor] .
+  op _xor_ : Expression Expression -> Expression [ctor] .
+
+  op _=_ : Expression Expression -> Expression [ctor] .
+  op _!=_ : Expression Expression -> Expression [ctor] .
+  op _<_ : Expression Expression -> Expression [ctor] .
+  op _<=_ : Expression Expression -> Expression [ctor] .
+  op _>_ : Expression Expression -> Expression [ctor] .
+  op _>=_ : Expression Expression -> Expression [ctor] .
+
+  op _+_ : Expression Expression -> Expression [ctor] .
+  op _-_ : Expression Expression -> Expression [ctor] .
+  op _*_ : Expression Expression -> Expression [ctor] .
+  op _/_ : Expression Expression -> Expression [ctor] .
+  op _mod_ : Expression Expression -> Expression [ctor] .
+  op _rem_ : Expression Expression -> Expression [ctor] .
+  op _**_ : Expression Expression -> Expression [ctor] .
+
+--- unary operators
+  op not : Expression -> Expression [ctor] .
+  op plus : Expression -> Expression [ctor] .
+  op minus : Expression -> Expression [ctor] .
+  op abs : Expression -> Expression [ctor] .
+endfm
+
+fmod SYM-EXPRESSION-SYNTAX is
+  including BEHAVIOR-EXPRESSION-SYNTAX .
+
+--- binary operators
+  op _and_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _or_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _xor_ : SymExpr SymExpr -> SymExpr [ctor] .
+
+  op _=_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _!=_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _<_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _<=_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _>_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _>=_ : SymExpr SymExpr -> SymExpr [ctor] .
+
+  op _+_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _-_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _*_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _/_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _mod_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _rem_ : SymExpr SymExpr -> SymExpr [ctor] .
+  op _**_ : SymExpr SymExpr -> SymExpr [ctor] .
+
+--- unary operators
+  op not : SymExpr -> SymExpr [ctor] .
+  op plus : SymExpr -> SymExpr [ctor] .
+  op minus : SymExpr -> SymExpr [ctor] .
+  op abs : SymExpr -> SymExpr [ctor] .
+endfm
+
+fmod EXPRESSION-SYNTAX is
+  including SYM-EXPRESSION-SYNTAX .
+
+--- binary operators
+  op _and_ : Value Value -> Value [ctor] .
+  op _or_ : Value Value -> Value [ctor] .
+  op _xor_ : Value Value -> Value [ctor] .
+
+  op _=_ : Value Value -> Value [ctor] .
+  op _!=_ : Value Value -> Value [ctor] .
+  op _<_ : Value Value -> Value [ctor] .
+  op _<=_ : Value Value -> Value [ctor] .
+  op _>_ : Value Value -> Value [ctor] .
+  op _>=_ : Value Value -> Value [ctor] .
+
+  op _+_ : Value Value -> Value [ctor] .
+  op _-_ : Value Value -> Value [ctor] .
+  op _*_ : Value Value -> Value [ctor] .
+  op _/_ : Value Value -> Value [ctor] .
+  op _mod_ : Value Value -> Value [ctor] .
+  op _rem_ : Value Value -> Value [ctor] .
+  op _**_ : Value Value -> Value [ctor] .
+
+--- unary operators
+  op not : Value -> Value [ctor] .
+  op plus : Value -> Value [ctor] .
+  op minus : Value -> Value [ctor] .
+  op abs : Value -> SymExpr [ctor] .
+endfm
+
+fmod BEHAVIOR-CONDITION-SYNTAX is
+  including EXPRESSION-SYNTAX .
+
+  sort TransGuard .
+  sort DispatchCond .
+  subsort DispatchCond < TransGuard .
+  op on`dispatch : -> DispatchCond [ctor] .
+
+--- execute conditions
+  sort ExecuteCond .
+  subsort Expression < ExecuteCond < TransGuard .
+  op otherwise : -> ExecuteCond [ctor] .
+endfm
+
+
+fmod BEHAVIOR-ACTION-SYNTAX is
+  including EXPRESSION-SYNTAX .
+  including CLASSIFIER-ID .
+
+  sort Action .
+
+--- action block
+  sort ActionBlock .
+  subsort ActionBlock < Action .
+  op `{_`} : ActionGroup -> ActionBlock [ctor] .
+
+  sorts ActionGroup ActionSequence ActionSet  EmptyAction .
+  subsorts Action EmptyAction < ActionSequence ActionSet < ActionGroup .
+  op skip : -> EmptyAction [ctor] . --- no action
+  op _;_ : ActionSequence ActionSequence -> ActionSequence [ctor assoc] .
+  op _&_ : ActionSet ActionSet -> ActionSet [ctor comm assoc] .
+
+--- assignment: local variables, output ports/params, and data (sub)components
+  sort AssignmentAction .
+  subsort AssignmentAction < Action .
+  op _:=_ : AssignmentTarget Expression -> AssignmentAction [ctor] .
+
+  sort AssignmentTarget .
+  op `{_`} : VarId -> AssignmentTarget [ctor] .
+  op `{_`} : FeatureId -> AssignmentTarget [ctor] .
+  op `{_`} : ComponentRef -> AssignmentTarget [ctor] .
+
+--- communication: in MR-SynchAADL, only subprogram component/classifier call.
+  sort CommunicationAction .
+  subsort CommunicationAction < Action .
+
+  op _! : ComponentId -> CommunicationAction [ctor] .
+  op _!`(_`) : ComponentId ParameterList -> CommunicationAction [ctor] .
+
+  op _! : ClassifierId -> CommunicationAction [ctor] .
+  op _!`(_`) : ClassifierId ParameterList -> CommunicationAction [ctor] .
+
+  sort ParameterList .
+  subsort Expression < ParameterList .
+  op _`,_ : ParameterList ParameterList -> ParameterList [ctor assoc] .
+
+--- branch action
+  sort BranchAction .
+  subsort BranchAction < Action .
+  op if`(_`)_end`if : Expression ActionGroup -> BranchAction [ctor] .
+  op if`(_`)_else_end`if : Expression ActionGroup ActionGroup -> BranchAction [ctor] .
+  op if`(_`)__end`if : Expression ActionGroup ElseIfs -> BranchAction [ctor] .
+  op if`(_`)__else_end`if : Expression ActionGroup ElseIfs ActionGroup -> BranchAction [ctor] .
+
+  sort ElseIfs .
+  op __ : ElseIfs ElseIfs -> ElseIfs [ctor assoc] .
+  op elsif`(_`)_ : Expression ActionGroup -> ElseIfs [ctor] .
+
+--- loop action. NOTE: The for loop is not supported yet.
+  sort LoopAction .
+  subsort LoopAction < Action .
+  op while`(_`)`{_`} : Expression ActionGroup -> LoopAction [ctor] .
+  op do_until`(_`) : ActionGroup Expression -> LoopAction [ctor] .
+endfm
+
+
+fmod BEHAVIOR-TRANSITION is
+  including BEHAVIOR-CONDITION-SYNTAX .
+  including BEHAVIOR-ACTION-SYNTAX .
+  including SET{Location} * (op _`,_ to __) .
+
+  sort Transition .
+
+  --- source -[ guard ]-> destination {action}
+  op _-`[_`]->__ : Location TransGuard Location ActionBlock -> Transition [ctor] .
+
+  --- NOTE: we do not consider a transition priority yet.
+  --- [priority]: sources -[ guard ]-> destination {action}
+  --- op [_`]:_-`[_`]->__ : Nat Location TransGuard Location ActionBlock -> Transition [ctor] .
+endfm
+
+
+view Transition from TRIV to BEHAVIOR-TRANSITION is
+  sort Elt to Transition .
+endv
+
+fmod BEHAVIOR-TRANSITION-SET is
+  including SET{Transition} * (op _`,_  to _;_) .
+endfm

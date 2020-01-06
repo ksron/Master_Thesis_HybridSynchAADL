@@ -1,0 +1,76 @@
+--- In AADL, a software component is one of systems, processes, thread groups,
+--- thread, subprogram groups, subprograms, and data. All of them can have
+--- subcomponents, connections, and properties.
+
+--- In this version, we do not consider "provides/requires subprogramm access"
+--- feature, since it may introduce asynchronous behavior. Therefore,
+--- subprogram groups are not considered here.
+
+--- the basic class
+(omod COMPONENT is
+  including FEATURE .
+  including CONNECTION-SET .
+  including EXPRESSION-SYNTAX .
+
+  vars PHI PHI' : SymExpr . vars CONF CONF' : Configuration .
+
+  class Component | features : Configuration,
+                    subcomponents : Configuration,
+		                connections : Set{Connection},
+		                properties : PropertyAssociation .
+  subsort ComponentRef < Oid .
+endom)
+
+--- a component with period (or rate).
+(omod PERIODIC-COMPONENT is
+  including COMPONENT .
+
+  class PeriodicComponent | rate : NzNat .
+  subclass PeriodicComponent < Component .
+endom)
+
+--- a container class whose behavior is defined by its subcomponents.
+(omod ENSEMBLE-COMPONENTS is
+  including PERIODIC-COMPONENT .
+
+  class Ensemble .
+  subclass Ensemble < PeriodicComponent .
+
+  class System .
+  class Process .
+  class ThreadGroup .
+  subclass System Process ThreadGroup < Ensemble .
+endom)
+
+(omod ENVIRONMENT-COMPONENT is
+  including PERIODIC-COMPONENT .
+  including SET{VarId} * (op _`,_ to _;_) .
+
+  class Environment | currMode : Location ,
+  	  				  variables : Set{VarId} .
+					  
+  subclass Environment < PeriodicComponent .
+
+endom)
+
+--- We assume that each thread has its behavior specification.
+(omod THREAD-COMPONENT is
+  including PERIODIC-COMPONENT .
+  including BEHAVIOR-TRANSITION-SET .
+  including SET{VarId} * (op _`,_ to _;_) .
+
+  class Thread | currState : Location,
+                 completeStates : Set{Location},
+            		 variables : Set{VarId},
+            		 transitions : Set{Transition} .
+  subclass Thread < PeriodicComponent .
+endom)
+
+--- A data component has a value.
+(omod DATA-COMPONENT is
+  including COMPONENT .
+  including DATA-CONTENT .
+
+  class Data | value : DataContent .
+  subclass Data < Component .
+endom)

@@ -1,0 +1,58 @@
+#!/bin/bash
+MAUDE_DIR=/home/ksron/maude-z3
+MAUDE_BIN=maude
+MAUDE_COM="$MAUDE_DIR/$MAUDE_BIN -no-advise -no-prelude -no-banner $MAUDE_DIR/prelude.maude $MAUDE_DIR/smt.maude"
+
+TIME=3600000
+RANGE=1000000
+
+TEMP_FILE=random_generation_file.maude
+
+file=$1
+searchFile=$2
+SEARCH_DEPTH=$3
+RESULT_DIR=$4
+MODEL=$(echo ${file%.*} | cut -d'_' -f 7)
+RESULT_FILE=${RESULT_DIR}/${searchFile%.*}_${MODEL}_${SEARCH_DEPTH}
+
+> ${RESULT_FILE}.expected
+> ${RESULT_FILE}.result
+
+ELLAPSE=0
+RUNTIME=0
+
+while [ "$ELLAPSE" -le $TIME ]
+do
+
+  RUNTIME=$((RUNTIME + 1))  
+  number=$RANDOM
+  let "number %= $RANGE"
+
+  TEMP_FILE=${RESULT_FILE}.maude
+  sed "s/000/${number}/g" ${searchFile} | sed "s/&&&/${SEARCH_DEPTH}/g" > ${TEMP_FILE}
+
+  ST=`date +%s%3N`
+  echo "quit" | $MAUDE_COM $file $TEMP_FILE >> ${RESULT_FILE}.expected
+  END=`date +%s%3N`
+  ELLAPSE=`expr $ELLAPSE + $END - $ST`
+
+  rm ${TEMP_FILE}
+
+  if grep -q Solution ${RESULT_FILE}.expected 
+  then
+#    grep Solution ${RESULT_FILE}.expected >> ${RESULT_FILE}.result
+    echo "SOLUTION=FOUND" > ${RESULT_FILE}.result
+    break  
+  fi
+done
+
+if [ "$ELLAPSE" -ge $TIME ] ;
+then
+  echo "SOLUTION=NONE" > ${RESULT_FILE}.result
+fi
+
+SSTATES=$(grep "states" ${RESULT_FILE}.expected | awk '{SUM += $2} END {print SUM}')
+
+echo "SEARCHED_STATES="${SSTATES} >> ${RESULT_FILE}.result
+echo "RUNS=${RUNTIME}" >> ${RESULT_FILE}.result
+echo "EXEC_TIME=${ELLAPSE}ms" >> ${RESULT_FILE}.result

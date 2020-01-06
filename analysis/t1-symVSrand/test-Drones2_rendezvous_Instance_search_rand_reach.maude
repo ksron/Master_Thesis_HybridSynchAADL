@@ -1,0 +1,8 @@
+--- COLLISION
+search [1] {{cinitState, 000}, 0, &&&} =>+
+{{O:Object,N:Nat}, T:Time, &&&} such that check-true(
+eval( Drones2rendezvousInstance |
+  ((abs((drone1 . environment | c[x]) - (drone2 . environment | c[x])) < [[0.4]])
+and
+   (abs((drone1 . environment | c[y]) - (drone2 . environment | c[y])) < [[0.4]]))
+,O:Object)) .

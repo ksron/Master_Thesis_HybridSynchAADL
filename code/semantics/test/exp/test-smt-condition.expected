@@ -1,0 +1,37 @@
+==========================================
+reduce in SMT-BOOL-EXP : [true] .
+rewrites: 0
+result SMTBoolValue: [true]
+==========================================
+reduce in SMT-BOOL-EXP : b(2) .
+rewrites: 0
+result SMTBoolVar: b(2)
+==========================================
+reduce in SMT-BOOL-EXP : b("a", 2) .
+rewrites: 0
+result SMTBoolVar: b("a", 2)
+==========================================
+reduce in SMT-BOOL-EXP : b(2) and [true] or b(4) === [false] .
+rewrites: 0
+result BoolExp: b(2) and [true] or b(4) === [false]
+==========================================
+reduce in SMT-REAL-EXP : [2/3] .
+rewrites: 0
+result SMTRealValue: [2/3]
+==========================================
+reduce in SMT-REAL-EXP : b(0) + [4/3] .
+rewrites: 0
+result [Exp]: b(0) + [4/3]
+==========================================
+reduce in SMT-REAL-EXP : r(0) + [4/3] .
+rewrites: 0
+result RealExp: r(0) + [4/3]
+==========================================
+reduce in SMT-REAL-EXP : r("b", 2) .
+rewrites: 0
+result SMTRealVar: r("b", 2)
+==========================================
+reduce in SMT-REAL-EXP : r(4) === r(5) or [0] > r(2) .
+rewrites: 0
+result BoolExp: r(4) === r(5) or [0] > r(2)
+Bye.

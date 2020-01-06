@@ -1,0 +1,212 @@
+mod SIMPLETHERM_IMPL_INSTANCE-MODEL is
+	including MODEL-TRANSITION-SYSTEM .
+	
+	--- AADL identifiers
+	ops offcontrol temp oncontrol : -> FeatureId [ctor] .
+	ops x t : -> VarId [ctor] .
+	ops controller environment ctrlThread ctrlProc lower upper SimpleThermimplInstance x curr : -> ComponentId [ctor] .
+	ops init off on : -> Location [ctor] .
+	--- the initial state
+	op initial : -> Object .
+	eq initial = < SimpleThermimplInstance : System |
+		features : (
+			none),
+		subcomponents : (
+			< controller : System |
+				features : (
+					< temp : DataInPort | 
+						content : null(Real) ,
+						cache : null(Real),
+						properties : none >
+					< oncontrol : DataOutPort | 
+						content : null(Unit) ,
+						properties : none >
+					< offcontrol : DataOutPort | 
+						content : null(Unit) ,
+						properties : none >),
+				subcomponents : (
+					< ctrlProc : Process |
+						features : (
+							< temp : DataInPort | 
+								content : null(Real) ,
+								cache : null(Real),
+								properties : none >
+							< oncontrol : DataOutPort | 
+								content : null(Unit) ,
+								properties : none >
+							< offcontrol : DataOutPort | 
+								content : null(Unit) ,
+								properties : none >),
+						subcomponents : (
+							< ctrlThread : Thread |
+								features : (
+									< temp : DataInPort | 
+										content : null(Real) ,
+										cache : null(Real),
+										properties : none >
+									< oncontrol : DataOutPort | 
+										content : null(Unit) ,
+										properties : none >
+									< offcontrol : DataOutPort | 
+										content : null(Unit) ,
+										properties : none >),
+								subcomponents : (
+									< lower : Data |
+										features : (
+											none),
+										subcomponents : (
+											none),
+										value : null(Real),
+										properties : (
+											(DataModel::InitialValue => {{10}})),
+										connections : (
+											empty)
+										> 
+									< upper : Data |
+										features : (
+											none),
+										subcomponents : (
+											none),
+										value : null(Real),
+										properties : (
+											(DataModel::InitialValue => {{30}})),
+										connections : (
+											empty)
+										> 
+									< curr : Data |
+										features : (
+											none),
+										subcomponents : (
+											none),
+										value : null(Real),
+										properties : (
+											(DataModel::InitialValue => {{15}})),
+										connections : (
+											empty)
+										> ),
+								currState : (
+									init),
+								completeStates : (
+									init),
+								variables : (
+									( x : Real )),
+								transitions : (
+									(init -[ on dispatch ]-> init {
+										(v{x} := ((c[curr] + f[temp]) / [[2]])) ;
+										if ((v[x] < c[lower])){
+											(oncontrol !)}
+										(elsif ((v[x] > c[upper])){
+											(offcontrol !)}
+										)
+										end if ;
+										(c{curr} := v[x])
+									})),
+								loopBound : (
+									10),
+								transBound : (
+									10),
+								varGen : (
+									< "SimpleThermimplInstance.controller.ctrlProc.ctrlThread" >
+									),
+								properties : (
+									(HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+									(HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}) ;
+									(HybridSynchAADL::Synchronous => {{true}}) ;
+									(TimingProperties::Period => {{5}})),
+								connections : (
+									empty)
+								> ),
+						properties : (
+							(HybridSynchAADL::Synchronous => {{true}}) ;
+							(TimingProperties::Period => {{5}})),
+						connections : (
+							(temp --> ctrlThread .. temp) ;
+							(ctrlThread .. oncontrol --> oncontrol) ;
+							(ctrlThread .. offcontrol --> offcontrol))
+						> ),
+				properties : (
+					(HybridSynchAADL::MaxClockDeviation => {{0.1}}) ;
+					(HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+					(HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}) ;
+					(HybridSynchAADL::Synchronous => {{true}}) ;
+					(TimingProperties::Period => {{5}})),
+				connections : (
+					(temp --> ctrlProc .. temp) ;
+					(ctrlProc .. oncontrol --> oncontrol) ;
+					(ctrlProc .. offcontrol --> offcontrol))
+				> 
+			< environment : Env |
+				features : (
+					< temp : EnvOutPort | 
+						content : null(Real),
+						target : controller,
+						properties : none,
+						envCache : null(Real) >
+					< oncontrol : EnvInPort | 
+						content : null(Unit),
+						properties : none,
+						envCache : null(Unit) >
+					< offcontrol : EnvInPort | 
+						content : null(Unit),
+						properties : none,
+						envCache : null(Unit) >),
+				subcomponents : (
+					< x : Data |
+						features : (
+							none),
+						subcomponents : (
+							none),
+						value : null(Real),
+						properties : (
+							(DataModel::InitialValue => {{16}})),
+						connections : (
+							empty)
+						> ),
+				currMode : (
+					off
+					),
+				jumps : (
+					(off -[ oncontrol ]-> on) ;
+					(off -[ offcontrol ]-> off) ;
+					(on -[ oncontrol ]-> on) ;
+					(on -[ offcontrol ]-> off)
+					),
+				flows : (
+					((on)[(x(t) =  c[x] + (v[t] * [[0.2]] ) ) ]) ;
+					((off)[(x(t) =  c[x] - (v[t] * [[0.1]] ) ) ])
+					),
+				sampling : (
+					(controller : (rat(0.0),rat(2.0)))
+					),
+				response : (
+					(controller : (rat(3.0),rat(4.0)))
+					),
+				varGen : (
+					< "SimpleThermimplInstance.environment" >
+					),
+				properties : (
+					(HybridSynchAADL::MaxClockDeviation => {{0.1}}) ;
+					(HybridSynchAADL::Synchronous => {{true}}) ;
+					(TimingProperties::Period => {{5}})),
+				connections : (
+					(x ==> temp)) 
+				> ),
+		properties : (
+			(HybridSynchAADL::MaxClockDeviation => {{0.1}}) ;
+			(HybridSynchAADL::Synchronous => {{true}}) ;
+			(TimingProperties::Period => {{5}})),
+		connections : (
+			(controller .. offcontrol --> environment .. offcontrol) ;
+			(controller .. oncontrol --> environment .. oncontrol) ;
+			(environment .. temp --> controller .. temp))
+		>  .
+endm
+
+mod SIMPLETHERM_IMPL_INSTANCE-MODEL-SYMBOLIC is
+	including SIMPLETHERM_IMPL_INSTANCE-MODEL .
+	including BEHAVIOR-SYMBOLIC-LOCATION .
+	
+	eq init = loc(real(0)) .
+	eq off = loc(real(1)) .
+	eq on = loc(real(2)) .
+endm

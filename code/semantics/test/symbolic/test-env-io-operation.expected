@@ -1,0 +1,37 @@
+==========================================
+reduce in TEST-ENV-FEATURE-OPERATION : readEnvFeature((((< d : EnvOutPort |
+    content : [0] # [false],envCache : r(3) # b(3),target : cr1 > < e :
+    EnvOutPort | content : [true] # [true],envCache : r(4) # b(4),target : cr2
+    >) < c : EnvInPort | content : r(1) # b(1),envCache : r(2) # b(2),target :
+    cr1 >) < b : EnvInPort | content : [true] # b(0),envCache : b(1) # b(0),
+    target : cr1 >) < a : EnvInPort | content : [0] # [true],envCache : [0] # [
+    true],target : cr1 >, < "G",5,5 >) .
+rewrites: 40
+result EnvFeatureReadResult: {< a : EnvInPort | content : [0] # [false],
+    envCache : r("G", 5) # b("G", 5),target : cr1 > < b : EnvInPort | content :
+    [false] # [false],envCache : b("G", 6) # b("G", 7),target : cr1 > < c :
+    EnvInPort | content : [0] # [false],envCache : r("G", 6) # b("G", 8),target
+    : cr1 > < d : EnvOutPort | content : [0] # [false],envCache : r(3) # b(3),
+    target : cr1 > < e : EnvOutPort | content : [true] # [true],envCache : r(4)
+    # b(4),target : cr2 >,a |-> (r("G", 5) # b("G", 5) : [true]), b |-> (b("G",
+    6) # b("G", 7) : [true]), c |-> (r("G", 6) # b("G", 8) : [true]), d |-> [0]
+    # [false], e |-> [false] # [false],[true] and b(0) === b(0) and b(1) === b(
+    2) and [true] === b(1) and [true] === [true] and r(1) === r(2) and [0] ===
+    [0],< "G",7,9 >}
+==========================================
+reduce in TEST-ENV-FEATURE-OPERATION : writeEnvFeature(e |-> r(1) # b(1), (((<
+    d : EnvOutPort | content : [0] # [false],envCache : r(3) # b(3),target :
+    cr1 > < e : EnvOutPort | content : [true] # [true],envCache : r(4) # b(4),
+    target : cr2 >) < c : EnvInPort | content : r(1) # b(1),envCache : r(2) #
+    b(2),target : cr1 >) < b : EnvInPort | content : [true] # b(0),envCache :
+    b(1) # b(0),target : cr1 >) < a : EnvInPort | content : [0] # [true],
+    envCache : [0] # [true],target : cr1 >, < "G",5,5 >) .
+rewrites: 12
+result EnvFeatureWriteResult: {< a : EnvInPort | content : [0] # [true],
+    envCache : [0] # [true],target : cr1 > < b : EnvInPort | content : [true] #
+    b(0),envCache : b(1) # b(0),target : cr1 > < c : EnvInPort | content : r(1)
+    # b(1),envCache : r(2) # b(2),target : cr1 > < d : EnvOutPort | content : [
+    0] # [false],envCache : r(3) # b(3),target : cr1 > < e : EnvOutPort |
+    content : r("G", 5) # b("G", 5),envCache : r("G", 5) # b("G", 5),target :
+    cr2 >,[true] and b(4) === b(1) and r(4) === r(1),< "G",6,6 >}
+Bye.

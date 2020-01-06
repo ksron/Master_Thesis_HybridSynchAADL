@@ -1,0 +1,131 @@
+==========================================
+search in TEST-BEHAVIOR-TRANSITION-SEMANTICS : execTrans(location(loc([0]))
+    complete(loc([0])) bcf trans(trans1)) =>+ R:BATransResult .
+
+Solution 1 (state 3)
+states: 4  rewrites: 295
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(0) + r(1) + r(2) + [
+    8739798026865869/140737488355328] # [true] | b(0) and b(1) and b(2) and [3]
+    < r(0) and [4] < r(0) | < "a.b",100,200 >
+
+No more solutions.
+states: 7  rewrites: 621
+==========================================
+search in TEST-BEHAVIOR-TRANSITION-SEMANTICS : execTrans(location(loc([0]))
+    complete(loc([0])) bcf trans(trans2)) =>+ R:BATransResult .
+
+Solution 1 (state 2)
+states: 3  rewrites: 307
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> [0] #
+    [false] | cr |=> r(0) + r(1) # [true] | b(0) and b(1) and (not b(0) or not
+    r(0) < [-1]) and (not b(0) or not [4] < r(0)) | < "a.b",100,200 >
+
+Solution 2 (state 3)
+states: 4  rewrites: 381
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> [0] #
+    [false] | cr |=> - r(1) + r(0) # [true] | b(0) and b(1) and r(0) < [-1] | <
+    "a.b",100,200 >
+
+Solution 3 (state 5)
+states: 6  rewrites: 512
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) + r(2) + [2] # [true] | b(0) and b(1)
+    and b(2) and [3] < r(0) and [4] < r(0) | < "a.b",100,200 >
+
+No more solutions.
+states: 9  rewrites: 760
+==========================================
+search in TEST-BEHAVIOR-TRANSITION-SEMANTICS : execTrans(location(loc([0]))
+    complete(loc([0])) bcf trans(trans3)) =>+ R:BATransResult .
+
+Solution 1 (state 2)
+states: 3  rewrites: 218
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> [0] #
+    [false] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + [1] and b(0) and
+    b(1) | < "a.b",100,200 >
+
+Solution 2 (state 6)
+states: 7  rewrites: 479
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(2)
+    + [2] and b(0) and b(1) and b(2) and [3] < r(0) and [4] < r(0) + [1] | <
+    "a.b",100,200 >
+
+Solution 3 (state 16)
+states: 17  rewrites: 1249
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(2) + r(2) + [3] and b(0) and b(1) and b(2) and [3] < r(0) and [4] < r(
+    0) + [1] and [4] < r(0) + r(1) + r(2) + [2] | < "a.b",100,200 >
+
+Solution 4 (state 33)
+states: 34  rewrites: 2464
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(1) + r(2) + r(2) + r(2) + [4] and b(0) and b(1) and b(2) and [3] < r(0)
+    and [4] < r(0) + [1] and [4] < r(0) + r(1) + r(2) + [2] and [4] < r(0) + r(
+    1) + r(1) + r(2) + r(2) + [3] | < "a.b",100,200 >
+
+Solution 5 (state 54)
+states: 55  rewrites: 4386
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + [5] and b(0) and b(1) and b(2)
+    and [3] < r(0) and [4] < r(0) + [1] and [4] < r(0) + r(1) + r(2) + [2] and
+    [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and [4] < r(0) + r(1) + r(1) +
+    r(1) + r(2) + r(2) + r(2) + [4] | < "a.b",100,200 >
+
+Solution 6 (state 75)
+states: 76  rewrites: 6510
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + [6] and b(0) and
+    b(1) and b(2) and [3] < r(0) and [4] < r(0) + [1] and [4] < r(0) + r(1) +
+    r(2) + [2] and [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and [4] < r(0)
+    + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4] and [4] < r(0) + r(1) + r(
+    1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + [5] | < "a.b",100,200 >
+
+Solution 7 (state 94)
+states: 95  rewrites: 8387
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + r(2) + [7]
+    and b(0) and b(1) and b(2) and [3] < r(0) and [4] < r(0) + [1] and [4] < r(
+    0) + r(1) + r(2) + [2] and [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and
+    [4] < r(0) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4] and [4] < r(0) +
+    r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + [5] and [4] < r(0)
+    + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + [6]
+    | < "a.b",100,200 >
+
+Solution 8 (state 115)
+states: 116  rewrites: 10599
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + r(
+    2) + r(2) + [8] and b(0) and b(1) and b(2) and [3] < r(0) and [4] < r(0) +
+    [1] and [4] < r(0) + r(1) + r(2) + [2] and [4] < r(0) + r(1) + r(1) + r(2)
+    + r(2) + [3] and [4] < r(0) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4]
+    and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + [
+    5] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) +
+    r(2) + r(2) + [6] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1)
+    + r(2) + r(2) + r(2) + r(2) + r(2) + r(2) + [7] | < "a.b",100,200 >
+
+Solution 9 (state 136)
+states: 137  rewrites: 13055
+R:BATransResult --> loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0) +
+    [-1] # [true] | cr |=> r(0) + r(1) # [true] | not [4] < r(0) + r(1) + r(1)
+    + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(
+    2) + r(2) + r(2) + r(2) + [9] and b(0) and b(1) and b(2) and [3] < r(0) and
+    [4] < r(0) + [1] and [4] < r(0) + r(1) + r(2) + [2] and [4] < r(0) + r(1) +
+    r(1) + r(2) + r(2) + [3] and [4] < r(0) + r(1) + r(1) + r(1) + r(2) + r(2)
+    + r(2) + [4] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(
+    2) + r(2) + [5] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) +
+    r(2) + r(2) + r(2) + r(2) + [6] and [4] < r(0) + r(1) + r(1) + r(1) + r(1)
+    + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + r(2) + [7] and [4] < r(
+    0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) +
+    r(2) + r(2) + r(2) + r(2) + [8] | < "a.b",100,200 >
+
+No more solutions.
+states: 184  rewrites: 19173
+Bye.

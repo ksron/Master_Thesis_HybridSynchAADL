@@ -1,0 +1,75 @@
+
+load mr-sync-aadl-interpreter.maude
+
+(tomod MODEL-TEST is
+ including MODEL-TRANSITION-SYSTEM .
+
+ vars CR : ComponentRef .
+ var P : FeatureId .
+ var N : Nat .
+ var NZ : NzNat .
+ vars OBJ OBJ' OBJ'' : Object .
+ vars COMPS COMPS' CONSTCONF : ConstConf .
+ var PROPS : PropertyAssociation .
+ var PHI PHI' PHI'' PHI''' : SymExpr .
+ var REST CONCONF : ConstConf .
+ var CONF : Configuration .
+
+ ops top top2 : -> Object .
+ ops topEnsemble subComp1 subComp2 subThread subComp1 subComp2 data1 x y : -> ComponentId [ctor] .
+ ops init state1 state2 : -> Location [ctor] .
+ ops out outData oPort1 iPort2 : -> FeatureId [ctor] .
+ ops a b : -> VarId [ctor] .
+ ops init state1 state2 : -> Location [ctor] .
+
+eq top = (< topEnsemble : System |
+				rate : 1,
+				features : (none),
+				subcomponents : (
+						< subComp1 : System |
+						rate : 1,
+						features : ( < oPort1 : OutPort | content : [0.0],
+								properties : none > ),
+						subcomponents : (
+								< subThread : Thread |
+								rate : 1,
+								features : (< outData : OutPort | content : nil,
+										properties : none >),
+								subcomponents : (< x : Data | value : i("x", 2),
+										features : (none),
+										subcomponents : (none),
+										properties : none,
+										connections : (empty) >
+										< y : Data | value : [1.0],
+										features : (none),
+										subcomponents : (none),
+										properties : none,
+										connections : (empty) >),
+								properties : ((TimingProperties::Period => {20}) ;
+										(HybridAADL::Synchronous => {true})),
+								currState : (init),
+								completeStates : (init),
+								variables : (a ; b),
+								transitions : (
+										(init -[ on dispatch ]-> state1 {
+										 ({x} := [x] + [1]) ;
+										 ({y} := [1])
+										 }) ;
+										(state1 -[ ([x] > [y]) ]-> init {
+										 ({y} := ([y] + [1])) ;
+										 ({outData} := [y])
+										 }) ;
+										(state1 -[ ([x] < [y]) ]-> init {
+										 ({y} := ([y] - [1]))
+										})),
+connections : (empty) >),
+			properties : ((TimingProperties::Period => {20}) ;
+							(HybridAADL::Synchronous => {true})),
+			connections : ((subThread .. outData --> oPort1 )) >),
+			connections : (empty),
+			properties : ((TimingProperties::Period => {20}) ;
+							(HybridAADL::Synchronous => {true})) >) .
+		endtom)
+
+(trew in MODEL-TEST : { ([true] || top) } in time <= 80 .)
+(search in MODEL-TEST : executeStep([true], top) =>* CONCONF .)

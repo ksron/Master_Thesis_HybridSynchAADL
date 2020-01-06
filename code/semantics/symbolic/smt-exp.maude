@@ -1,0 +1,96 @@
+
+--- Symbolic expressions, composed of variables and concrete values.
+fmod SMT-EXP is
+  including EXP .
+  protecting NAT .
+
+  sorts SMTVar SMTValue SMTExp .
+  subsort SMTValue SMTVar < SMTExp < Exp .
+
+  --- return the index of a variable
+  op getIndex : SMTVar ~> Nat [format (m! o)] .
+endfm
+
+
+--- Boolean expressions 
+fmod SMT-BOOL-EXP is
+  protecting STRING .
+  including BOOL-EXP .
+  including SMT-EXP .
+
+  sort SMTBoolExp .
+  subsort SMTBoolExp < BoolExp SMTExp .
+
+  var N : Nat .
+  var S : String .
+  var B : Bool .
+
+--- boolean variables in constraints
+  sort SMTBoolVar .
+  subsort SMTBoolVar < SMTVar SMTBoolExp .
+  op b : Nat -> SMTBoolVar [ctor] .
+  op b : String Nat -> SMTBoolVar [ctor] .
+
+  eq getIndex(b(N)) = N .
+  eq getIndex(b(S, N)) = N .
+
+--- Boolean constants, enclosed by [_]
+  sort SMTBoolValue .
+  subsort SMTBoolValue < SMTValue SMTBoolExp .
+  op [_] : Bool -> SMTBoolValue [ctor] .
+  
+  eq bool(B) = [B] .
+  eq bval([B]) = B .
+endfm
+
+
+--- Real expressions. 
+--- We consider SMT theories over reals with rational constants. That is,
+--- every concrete value is actually a rational constant, but a variable can
+--- have a real valuation.
+fmod SMT-REAL-EXP is
+  including REAL-EXP .
+  protecting SMT-BOOL-EXP .
+  protecting CONVERSION .
+
+  sort SMTRealExp .
+  subsort SMTRealExp < RealExp SMTExp .
+
+  var N : Nat .
+  var S : String .
+  var R : Rat .
+  var F : Float .
+
+--- real variables in constraints
+  sort SMTRealVar .
+  subsort SMTRealVar < SMTVar SMTRealExp .
+  op r : Nat -> SMTRealVar [ctor] .
+  op r : String Nat -> SMTRealVar [ctor] . 
+
+  eq getIndex(r(N)) = N .
+  eq getIndex(r(S, N)) = N .
+
+--- rational constants, enclosed by [_]
+  sort SMTRealValue .
+  subsort SMTRealValue < SMTValue SMTRealExp .
+  op [_] : Rat -> SMTRealValue [ctor] .
+
+  eq real(R) = [R] .
+  eq real(F) = [rat(F)] .
+
+  eq fval([R]) = float(R) .
+  eq rval([R]) = R .
+endfm
+
+
+
+fmod SMT-UNIT-EXP is
+  including UNIT-EXP .
+  protecting SMT-BOOL-EXP .
+
+  sort SMTUnitValue .
+  subsort SMTUnitValue < SMTValue UnitExp < Exp .
+  op * : -> SMTUnitValue [ctor] .  --- for event
+endfm
+
+

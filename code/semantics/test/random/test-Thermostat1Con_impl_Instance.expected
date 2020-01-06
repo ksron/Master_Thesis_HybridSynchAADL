@@ -1,0 +1,469 @@
+==========================================
+rewrite [100] in TEST-THERMOSTAT-SYSTEM : {{initState,0}} .
+rewrites: 96536
+result GlobalSystem: {{< Thermostat1ConimplInstance : System | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : none,subcomponents : (< console :
+    System | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< tempmax : DataOutPort | properties : DataModel::InitialValue => {{50}},
+    content : [5.0e+1] # [(true).Bool] > < tempmin : DataOutPort | properties :
+    DataModel::InitialValue => {{20}},content : [2.0e+1] # [(true).Bool] >),
+    subcomponents : < consoleProc : Process | properties : ((
+    TimingProperties::Period => {{5}}) ; HybridSynchAADL::Synchronous => {{(
+    true).Bool}}),features : (< tempmax : DataOutPort | properties : none,
+    content : [0.0] # [(false).Bool] > < tempmin : DataOutPort | properties :
+    none,content : [0.0] # [(false).Bool] >),subcomponents : < consoleThread :
+    Thread | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::Synchronous => {{(true).Bool}}),features : (< tempmax :
+    DataOutPort | properties : none,content : [0.0] # [(false).Bool] > <
+    tempmin : DataOutPort | properties : none,content : [0.0] # [(false).Bool]
+    >),subcomponents : none,connections : empty,varGen : <
+    "Thermostat1ConimplInstance.console.consoleProc.consoleThread" >,currState
+    : idle,completeStates : idle,variables : empty,transitions : ((select -[[[(
+    true).Bool]]]-> idle {(f{tempmax} := [[50]]) ; f{tempmin} := [[20]]}) ;
+    idle -[on dispatch]-> select {skip}),loopBound : 10,transBound : 10 >,
+    connections : (((consoleThread .. tempmax) --> tempmax) ; (consoleThread ..
+    tempmin) --> tempmin) >,connections : (((consoleProc .. tempmax) -->
+    tempmax) ; (consoleProc .. tempmin) --> tempmin) > < controller : System |
+    properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ; (
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}) ; (
+    HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [0.0] # [(false).Bool] > <
+    offcontrol : DataOutPort | properties : none,content : * # [(false).Bool] >
+    < tempmin : DataInPort | properties : none,content : [0.0] # [(
+    false).Bool],cache : [0.0] # [(false).Bool] >),subcomponents : < ctrlProc :
+    Process | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::Synchronous => {{(true).Bool}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [0.0] # [(false).Bool] > <
+    offcontrol : DataOutPort | properties : none,content : * # [(false).Bool] >
+    < tempmin : DataInPort | properties : none,content : [0.0] # [(
+    false).Bool],cache : [0.0] # [(false).Bool] >),subcomponents : < ctrlThread
+    : Thread | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ; (
+    HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    5.0e+1] # [(true).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [-3.723610084439537e-1] # [(
+    true).Bool] > < offcontrol : DataOutPort | properties : none,content : * #
+    [(false).Bool] > < tempmin : DataInPort | properties : none,content : [0.0]
+    # [(false).Bool],cache : [2.0e+1] # [(true).Bool] >),subcomponents : none,
+    connections : empty,varGen : <
+    "Thermostat1ConimplInstance.controller.ctrlProc.ctrlThread" >,currState :
+    init,completeStates : init,variables : empty,transitions : init -[on
+    dispatch]-> init {if(f[currtemp] > f[tempmax]){offcontrol !} (elsif(f[
+    currtemp] < f[tempmin]){oncontrol !}) end if},loopBound : 10,transBound :
+    10 >,connections : ((tempmax --> (ctrlThread .. tempmax)) ; (currtemp --> (
+    ctrlThread .. currtemp)) ; (tempmin --> (ctrlThread .. tempmin)) ; ((
+    ctrlThread .. oncontrol) --> oncontrol) ; (ctrlThread .. offcontrol) -->
+    offcontrol) >,connections : ((tempmax --> (ctrlProc .. tempmax)) ; (
+    currtemp --> (ctrlProc .. currtemp)) ; (tempmin --> (ctrlProc .. tempmin))
+    ; ((ctrlProc .. oncontrol) --> oncontrol) ; (ctrlProc .. offcontrol) -->
+    offcontrol) > < environment : EnvWithTimer | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : (< oncontrol : EnvInPort | properties :
+    none,content : * # [(false).Bool],envCache : null(Unit) > < temp :
+    EnvOutPort | properties : none,content : [0.0] # [(false).Bool],envCache :
+    null(Real),target : controller > < offcontrol : EnvInPort | properties :
+    none,content : * # [(false).Bool],envCache : null(Unit) >),subcomponents :
+    < x : Data | properties : DataModel::InitialValue => {{16}},features :
+    none,subcomponents : none,connections : empty,value : [-4.2437842580126111]
+    # [(true).Bool] >,connections : x ==> temp,varGen : <
+    "Thermostat1ConimplInstance.environment" >,currMode : off,jumps : ((off -[
+    oncontrol]-> on) ; (off -[offcontrol]-> off) ; (on -[oncontrol]-> on) ; on
+    -[offcontrol]-> off),flows : ((off [x(t)= ([[1.0000000000000001e-1]] * (
+    minus([[3.0e+1]]) * v[t]))]) ; on [x(t)= ([[1.0000000000000001e-1]] * (([[
+    4.5e+1]] - [[3.0e+1]]) * v[t]))]),sampling : controller :(0,2),response :
+    controller :(3,4),timer : 0,samplingIDs : controller,responseIDs :
+    controller >),connections : (((console .. tempmax) --> (controller ..
+    tempmax)) ; ((console .. tempmin) --> (controller .. tempmin)) ; ((
+    controller .. oncontrol) --> (environment .. oncontrol)) ; ((controller ..
+    offcontrol) --> (environment .. offcontrol)) ; (environment .. temp) --> (
+    controller .. currtemp)) >,400}}
+==========================================
+rewrite [100] in TEST-THERMOSTAT-SYSTEM : {{initState,400}} .
+rewrites: 96499
+result GlobalSystem: {{< Thermostat1ConimplInstance : System | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : none,subcomponents : (< console :
+    System | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< tempmax : DataOutPort | properties : DataModel::InitialValue => {{50}},
+    content : [5.0e+1] # [(true).Bool] > < tempmin : DataOutPort | properties :
+    DataModel::InitialValue => {{20}},content : [2.0e+1] # [(true).Bool] >),
+    subcomponents : < consoleProc : Process | properties : ((
+    TimingProperties::Period => {{5}}) ; HybridSynchAADL::Synchronous => {{(
+    true).Bool}}),features : (< tempmax : DataOutPort | properties : none,
+    content : [0.0] # [(false).Bool] > < tempmin : DataOutPort | properties :
+    none,content : [0.0] # [(false).Bool] >),subcomponents : < consoleThread :
+    Thread | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::Synchronous => {{(true).Bool}}),features : (< tempmax :
+    DataOutPort | properties : none,content : [0.0] # [(false).Bool] > <
+    tempmin : DataOutPort | properties : none,content : [0.0] # [(false).Bool]
+    >),subcomponents : none,connections : empty,varGen : <
+    "Thermostat1ConimplInstance.console.consoleProc.consoleThread" >,currState
+    : idle,completeStates : idle,variables : empty,transitions : ((select -[[[(
+    true).Bool]]]-> idle {(f{tempmax} := [[50]]) ; f{tempmin} := [[20]]}) ;
+    idle -[on dispatch]-> select {skip}),loopBound : 10,transBound : 10 >,
+    connections : (((consoleThread .. tempmax) --> tempmax) ; (consoleThread ..
+    tempmin) --> tempmin) >,connections : (((consoleProc .. tempmax) -->
+    tempmax) ; (consoleProc .. tempmin) --> tempmin) > < controller : System |
+    properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ; (
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}) ; (
+    HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [0.0] # [(false).Bool] > <
+    offcontrol : DataOutPort | properties : none,content : * # [(false).Bool] >
+    < tempmin : DataInPort | properties : none,content : [0.0] # [(
+    false).Bool],cache : [0.0] # [(false).Bool] >),subcomponents : < ctrlProc :
+    Process | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::Synchronous => {{(true).Bool}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [0.0] # [(false).Bool] > <
+    offcontrol : DataOutPort | properties : none,content : * # [(false).Bool] >
+    < tempmin : DataInPort | properties : none,content : [0.0] # [(
+    false).Bool],cache : [0.0] # [(false).Bool] >),subcomponents : < ctrlThread
+    : Thread | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ; (
+    HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    5.0e+1] # [(true).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [-3.5102046018722945] # [(
+    true).Bool] > < offcontrol : DataOutPort | properties : none,content : * #
+    [(false).Bool] > < tempmin : DataInPort | properties : none,content : [0.0]
+    # [(false).Bool],cache : [2.0e+1] # [(true).Bool] >),subcomponents : none,
+    connections : empty,varGen : <
+    "Thermostat1ConimplInstance.controller.ctrlProc.ctrlThread" >,currState :
+    init,completeStates : init,variables : empty,transitions : init -[on
+    dispatch]-> init {if(f[currtemp] > f[tempmax]){offcontrol !} (elsif(f[
+    currtemp] < f[tempmin]){oncontrol !}) end if},loopBound : 10,transBound :
+    10 >,connections : ((tempmax --> (ctrlThread .. tempmax)) ; (currtemp --> (
+    ctrlThread .. currtemp)) ; (tempmin --> (ctrlThread .. tempmin)) ; ((
+    ctrlThread .. oncontrol) --> oncontrol) ; (ctrlThread .. offcontrol) -->
+    offcontrol) >,connections : ((tempmax --> (ctrlProc .. tempmax)) ; (
+    currtemp --> (ctrlProc .. currtemp)) ; (tempmin --> (ctrlProc .. tempmin))
+    ; ((ctrlProc .. oncontrol) --> oncontrol) ; (ctrlProc .. offcontrol) -->
+    offcontrol) > < environment : EnvWithTimer | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : (< oncontrol : EnvInPort | properties :
+    none,content : * # [(false).Bool],envCache : null(Unit) > < temp :
+    EnvOutPort | properties : none,content : [0.0] # [(false).Bool],envCache :
+    null(Real),target : controller > < offcontrol : EnvInPort | properties :
+    none,content : * # [(false).Bool],envCache : null(Unit) >),subcomponents :
+    < x : Data | properties : DataModel::InitialValue => {{16}},features :
+    none,subcomponents : none,connections : empty,value : [-2.9567123353846192]
+    # [(true).Bool] >,connections : x ==> temp,varGen : <
+    "Thermostat1ConimplInstance.environment" >,currMode : off,jumps : ((off -[
+    oncontrol]-> on) ; (off -[offcontrol]-> off) ; (on -[oncontrol]-> on) ; on
+    -[offcontrol]-> off),flows : ((off [x(t)= ([[1.0000000000000001e-1]] * (
+    minus([[3.0e+1]]) * v[t]))]) ; on [x(t)= ([[1.0000000000000001e-1]] * (([[
+    4.5e+1]] - [[3.0e+1]]) * v[t]))]),sampling : controller :(0,2),response :
+    controller :(3,4),timer : 0,samplingIDs : controller,responseIDs :
+    controller >),connections : (((console .. tempmax) --> (controller ..
+    tempmax)) ; ((console .. tempmin) --> (controller .. tempmin)) ; ((
+    controller .. oncontrol) --> (environment .. oncontrol)) ; ((controller ..
+    offcontrol) --> (environment .. offcontrol)) ; (environment .. temp) --> (
+    controller .. currtemp)) >,800}}
+==========================================
+rewrite [100] in TEST-THERMOSTAT-SYSTEM : {{initState,800}} .
+rewrites: 96497
+result GlobalSystem: {{< Thermostat1ConimplInstance : System | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : none,subcomponents : (< console :
+    System | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< tempmax : DataOutPort | properties : DataModel::InitialValue => {{50}},
+    content : [5.0e+1] # [(true).Bool] > < tempmin : DataOutPort | properties :
+    DataModel::InitialValue => {{20}},content : [2.0e+1] # [(true).Bool] >),
+    subcomponents : < consoleProc : Process | properties : ((
+    TimingProperties::Period => {{5}}) ; HybridSynchAADL::Synchronous => {{(
+    true).Bool}}),features : (< tempmax : DataOutPort | properties : none,
+    content : [0.0] # [(false).Bool] > < tempmin : DataOutPort | properties :
+    none,content : [0.0] # [(false).Bool] >),subcomponents : < consoleThread :
+    Thread | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::Synchronous => {{(true).Bool}}),features : (< tempmax :
+    DataOutPort | properties : none,content : [0.0] # [(false).Bool] > <
+    tempmin : DataOutPort | properties : none,content : [0.0] # [(false).Bool]
+    >),subcomponents : none,connections : empty,varGen : <
+    "Thermostat1ConimplInstance.console.consoleProc.consoleThread" >,currState
+    : idle,completeStates : idle,variables : empty,transitions : ((select -[[[(
+    true).Bool]]]-> idle {(f{tempmax} := [[50]]) ; f{tempmin} := [[20]]}) ;
+    idle -[on dispatch]-> select {skip}),loopBound : 10,transBound : 10 >,
+    connections : (((consoleThread .. tempmax) --> tempmax) ; (consoleThread ..
+    tempmin) --> tempmin) >,connections : (((consoleProc .. tempmax) -->
+    tempmax) ; (consoleProc .. tempmin) --> tempmin) > < controller : System |
+    properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ; (
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}) ; (
+    HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [0.0] # [(false).Bool] > <
+    offcontrol : DataOutPort | properties : none,content : * # [(false).Bool] >
+    < tempmin : DataInPort | properties : none,content : [0.0] # [(
+    false).Bool],cache : [0.0] # [(false).Bool] >),subcomponents : < ctrlProc :
+    Process | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::Synchronous => {{(true).Bool}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    0.0] # [(false).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [0.0] # [(false).Bool] > <
+    offcontrol : DataOutPort | properties : none,content : * # [(false).Bool] >
+    < tempmin : DataInPort | properties : none,content : [0.0] # [(
+    false).Bool],cache : [0.0] # [(false).Bool] >),subcomponents : < ctrlThread
+    : Thread | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ; (
+    HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< tempmax :
+    DataInPort | properties : none,content : [0.0] # [(false).Bool],cache : [
+    5.0e+1] # [(true).Bool] > < oncontrol : DataOutPort | properties : none,
+    content : * # [(false).Bool] > < currtemp : DataInPort | properties : none,
+    content : [0.0] # [(false).Bool],cache : [-3.4251491733419591e-2] # [(
+    true).Bool] > < offcontrol : DataOutPort | properties : none,content : * #
+    [(false).Bool] > < tempmin : DataInPort | properties : none,content : [0.0]
+    # [(false).Bool],cache : [2.0e+1] # [(true).Bool] >),subcomponents : none,
+    connections : empty,varGen : <
+    "Thermostat1ConimplInstance.controller.ctrlProc.ctrlThread" >,currState :
+    init,completeStates : init,variables : empty,transitions : init -[on
+    dispatch]-> init {if(f[currtemp] > f[tempmax]){offcontrol !} (elsif(f[
+    currtemp] < f[tempmin]){oncontrol !}) end if},loopBound : 10,transBound :
+    10 >,connections : ((tempmax --> (ctrlThread .. tempmax)) ; (currtemp --> (
+    ctrlThread .. currtemp)) ; (tempmin --> (ctrlThread .. tempmin)) ; ((
+    ctrlThread .. oncontrol) --> oncontrol) ; (ctrlThread .. offcontrol) -->
+    offcontrol) >,connections : ((tempmax --> (ctrlProc .. tempmax)) ; (
+    currtemp --> (ctrlProc .. currtemp)) ; (tempmin --> (ctrlProc .. tempmin))
+    ; ((ctrlProc .. oncontrol) --> oncontrol) ; (ctrlProc .. offcontrol) -->
+    offcontrol) > < environment : EnvWithTimer | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : (< oncontrol : EnvInPort | properties :
+    none,content : * # [(false).Bool],envCache : null(Unit) > < temp :
+    EnvOutPort | properties : none,content : [0.0] # [(false).Bool],envCache :
+    null(Real),target : controller > < offcontrol : EnvInPort | properties :
+    none,content : * # [(false).Bool],envCache : null(Unit) >),subcomponents :
+    < x : Data | properties : DataModel::InitialValue => {{16}},features :
+    none,subcomponents : none,connections : empty,value : [-2.5072015056636192]
+    # [(true).Bool] >,connections : x ==> temp,varGen : <
+    "Thermostat1ConimplInstance.environment" >,currMode : off,jumps : ((off -[
+    oncontrol]-> on) ; (off -[offcontrol]-> off) ; (on -[oncontrol]-> on) ; on
+    -[offcontrol]-> off),flows : ((off [x(t)= ([[1.0000000000000001e-1]] * (
+    minus([[3.0e+1]]) * v[t]))]) ; on [x(t)= ([[1.0000000000000001e-1]] * (([[
+    4.5e+1]] - [[3.0e+1]]) * v[t]))]),sampling : controller :(0,2),response :
+    controller :(3,4),timer : 0,samplingIDs : controller,responseIDs :
+    controller >),connections : (((console .. tempmax) --> (controller ..
+    tempmax)) ; ((console .. tempmin) --> (controller .. tempmin)) ; ((
+    controller .. oncontrol) --> (environment .. oncontrol)) ; ((controller ..
+    offcontrol) --> (environment .. offcontrol)) ; (environment .. temp) --> (
+    controller .. currtemp)) >,1200}}
+==========================================
+rewrite [100] in TEST-THERMOSTAT-SYSTEM : {{cinitState,0}} .
+rewrites: 71208
+result GlobalSystem: {{< Thermostat1ConimplInstance : System | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : none,subcomponents : (< environment :
+    EnvWithTimer | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< oncontrol : EnvInPort | properties : none,content : * # [(false).Bool],
+    envCache : null(Unit) > < temp : EnvOutPort | properties : none,content : [
+    0.0] # [(false).Bool],envCache : null(Real),target : controller > <
+    offcontrol : EnvInPort | properties : none,content : * # [(false).Bool],
+    envCache : null(Unit) >),subcomponents : < x : Data | properties :
+    DataModel::InitialValue => {{16}},features : none,subcomponents : none,
+    connections : empty,value : [-4.2437842580126111] # [(true).Bool] >,
+    connections : x ==> temp,varGen : <
+    "Thermostat1ConimplInstance.environment" >,currMode : off,jumps : ((off -[
+    oncontrol]-> on) ; (off -[offcontrol]-> off) ; (on -[oncontrol]-> on) ; on
+    -[offcontrol]-> off),flows : ((off [x(t)= ([[1.0000000000000001e-1]] * (
+    minus([[3.0e+1]]) * v[t]))]) ; on [x(t)= ([[1.0000000000000001e-1]] * (([[
+    4.5e+1]] - [[3.0e+1]]) * v[t]))]),sampling : controller :(0,2),response :
+    controller :(3,4),timer : 0,samplingIDs : controller,responseIDs :
+    controller > < console . consoleProc . consoleThread : Thread | properties
+    : ((TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {
+    {(true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : (< tempmax : DataOutPort | properties :
+    DataModel::InitialValue => {{50}},content : [5.0e+1] # [(true).Bool] > <
+    tempmin : DataOutPort | properties : DataModel::InitialValue => {{20}},
+    content : [2.0e+1] # [(true).Bool] >),subcomponents : none,connections :
+    empty,varGen : <
+    "Thermostat1ConimplInstance.console.consoleProc.consoleThread" >,currState
+    : idle,completeStates : idle,variables : empty,transitions : ((select -[[[(
+    true).Bool]]]-> idle {(f{tempmax} := [[50]]) ; f{tempmin} := [[20]]}) ;
+    idle -[on dispatch]-> select {skip}),loopBound : 10,transBound : 10 > <
+    controller . ctrlProc . ctrlThread : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; (HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}) ; (HybridSynchAADL::SamplingTime => {{0.0 ..
+    2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (<
+    tempmax : DataInPort | properties : none,content : [0.0] # [(false).Bool],
+    cache : [5.0e+1] # [(true).Bool] > < oncontrol : DataOutPort | properties :
+    none,content : * # [(false).Bool] > < currtemp : DataInPort | properties :
+    none,content : [0.0] # [(false).Bool],cache : [-3.723610084439537e-1] # [(
+    true).Bool] > < offcontrol : DataOutPort | properties : none,content : * #
+    [(false).Bool] > < tempmin : DataInPort | properties : none,content : [0.0]
+    # [(false).Bool],cache : [2.0e+1] # [(true).Bool] >),subcomponents : none,
+    connections : empty,varGen : <
+    "Thermostat1ConimplInstance.controller.ctrlProc.ctrlThread" >,currState :
+    init,completeStates : init,variables : empty,transitions : init -[on
+    dispatch]-> init {if(f[currtemp] > f[tempmax]){offcontrol !} (elsif(f[
+    currtemp] < f[tempmin]){oncontrol !}) end if},loopBound : 10,transBound :
+    10 >),connections : (((environment .. temp) --> ((controller . ctrlProc .
+    ctrlThread) .. currtemp)) ; (((console . consoleProc . consoleThread) ..
+    tempmax) --> ((controller . ctrlProc . ctrlThread) .. tempmax)) ; (((
+    console . consoleProc . consoleThread) .. tempmin) --> ((controller .
+    ctrlProc . ctrlThread) .. tempmin)) ; (((controller . ctrlProc .
+    ctrlThread) .. oncontrol) --> (environment .. oncontrol)) ; ((controller .
+    ctrlProc . ctrlThread) .. offcontrol) --> (environment .. offcontrol)) >,
+    400}}
+==========================================
+rewrite [100] in TEST-THERMOSTAT-SYSTEM : {{cinitState,400}} .
+rewrites: 71205
+result GlobalSystem: {{< Thermostat1ConimplInstance : System | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : none,subcomponents : (< environment :
+    EnvWithTimer | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< oncontrol : EnvInPort | properties : none,content : * # [(false).Bool],
+    envCache : null(Unit) > < temp : EnvOutPort | properties : none,content : [
+    0.0] # [(false).Bool],envCache : null(Real),target : controller > <
+    offcontrol : EnvInPort | properties : none,content : * # [(false).Bool],
+    envCache : null(Unit) >),subcomponents : < x : Data | properties :
+    DataModel::InitialValue => {{16}},features : none,subcomponents : none,
+    connections : empty,value : [-2.9567123353846192] # [(true).Bool] >,
+    connections : x ==> temp,varGen : <
+    "Thermostat1ConimplInstance.environment" >,currMode : off,jumps : ((off -[
+    oncontrol]-> on) ; (off -[offcontrol]-> off) ; (on -[oncontrol]-> on) ; on
+    -[offcontrol]-> off),flows : ((off [x(t)= ([[1.0000000000000001e-1]] * (
+    minus([[3.0e+1]]) * v[t]))]) ; on [x(t)= ([[1.0000000000000001e-1]] * (([[
+    4.5e+1]] - [[3.0e+1]]) * v[t]))]),sampling : controller :(0,2),response :
+    controller :(3,4),timer : 0,samplingIDs : controller,responseIDs :
+    controller > < console . consoleProc . consoleThread : Thread | properties
+    : ((TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {
+    {(true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : (< tempmax : DataOutPort | properties :
+    DataModel::InitialValue => {{50}},content : [5.0e+1] # [(true).Bool] > <
+    tempmin : DataOutPort | properties : DataModel::InitialValue => {{20}},
+    content : [2.0e+1] # [(true).Bool] >),subcomponents : none,connections :
+    empty,varGen : <
+    "Thermostat1ConimplInstance.console.consoleProc.consoleThread" >,currState
+    : idle,completeStates : idle,variables : empty,transitions : ((select -[[[(
+    true).Bool]]]-> idle {(f{tempmax} := [[50]]) ; f{tempmin} := [[20]]}) ;
+    idle -[on dispatch]-> select {skip}),loopBound : 10,transBound : 10 > <
+    controller . ctrlProc . ctrlThread : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; (HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}) ; (HybridSynchAADL::SamplingTime => {{0.0 ..
+    2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (<
+    tempmax : DataInPort | properties : none,content : [0.0] # [(false).Bool],
+    cache : [5.0e+1] # [(true).Bool] > < oncontrol : DataOutPort | properties :
+    none,content : * # [(false).Bool] > < currtemp : DataInPort | properties :
+    none,content : [0.0] # [(false).Bool],cache : [-3.5102046018722945] # [(
+    true).Bool] > < offcontrol : DataOutPort | properties : none,content : * #
+    [(false).Bool] > < tempmin : DataInPort | properties : none,content : [0.0]
+    # [(false).Bool],cache : [2.0e+1] # [(true).Bool] >),subcomponents : none,
+    connections : empty,varGen : <
+    "Thermostat1ConimplInstance.controller.ctrlProc.ctrlThread" >,currState :
+    init,completeStates : init,variables : empty,transitions : init -[on
+    dispatch]-> init {if(f[currtemp] > f[tempmax]){offcontrol !} (elsif(f[
+    currtemp] < f[tempmin]){oncontrol !}) end if},loopBound : 10,transBound :
+    10 >),connections : (((environment .. temp) --> ((controller . ctrlProc .
+    ctrlThread) .. currtemp)) ; (((console . consoleProc . consoleThread) ..
+    tempmax) --> ((controller . ctrlProc . ctrlThread) .. tempmax)) ; (((
+    console . consoleProc . consoleThread) .. tempmin) --> ((controller .
+    ctrlProc . ctrlThread) .. tempmin)) ; (((controller . ctrlProc .
+    ctrlThread) .. oncontrol) --> (environment .. oncontrol)) ; ((controller .
+    ctrlProc . ctrlThread) .. offcontrol) --> (environment .. offcontrol)) >,
+    800}}
+==========================================
+rewrite [100] in TEST-THERMOSTAT-SYSTEM : {{cinitState,800}} .
+rewrites: 71203
+result GlobalSystem: {{< Thermostat1ConimplInstance : System | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : none,subcomponents : (< environment :
+    EnvWithTimer | properties : ((TimingProperties::Period => {{5}}) ; (
+    HybridSynchAADL::Synchronous => {{(true).Bool}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< oncontrol : EnvInPort | properties : none,content : * # [(false).Bool],
+    envCache : null(Unit) > < temp : EnvOutPort | properties : none,content : [
+    0.0] # [(false).Bool],envCache : null(Real),target : controller > <
+    offcontrol : EnvInPort | properties : none,content : * # [(false).Bool],
+    envCache : null(Unit) >),subcomponents : < x : Data | properties :
+    DataModel::InitialValue => {{16}},features : none,subcomponents : none,
+    connections : empty,value : [-2.5072015056636192] # [(true).Bool] >,
+    connections : x ==> temp,varGen : <
+    "Thermostat1ConimplInstance.environment" >,currMode : off,jumps : ((off -[
+    oncontrol]-> on) ; (off -[offcontrol]-> off) ; (on -[oncontrol]-> on) ; on
+    -[offcontrol]-> off),flows : ((off [x(t)= ([[1.0000000000000001e-1]] * (
+    minus([[3.0e+1]]) * v[t]))]) ; on [x(t)= ([[1.0000000000000001e-1]] * (([[
+    4.5e+1]] - [[3.0e+1]]) * v[t]))]),sampling : controller :(0,2),response :
+    controller :(3,4),timer : 0,samplingIDs : controller,responseIDs :
+    controller > < console . consoleProc . consoleThread : Thread | properties
+    : ((TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {
+    {(true).Bool}}) ; HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}),features : (< tempmax : DataOutPort | properties :
+    DataModel::InitialValue => {{50}},content : [5.0e+1] # [(true).Bool] > <
+    tempmin : DataOutPort | properties : DataModel::InitialValue => {{20}},
+    content : [2.0e+1] # [(true).Bool] >),subcomponents : none,connections :
+    empty,varGen : <
+    "Thermostat1ConimplInstance.console.consoleProc.consoleThread" >,currState
+    : idle,completeStates : idle,variables : empty,transitions : ((select -[[[(
+    true).Bool]]]-> idle {(f{tempmax} := [[50]]) ; f{tempmin} := [[20]]}) ;
+    idle -[on dispatch]-> select {skip}),loopBound : 10,transBound : 10 > <
+    controller . ctrlProc . ctrlThread : Thread | properties : ((
+    TimingProperties::Period => {{5}}) ; (HybridSynchAADL::Synchronous => {{(
+    true).Bool}}) ; (HybridSynchAADL::MaxClockDeviation => {{
+    1.0000000000000001e-1}}) ; (HybridSynchAADL::SamplingTime => {{0.0 ..
+    2.0}}) ; HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (<
+    tempmax : DataInPort | properties : none,content : [0.0] # [(false).Bool],
+    cache : [5.0e+1] # [(true).Bool] > < oncontrol : DataOutPort | properties :
+    none,content : * # [(false).Bool] > < currtemp : DataInPort | properties :
+    none,content : [0.0] # [(false).Bool],cache : [-3.4251491733419591e-2] # [(
+    true).Bool] > < offcontrol : DataOutPort | properties : none,content : * #
+    [(false).Bool] > < tempmin : DataInPort | properties : none,content : [0.0]
+    # [(false).Bool],cache : [2.0e+1] # [(true).Bool] >),subcomponents : none,
+    connections : empty,varGen : <
+    "Thermostat1ConimplInstance.controller.ctrlProc.ctrlThread" >,currState :
+    init,completeStates : init,variables : empty,transitions : init -[on
+    dispatch]-> init {if(f[currtemp] > f[tempmax]){offcontrol !} (elsif(f[
+    currtemp] < f[tempmin]){oncontrol !}) end if},loopBound : 10,transBound :
+    10 >),connections : (((environment .. temp) --> ((controller . ctrlProc .
+    ctrlThread) .. currtemp)) ; (((console . consoleProc . consoleThread) ..
+    tempmax) --> ((controller . ctrlProc . ctrlThread) .. tempmax)) ; (((
+    console . consoleProc . consoleThread) .. tempmin) --> ((controller .
+    ctrlProc . ctrlThread) .. tempmin)) ; (((controller . ctrlProc .
+    ctrlThread) .. oncontrol) --> (environment .. oncontrol)) ; ((controller .
+    ctrlProc . ctrlThread) .. offcontrol) --> (environment .. offcontrol)) >,
+    1200}}
+Bye.

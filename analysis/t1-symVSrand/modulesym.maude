@@ -1,0 +1,20 @@
+load ../../code/semantics/interpreter-symbolic.maude
+load ../model/drones/Drones2_rendezvous_Instance1.maude
+
+mod TEST-DRONE2-SYSTEM is
+  including DRONES2_RENDEZVOUS_INSTANCE-MODEL-SYMBOLIC .
+  including SPECIFICATION-LANGUAGE-SEMANTICS .
+
+  op initConst : -> BoolExp .
+  eq initConst = [true] .
+
+  op cinitState : -> Object .
+  eq cinitState = initialize(collapse(initial)) .
+endm
+
+mod TESTER is
+  including TEST-DRONE2-SYSTEM .
+
+  eq @m@ = ['DRONES2_RENDEZVOUS_INSTANCE-MODEL-SYMBOLIC] .
+  eq MFlag = true .
+endm

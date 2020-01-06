@@ -1,0 +1,195 @@
+load smt/smt.maude
+load smt/smt-interface.maude
+load smt/smt-condition.maude
+
+set include BOOL on .
+load real-time-maude
+set include BOOL off .
+load timeDomain.maude
+
+--- Syntax
+load identifiers.maude
+load data-value.maude
+
+load input-adaptor-syntax.maude
+load aadl-property.maude
+load behAnnexSyntax.maude
+
+load connection.maude
+load features.maude
+load components.maude
+
+load symTranslation.maude
+
+--- semantics
+load behAnnexSemantics.maude
+load transfer-data.maude
+load component-dynamics.maude
+
+
+(tomod THREAD-TEST is
+  including ENSEMBLE-DYNAMICS .
+  including THREAD-DYNAMICS .
+
+  vars CR : ComponentRef .
+  var P : FeatureId .
+  var N : Nat .
+  var NZ : NzNat .
+  vars OBJ OBJ' OBJ'' : Object .
+  vars COMPS COMPS' : ConstConf .
+  var PROPS : PropertyAssociation .
+  var NDL : NeList{DataContent} .
+  var PHI PHI' PHI'' PHI''' : SymExpr .
+  var REST : ConstConf .
+  var CONF COMPS' : Configuration .
+  var STP : SymTransitionTuple .
+  var PHI' : SymExpr .
+  var LCF : LocalBehaviorConf .
+  var SE : SymExpr .
+  var L' : Location .
+  var FMAP' : FeatureMap .
+
+  ops top top2 : -> Object [ctor] .
+  ops subComp1 subComp2 sub1 sub2 subComp1 subComp2 oPort1 iPort2 out data1 x y : -> ComponentId [ctor] .
+  ops init state1 state2 : -> Location [ctor] .
+  ops outData goal : -> FeatureId [ctor] .
+  ops a b : -> VarId [ctor] .
+
+  eq top =  < sub1 : Thread |
+                rate : 1,
+                features : (< outData : OutPort | content : nil,
+                                             properties : none >),
+                subcomponents : (< x : Data | value : i("x",2),
+                                                  features : (none),
+                                                  subcomponents : (none),
+                                                  properties : none,
+                                                  connections : (empty) >
+                                  < y : Data | value : [1.0],
+                                    features : (none),
+                                    subcomponents : (none),
+                                    properties : none,
+                                    connections : (empty) >),
+                 properties : none,
+                 currState : (init),
+                 completeStates : (state2),
+                 variables : (a ; b),
+                 transitions : (
+                    (init -[ on dispatch ]-> state1 {
+                      ({x} := [x] + [1]) ;
+                      ({y} := [1])
+                      }) ;
+                    (state1 -[ ([x] > [y]) ]-> state2 {
+                      ({y} := ([y] + [1]))
+                      }) ),
+                  connections : (empty) > .
+
+  eq top2 =  < sub2 : Thread |
+                rate : 1,
+                features : (< outData : OutPort | content : nil,
+                                             properties : none >),
+                subcomponents : (none) ,
+                 properties : none,
+                 currState : (init),
+                 completeStates : (state2),
+                 variables : (a ; b),
+                 transitions : (empty),
+                 connections : (empty) > .
+  op lcf1 : -> LocalBehaviorConf [ctor] .
+
+  eq lcf1 = ((a |-> [0]) ; (b |-> [1])) | (empty).FeatureMap | (< x : Data | value : [0.0],
+                                    features : (none),
+                                    subcomponents : (none),
+                                    properties : none,
+                                    connections : (empty) >
+                                    < y : Data | value : [1.0],
+                                      features : (none),
+                                      subcomponents : (none),
+                                      properties : none,
+                                      connections : (empty) >) |(none).PropertyAssociation .
+
+  op test : SymTransitionTuple Object ~> ConstConf [format (m! o)] .
+  eq test(([false] | L' | FMAP' | COMPS'), < CR : Thread | >) = ([true] || (< CR : Thread | >)) .
+  eq test(((PHI) | L' | FMAP' | COMPS'), < CR : Thread | >) = (PHI || (< CR : Thread | >)) [owise] .
+
+  op test2 : Object ~> ConstConf [format (m! o)] .
+  eq test2(< CR : Thread | >) = ([true] || < CR : Thread | >) .
+  eq test2(< CR : Ensemble | >) = ([false] || < CR : Thread | >) .
+
+endtom)
+
+--- basic operation test
+(red in THREAD-TEST : readFeature((none)) .)
+
+(red in THREAD-TEST : guardConstraint(([x] > [y]), lcf1) .)
+(red in THREAD-TEST : guardConstraint((on dispatch), lcf1) .)
+
+--- execTransSystem test
+(search in THREAD-TEST : execTransSystem((init), (state2), (
+   (init -[ on dispatch ]-> state1 {
+     ({x} := [x] + [1]) ;
+     ({y} := [1])
+     }) ;
+   (state1 -[ ([x] > [y]) ]-> state2 {
+     ({y} := ([y] + [1]))
+     }) ), defaultValuation((a ; b)), (empty) | (< x : Data | value : i("x",1),
+                                       features : (none),
+                                       subcomponents : (none),
+                                       properties : none,
+                                       connections : (empty) >
+                                       < y : Data | value : [1.0],
+                                         features : (none),
+                                         subcomponents : (none),
+                                         properties : none,
+                                         connections : (empty) >) | (none), [true]) =>* STP .)
+
+(search in THREAD-TEST : execTransSystem(init,state2,
+  init -[on dispatch]-> state1
+    {({x}:=([x]+[1]));
+    {y}:=[1]};
+    state1 -[[x]>[y]]-> state2
+    {{y}:=([y]+[1])},
+    (a |-> bot); b |-> bot,
+    empty |
+    < x : Data |connections : empty,features : none,properties : none,subcomponents : none,value : i("x",2)>
+    < y : Data | connections : empty,features : none,properties : none,subcomponents : none,value :[1.0]>
+    | none,[true]) =>* STP .)
+
+--- checking if reduction works
+***(
+(red in THREAD-TEST : (< sub1 : System | rate : 1, features : (none), subcomponents : (none), connections : (empty), properties : none > ) .)
+(red in THREAD-TEST : test2(< sub1 : System | rate : 1, features : (none), subcomponents : (none), connections : (empty), properties : none > ) .)
+
+(red in THREAD-TEST : test(([true] | (state2) | (empty) | (none)),
+< sub2 : Thread | rate : 1, currState : (init), completeStates : (state1),
+                subcomponents : (none), properties : (none), variables : (a ; b),
+                features : (none), transitions : (empty), connections : (empty) >) .)
+
+(red in THREAD-TEST : ([true] | ((state2) | (empty) | (none))) .)
+(red in THREAD-TEST : < sub2 : Thread | rate : 1, currState : (init), completeStates : (state1),
+                subcomponents : (none), properties : (none), variables : (a ; b),
+                features : (none), transitions : (empty), connections : (empty) > .)
+
+(red in THREAD-TEST : ([true] || < sub2 : Thread | rate : 1, currState : (init), completeStates : (state1),
+                subcomponents : (none), properties : (none), variables : (a ; b),
+                features : (none), transitions : (empty), connections : (empty) > ) .)
+(red in THREAD-TEST : test2(< sub2 : Thread | rate : 1, currState : (init), completeStates : (state1),
+                subcomponents : (none), properties : (none), variables : (a ; b),
+                features : (none), transitions : (empty), connections : (empty) >) .)
+(red in THREAD-TEST : test2(< sub1 : System | rate : 1, features : (none), subcomponents : (none), connections : (empty), properties : none > ) .)
+
+)
+
+--- executeStepTrans test
+(red in THREAD-TEST : executeStepTrans((none), ([true] | ((state2) | (empty) | (none))).SymTransitionTuple,
+            < sub2 : Thread | rate : 1,  currState : (init), completeStates : (state2),
+                              subcomponents : (none) , properties : none, variables : (a ; b),
+                              features : (< outData : OutPort | content : nil, properties : none >),
+                              transitions : (empty), connections : (empty) >) .)
+
+--- executeStepRead test
+(red in THREAD-TEST : executeStepRead(((none) | (empty)), top) .)
+(search in THREAD-TEST : executeStepRead(((none) | (empty)), top) =>* COMPS .)
+
+--- executeStep test
+(red in THREAD-TEST : executeStep([true] || top) .)
+(search in THREAD-TEST : executeStep([true] || top) =>* COMPS .)

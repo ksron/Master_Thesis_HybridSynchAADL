@@ -1,0 +1,38 @@
+==========================================
+reduce in TEST-TRANS : x(t)= ((v[t] * v[t]) + (c[x] + [[1]])) .
+rewrites: 0
+result AADLEnvFunc: x(t)= ((v[t] * v[t]) + (c[x] + [[1]]))
+==========================================
+reduce in TEST-TRANS : (x(t)= ((v[t] * v[t]) + (c[x] + [[1]]))) ; y(s)= (v[s] +
+    ((c[x] - c[y]) * [[5.0e-1]])) .
+rewrites: 0
+result NeSet{AADLEnvFunc}: (x(t)= ((v[t] * v[t]) + (c[x] + [[1]]))) ; y(s)= (v[
+    s] + ((c[x] - c[y]) * [[5.0e-1]]))
+==========================================
+reduce in TEST-TRANS : d/dt[x]= ((c[x] * c[y]) + [[1]]) .
+rewrites: 0
+result AADLDiffEq: d/dt[x]= ((c[x] * c[y]) + [[1]])
+==========================================
+reduce in TEST-TRANS : (d/dt[x]= ((c[x] * c[y]) + [[1]])) ; d/dt[y]= (c[y] - [[
+    2]]) .
+rewrites: 0
+result NeSet{AADLDiffEq}: (d/dt[x]= ((c[x] * c[y]) + [[1]])) ; d/dt[y]= (c[y] -
+    [[2]])
+==========================================
+reduce in TEST-TRANS : trans .
+rewrites: 1
+result NeSet{EnvJump}: (loc([0]) -[on1]-> loc([2])) ; (loc([0]) -[on2]-> loc([
+    1])) ; (loc([1]) -[on1]-> loc([3])) ; (loc([1]) -[off2]-> loc([0])) ; (loc(
+    [2]) -[on2]-> loc([3])) ; (loc([2]) -[off1]-> loc([0])) ; (loc([3]) -[
+    on2]-> loc([2])) ; loc([3]) -[off1]-> loc([1])
+==========================================
+reduce in TEST-TRANS : flows .
+rewrites: 1
+result NeSet{EnvFlow}: (loc([0]) [(x(t)= (c[x] - (v[t] * [[
+    1.0000000000000001e-1]]))) ; y(s)= (c[y] - (v[s] * [[
+    2.9999999999999999e-1]]))]) ; (loc([1]) [(x(t)= (c[x] - (v[t] * [[
+    1.0000000000000001e-1]]))) ; y(s)= (c[y] + (v[s] * [[5.0e-1]]))]) ; (loc([
+    2]) [(x(t)= (c[x] + (v[t] * [[2.0000000000000001e-1]]))) ; y(s)= (c[y] - (
+    v[s] * [[2.9999999999999999e-1]]))]) ; loc([3]) [(x(t)= (c[x] + (v[t] * [[
+    2.0000000000000001e-1]]))) ; y(s)= (c[y] + (v[s] * [[5.0e-1]]))]
+Bye.

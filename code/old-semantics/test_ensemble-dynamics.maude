@@ -1,0 +1,231 @@
+load smt/smt.maude
+load smt/smt-interface.maude
+load smt/smt-condition.maude
+
+set include BOOL on .
+load real-time-maude
+set include BOOL off .
+load timeDomain.maude
+
+--- Syntax
+load identifiers.maude
+load data-value.maude
+
+load input-adaptor-syntax.maude
+load aadl-property.maude
+load behAnnexSyntax.maude
+
+load connection.maude
+load features.maude
+load components.maude
+
+load symTranslation.maude
+
+--- semantics
+load behAnnexSemantics.maude
+load transfer-data.maude
+load component-dynamics.maude
+
+
+(tomod ENSEMBLE-TEST is
+  including ENSEMBLE-DYNAMICS .
+  including THREAD-DYNAMICS .
+
+  vars CR : ComponentRef .
+  var P : FeatureId .
+  var N : Nat .
+  var NZ : NzNat .
+  vars OBJ OBJ' OBJ'' : Object .
+  vars COMPS COMPS' : ConstConf .
+  var PROPS : PropertyAssociation .
+  var PHI PHI' PHI'' PHI''' : SymExpr .
+  var REST CONCONF : ConstConf .
+  var CONF : Configuration .
+
+  ops top sub1 emptyEnsemble complex : -> Object .
+  ops topEnsemble top2Ensemble subComp1 subComp2 subThread subComp1 subComp2 data1 x y : -> ComponentId [ctor] .
+  ops init state1 state2 : -> Location [ctor] .
+  ops out outData oPort1 iPort2 : -> FeatureId [ctor] .
+  ops a b : -> VarId [ctor] .
+  ops init state1 state2 : -> Location [ctor] .
+
+  eq emptyEnsemble = < top2Ensemble : System | rate : 1, features : (none), subcomponents : (none), connections : (empty), properties : none > .
+
+  eq top = < topEnsemble : System |
+                rate : 1,
+                features : (none),
+                subcomponents : (< subThread : Thread |
+                              rate : 1,
+                              features : (< outData : OutPort | content : nil,
+                                                           properties : none >),
+                              subcomponents : (< x : Data | value : i("x",2),
+                                                                features : (none),
+                                                                subcomponents : (none),
+                                                                properties : none,
+                                                                connections : (empty) >
+                                                < y : Data | value : [1.0],
+                                                  features : (none),
+                                                  subcomponents : (none),
+                                                  properties : none,
+                                                  connections : (empty) >),
+                               properties : none,
+                               currState : (init),
+                               completeStates : (init),
+                               variables : (a ; b),
+                               transitions : (
+                                  (init -[ on dispatch ]-> state1 {
+                                    ({x} := [x] + [1]) ;
+                                    ({y} := [1])
+                                    }) ;
+                                  (state1 -[ ([x] > [y]) ]-> init {
+                                    ({y} := ([y] + [1]));
+									({x} := [y])
+                                    }) ),
+                                connections : (empty) >),
+                 connections : (empty),
+                 properties : none > .
+
+ eq sub1 =
+ < subComp1 : System |
+           rate : 2,
+           features : ( < oPort1 : OutPort | content : [0.0],
+                                            properties : none > ),
+           subcomponents : (
+             < subThread : Thread |
+                         rate : 1,
+                         features : (< outData : OutPort | content : nil,
+                                                      properties : none >),
+                         subcomponents : (< x : Data | value : i("x", 2),
+                                                           features : (none),
+                                                           subcomponents : (none),
+                                                           properties : none,
+                                                           connections : (empty) >
+                                           < y : Data | value : [1.0],
+                                             features : (none),
+                                             subcomponents : (none),
+                                             properties : none,
+                                             connections : (empty) >),
+                          properties : ((TimingProperties::Period => {5}) ;
+                                       (HybridAADL::Synchronous => {true})),
+                          currState : (init),
+                          completeStates : (init),
+                          variables : (a ; b),
+                          transitions : (
+                             (init -[ on dispatch ]-> state1 {
+                               ({x} := [x] + [1]) ;
+                               ({y} := [1])
+                               }) ;
+                             (state1 -[ ([x] > [y]) ]-> init {
+                               ({y} := ([y] + [1])) ;
+                               ({outData} := [y])
+                               }) ),
+                           connections : (empty) >),
+               properties : ((TimingProperties::Period => {10}) ;
+                            (HybridAADL::Synchronous => {true})),
+               connections : ((subThread .. outData --> oPort1 )) > .
+
+    eq complex = < topEnsemble : System |
+                rate : 1,
+                features : (none),
+                subcomponents : (
+                  < subComp2 : System |
+                        rate : 1,
+                        features : (< iPort2 : InPort | content : nil,
+                                                        cache : bot,
+                                                        properties : none >),
+                        subcomponents : (none),
+                        properties : ((TimingProperties::Period => {10}) ;
+                                     (HybridAADL::Synchronous => {true})),
+                        connections : (empty) >
+                  < subComp1 : System |
+                      rate : 3,
+                      features : ( < oPort1 : OutPort | content : [0.0],
+                                                       properties : none > ),
+                      subcomponents : (
+                        < subThread : Thread |
+                                    rate : 1,
+                                    features : (< outData : OutPort | content : nil,
+                                                                 properties : none >),
+                                    subcomponents : (< x : Data | value : i("x", 2),
+                                                                      features : (none),
+                                                                      subcomponents : (none),
+                                                                      properties : none,
+                                                                      connections : (empty) >
+                                                      < y : Data | value : [1.0],
+                                                        features : (none),
+                                                        subcomponents : (none),
+                                                        properties : none,
+                                                        connections : (empty) >),
+                                     properties : ((TimingProperties::Period => {5}) ;
+                                                  (HybridAADL::Synchronous => {true})),
+                                     currState : (init),
+                                     completeStates : (init),
+                                     variables : (a ; b),
+                                     transitions : (
+                                        (init -[ on dispatch ]-> state1 {
+                                          ({x} := [x] + [1]) ;
+                                          ({y} := [1])
+                                          }) ;
+                                        (state1 -[ ([x] > [y]) ]-> init {
+                                          ({y} := ([y] + [1])) ;
+                                          ({outData} := [y])
+                                          }) ),
+                                      connections : (empty) >),
+                          properties : ((TimingProperties::Period => {10}) ;
+                                       (HybridAADL::Synchronous => {true})),
+                          connections : ((subThread .. outData --> oPort1 )) >),
+                  connections : ((subComp1 .. oPort1 --> subComp2 .. iPort2)),
+                  properties : ((TimingProperties::Period => {40}) ;
+                               (HybridAADL::Synchronous => {true})) > .
+
+
+endtom)
+
+
+--- k-step Test
+(red in ENSEMBLE-TEST : k-executeStep([true],[true], 1,
+    < subComp2 : Thread |
+              rate : 1,
+              features : (< outData : OutPort | content : nil,
+                                           properties : none >),
+              subcomponents : (none) ,
+               properties : none,
+               currState : (init),
+               completeStates : (init),
+               variables : (a ; b),
+               transitions : (empty),
+               connections : (empty) >) .)
+(search in ENSEMBLE-TEST : k-executeStep((i("x", 2) > [3]),[true], 3,
+    < subComp2 : Thread |
+              rate : 1,
+              features : (< outData : OutPort | content : nil,
+                                           properties : none >),
+              subcomponents : (none) ,
+               properties : none,
+               currState : (init),
+               completeStates : (state2),
+               variables : (a ; b),
+               transitions : (empty),
+               connections : (empty) >) =>* CONCONF .)
+
+(red in ENSEMBLE-TEST : k-executeStep([true], [true], 3, top) .)
+(rew in ENSEMBLE-TEST : k-executeStep((i("x", 3) > [2]),[true], 3, top) .)
+(search in ENSEMBLE-TEST : k-executeStep([true], [true], 3, top) =>* CONCONF .)
+
+--- empty ensemble test
+(red in ENSEMBLE-TEST : prepareExecSub(([true]), emptyEnsemble) .)
+(red in ENSEMBLE-TEST : transferResults(prepareExecSub([true], ([true]), emptyEnsemble)) .)
+(red in ENSEMBLE-TEST : executeStep([true], emptyEnsemble) .)
+
+--- ensemble test
+(search in ENSEMBLE-TEST : prepareExecSub(([true]), top) =>* CONCONF .)
+(search in ENSEMBLE-TEST : transferResults(prepareExecSub(([true]), top)) =>* CONCONF .)
+(search in ENSEMBLE-TEST : executeStep([true], top) =>* CONCONF .)
+---
+--- complex system test
+(rew in ENSEMBLE-TEST : transferResults(prepareExecSub(([true]), sub1)) .)
+(search in ENSEMBLE-TEST : executeStep([true],  sub1) =>* CONCONF .)
+
+(rew in ENSEMBLE-TEST : executeStep([true], complex) .)
+
+(search in ENSEMBLE-TEST : executeStep([true], complex) =>* CONCONF .)

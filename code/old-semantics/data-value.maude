@@ -1,0 +1,138 @@
+--- Data values used in components and communications.
+
+(fmod SYM-EXPRESSION is
+  sort SymExpr .
+endfm)
+
+(fmod SYM-DATA-VAR is
+  including SYM-EXPRESSION .
+  sort SymVar .
+  subsort SymVar < SymExpr .
+endfm)
+
+(fmod DATA-VALUE is
+  including SYM-EXPRESSION .
+  sort Value .
+  subsort Value < SymExpr .
+endfm)
+
+(fmod DATA-CONTENT is
+  including SYM-EXPRESSION .
+  sort DataContent .
+  subsort SymExpr < DataContent .
+  op bot : -> DataContent [ctor] .   --- bottom (no value)
+endfm)
+
+(view SymExpr from TRIV to SYM-EXPRESSION is
+  sort Elt to SymExpr .
+endv)
+
+(view SymVar from TRIV to SYM-DATA-VAR is
+  sort Elt to SymVar .
+endv)
+
+(view Value from TRIV to DATA-VALUE is
+  sort Elt to Value .
+endv)
+
+(view DataContent from TRIV to DATA-CONTENT is
+  sort Elt to DataContent .
+endv)
+
+--- In AADL, a data value is typically (a combination of) boolean, integer,
+--- float, character, and string. They can be also composed by using
+--- array, struct, and union, as explained in the Data Modeling Annex.
+--- This file specifies such basic data types in Maude.
+--- Note that some other properties, such as the bit size
+--- of a data type, can be defined in the annex, but we do not consider those here.
+
+(fmod BASIC-VALUE is
+  including SYM-EXPRESSION .
+  protecting CONVERSION .
+
+  sort BoolValue IntValue FloatValue CharValue StringValue .
+  subsort BoolValue IntValue FloatValue CharValue StringValue < SymExpr .
+  subsort CharValue < StringValue .
+
+endfm)
+
+(fmod SYM-BASIC-VAR is
+  including BASIC-VALUE .
+  including SYM-DATA-VAR .
+
+  sort SymBoolVar SymIntVar SymFloatVar SymCharVar SymStringVar .
+  subsort SymBoolVar SymIntVar SymFloatVar SymCharVar SymStringVar < SymVar .
+  subsort SymCharVar < SymStringVar .
+  subsort SymBoolVar < BoolValue .
+  subsort SymIntVar < IntValue .
+  subsort SymFloatVar < FloatValue .
+  subsort SymCharVar < CharValue .
+  subsort SymStringVar < StringValue .
+
+  op i : String Nat -> SymIntVar [ctor] .
+  op f : String Nat -> SymFloatVar [ctor] .
+  op b : String Nat -> SymBoolVar [ctor] .
+  op c : String Nat -> SymCharVar [ctor] .
+  op s : String Nat -> SymStringVar [ctor] .
+
+endfm)
+
+(fmod CONCRETE-VALUE is
+  including BASIC-VALUE .
+  including DATA-VALUE .
+
+  sort cBoolValue cIntValue cFloatValue cCharValue cStringValue .
+  subsort cBoolValue cIntValue cFloatValue cCharValue cStringValue < Value .
+  subsort cCharValue < cStringValue .
+  subsort cBoolValue < BoolValue .
+  subsort cIntValue < IntValue .
+  subsort cFloatValue < FloatValue .
+  subsort cCharValue < CharValue .
+  subsort cStringValue < StringValue .
+
+  op `[_`] : Bool -> cBoolValue [ctor] .
+  op `[_`] : Int -> cIntValue [ctor] .
+  op `[_`] : Float -> cFloatValue [ctor] .
+  op `[_`] : Char -> cCharValue [ctor] .
+  op `[_`] : String -> cStringValue [ctor] .
+
+  var B : Bool . var I : Int . var F : Float . var S : String .
+
+  op bool : cBoolValue -> Bool .		eq bool([B]) = B .
+  op int : cIntValue -> Int .		eq int([I]) = I .
+  op float : cIntValue -> Float .	eq float([I]) = float(I) .
+  op float  : cFloatValue -> Float .	eq float([F]) = F .
+  op string : cStringValue -> String .	eq string([S]) = S .
+endfm)
+
+*** Since arrays are not defined yet in the semantics, arrays and structs
+*** are not used.
+
+--- An array value is a map from a number to a value. An array value is
+--- also a value, so that a multi-dimensional array value is also well defined.
+(fmod ARRAY-VALUE is
+  protecting MAP{Nat,SymExpr} .
+
+  sort ArrayValue .
+  subsort ArrayValue < SymExpr .
+  op array : Map{Nat,SymExpr} -> ArrayValue [ctor] .
+
+  var M : Map{Nat,SymExpr} . var I : Nat .
+
+  op _`[_`] : ArrayValue Nat -> SymExpr .
+  eq array(M) [I] = M [I] .
+endfm)
+
+--- Similarly, a struct value is a map from a component id to a value.
+(fmod STRUCT-VALUE is
+  protecting MAP{ComponentId,SymExpr} .
+
+  sort StructValue .
+  subsort StructValue < SymExpr .
+  op struct : Map{ComponentId,SymExpr} -> StructValue [ctor] .
+
+  var M : Map{ComponentId,SymExpr} . var C : ComponentId .
+
+  op _._ : StructValue ComponentId -> SymExpr .
+  eq struct(M) . C = M [C] .
+endfm)

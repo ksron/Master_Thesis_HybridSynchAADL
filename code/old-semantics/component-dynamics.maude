@@ -1,0 +1,141 @@
+--- Defines a transition step of each component.
+
+(tomod COMPONENT-DYNAMICS is
+  protecting PERIODIC-COMPONENT .
+  protecting PORT .
+  protecting SYNCHAADL-PROPERTIES .
+  including TIME-DOMAIN .
+  including SYM-TRANS .
+
+  var CR : ComponentRef . var P : FeatureId .
+  vars PORTS PORTS' REST CONF CONF' : Configuration .  var PROPS : PropertyAssociation .
+  var NZ : NzNat .  var NDL : NeList{DataContent} .  var IA : BuiltinInputAdaptor .
+  var PHI PHI' : SymExpr . var OBJ OBJ' : Object .
+
+---  Constraint Configuration
+  sort ConstConf .
+  subsort Configuration < ConstConf .
+  op _||_ : SymExpr Configuration -> ConstConf [ctor] .
+  op __ : ConstConf ConstConf -> ConstConf [ctor config assoc comm id: none] .
+
+  eq (PHI || CONF) (PHI' || CONF') = (PHI and PHI' || CONF CONF') .
+  ---eq (PHI || CONF) (CONF') = (PHI || (CONF CONF')) .
+  eq (PHI || OBJ) (PHI' || OBJ') = (PHI and PHI' || OBJ OBJ') .
+  eq (PHI || OBJ) (OBJ') = (PHI || (OBJ OBJ')) .
+  ---eq ([true] ; CONF) = CONF .
+
+--- A transition relation of each component, defined by either equations or rules.
+  op executeStep : SymExpr Object ~> ConstConf [format (m! o)] .
+
+--- input adaptors (name, input, output length)
+  op adaptor : BuiltinInputAdaptor NeList{DataContent} NzNat -> NeList{DataContent} [format (m! o)] .
+
+--- apply adaptors to the input ports of given components
+  op applyAdaptors : Configuration -> Configuration [format (m! o)] .
+  eq applyAdaptors(< CR : PeriodicComponent | rate : NZ, features : PORTS > REST)
+   = < CR : PeriodicComponent | features : applyAdaptors(NZ,PORTS,none) > applyAdaptors(REST) .
+  eq applyAdaptors(none) = none .
+
+  op applyAdaptors : NzNat Configuration Configuration -> Object [format (m! o)] .
+  eq applyAdaptors(NZ, < P : InPort | content : NDL,
+                                      properties : (HybridAADL::InputAdaptor => {IA}); PROPS > PORTS, PORTS')
+   = applyAdaptors(NZ, PORTS, PORTS' < P : InPort | content : adaptor(IA, NDL, NZ) >)  .
+  eq applyAdaptors(NZ, PORTS, PORTS') = PORTS PORTS' [owise] .
+endtom)
+
+(tomod THREAD-DYNAMICS is
+  including COMPONENT-DYNAMICS .
+  including THREAD-COMPONENT .
+  including BEHAVIOR-TRANSITION-SEMANTICS .
+
+  vars COMPS COMPS' PORTS PORTS' CONF : Configuration .  var PROPS : PropertyAssociation .
+  vars VAL VAL' : VarValuation .  vars FMAP FMAP' : FeatureMap .
+  vars PHI PHI' : SymExpr .
+  var CR : ComponentRef .  var VIS : Set{VarId} .
+  vars L L' : Location . vars LS : Set{Location} .
+  var GUARD : TransGuard .  var TRS TRS' : Set{Transition} .  var ACTION : ActionBlock .
+
+--- aux operators
+  op executeStepRead : Pair{Configuration,FeatureMap} Object ~> ConstConf [format (m! o)] .
+  op executeStepTrans : Configuration SymTransitionTuple Object ~> ConstConf [format (m! o)] .
+
+--- first, read data in its input ports
+  --- eq executeStep(PHI, < CR : Thread | features : PORTS >)
+  --- = executeStepRead(readFeature(PORTS), < CR : Thread | features : PORTS >) .
+  crl executeStep(PHI, < CR : Thread | features : PORTS >) => (PHI' || CONF)
+      if executeStepRead(readFeature(PORTS), < CR : Thread | features : PORTS >) => (PHI' || CONF)
+	      /\ check-sat(true, PHI and PHI') .
+
+--- then, execute its transition system; system is always nondeterministic
+  eq executeStepRead(PORTS' | FMAP,
+         < CR : Thread | subcomponents : COMPS, properties : PROPS,
+			 currState : L, completeStates : LS,
+			 variables : VIS,   transitions : TRS >)
+   = executeStepTrans(PORTS', execTransSystem(L,LS,TRS,defaultValuation(VIS), FMAP | COMPS | PROPS, [true]), < CR : Thread | >) .
+
+--- its ports, data, and state will be update accordingly
+  eq executeStepTrans(PORTS', (PHI | L' | FMAP' | COMPS'), < CR : Thread | >)
+    = (PHI || (< CR : Thread | features : writeFeature(FMAP',PORTS'), subcomponents : COMPS', currState : L' >)) .
+
+endtom)
+
+(tomod ENSEMBLE-DYNAMICS is
+  including COMPONENT-DYNAMICS .
+  including ENSEMBLE-COMPONENTS .
+  including DEFAULT-PROPERTIES .
+  protecting TRANSFER-DATA .
+
+  vars CR : ComponentRef .  var P : FeatureId .  var N : Nat . var NZ : NzNat .
+  vars OBJ OBJ' OBJ'' : Object .  vars COMPS COMPS' CONCONF CONCONF' : ConstConf .
+  var PROPS : PropertyAssociation .  var NDL : NeList{DataContent} .
+  var QUEUE : [ObjectQueue] . var GPHI PHI PHI' PHI'' PHI''' : SymExpr .
+  var REST : ConstConf . var CONF : Configuration .
+
+--- the frozen attribute gives a deterministic order in rewriting.
+  sort ObjectQueue .
+  op nil : -> ObjectQueue [ctor] .
+  op _::_ : ConstConf ObjectQueue -> ObjectQueue [ctor frozen(2)] .
+  op _|_ : ObjectQueue ConstConf ~> ConstConf [ctor] .
+
+--- the result of prepareExecSub will be rewritten to an object .
+---  eq executeStep(PHI, < CR : Ensemble | >)
+---   = transferResults(prepareExecSub(PHI, applyAdaptorsSub(transferInputs(< CR : Ensemble | >)))) .
+  crl executeStep(PHI, < CR : Ensemble | >) => (PHI' || CONF)
+    if transferResults(prepareExecSub(PHI, applyAdaptorsSub(transferInputs(< CR : Ensemble | >)))) => (PHI' || CONF)
+	   /\ check-sat(true, PHI and PHI') .
+
+  op transferResults : Object -> ConstConf [format (m! o)] .
+  eq transferResults(< CR : Ensemble | subcomponents : (PHI' || CONF) >)
+  = (PHI' || transferResultsAux(< CR : Ensemble | subcomponents : CONF >)) .
+
+  eq transferResults (< CR : Ensemble | subcomponents : CONF > )
+  = ([true] || transferResultsAux(< CR : Ensemble | subcomponents : CONF >)) .
+
+--- apply adaptors to subcomponents
+   op applyAdaptorsSub : Object -> Object [format (m! o)] .
+   eq applyAdaptorsSub(< CR : Ensemble | subcomponents : COMPS >)
+    = < CR : Ensemble | subcomponents : applyAdaptors(COMPS) > .
+
+--- prepare to execute. If there are several nondeterministic components,
+--- we need to adopt the POR technique in the MR-PALS semantics.
+  op prepareExecSub : SymExpr Object ~> Object [format (m! o)] .
+  eq prepareExecSub(PHI, < CR : Ensemble | subcomponents : COMPS >)
+   = < CR : Ensemble | subcomponents : prepareExec(PHI, COMPS, nil) > .
+
+  --- generate a "serialized" queue. This is generally needed since a system
+  --- component can contain several system components in AADL.
+  op prepareExec : SymExpr Configuration ObjectQueue ~> ConstConf [format (m! o)] .
+  eq prepareExec(PHI, < CR : PeriodicComponent | rate : NZ > COMPS, QUEUE)
+    =  prepareExec(PHI, COMPS, k-executeStep(PHI,[true],  NZ, < CR : PeriodicComponent | >) :: QUEUE) .
+  eq prepareExec(PHI, COMPS, QUEUE) = (QUEUE | COMPS) [owise] .
+
+  --- performs "executeStep" k times, after applying adaptors.
+  op k-executeStep : SymExpr SymExpr Nat ConstConf ~> ConstConf [format (m! o)] .
+  eq k-executeStep(GPHI, PHI, s(N), OBJ) 		= k-executeStep(GPHI, PHI, N, executeStep((GPHI and PHI), OBJ)) .
+  eq k-executeStep(GPHI, PHI, N, (PHI' || OBJ)) = k-executeStep(GPHI, (PHI and PHI'), N, OBJ) .
+  eq k-executeStep(GPHI, PHI, 0, OBJ)   		= (PHI || OBJ) .
+
+--- if the first item finishes its execution, then the next item is scheduled
+  eq CONCONF :: QUEUE | COMPS = QUEUE | COMPS CONCONF .
+  eq              nil | COMPS =         COMPS .
+endtom)

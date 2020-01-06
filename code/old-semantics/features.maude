@@ -1,0 +1,44 @@
+--- This file specifies a feature in AADL; for a synchronous AADL,
+--- only ports (for usual components) and parameters (for subprograms).
+
+(omod FEATURE is
+  including FEATURE-ID .
+  including AADL-PROPERTY-ASSOCIATION .
+
+  class Feature | properties : PropertyAssociation .
+
+  subsort FeatureId < Oid .
+endom)
+
+--- A port is either an input or an output port. We assume that every port
+--- is a data port, and we do not consider in-out ports in MR-SynchAADL.
+--- A data port can have a "vector" of values in MR-SynchAADL.  The term "bot"
+--- is used To represent "no value received"
+(omod PORT is
+  including FEATURE .
+  including LIST{DataContent} .
+
+  class Port | content : List{DataContent} .
+  subclass Port < Feature .
+
+  --- When no value has been received, then the previously received value can be used in AADL.
+  class InPort | cache : DataContent .
+  subclass InPort < Port .
+
+  class OutPort .
+  subclass OutPort < Port .
+endom)
+
+--- A parameter is either an input or an output parameter. We do not consider
+--- in-out parameters in MR-SynchAADL.
+(omod PARAMETER is
+  including FEATURE .
+  including DATA-CONTENT .
+
+  class Parameter | content : DataContent .
+  subclass Parameter < Feature .
+
+  class InParameter .
+  class OutParameter .
+  subclass InParameter OutParameter < Parameter .
+endom)

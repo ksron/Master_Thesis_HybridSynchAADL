@@ -1,0 +1,12 @@
+
+(fmod BUILTIN-INPUT-ADAPTORS is
+  sorts BuiltinInputAdaptor OneToManyInputAdaptor ManyToOneInputAdaptor .
+  subsorts OneToManyInputAdaptor ManyToOneInputAdaptor < BuiltinInputAdaptor .
+
+  ops repeat`input use`in`first`iteration use`in`last`iteration : -> OneToManyInputAdaptor [ctor] .
+  op use`in`iteration_ : Nat -> OneToManyInputAdaptor [ctor] .
+
+  ops first last max min sum average : -> ManyToOneInputAdaptor [ctor] .
+  op use`element_ : Nat -> ManyToOneInputAdaptor [ctor] .
+endfm)
+

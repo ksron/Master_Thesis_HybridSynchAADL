@@ -1,0 +1,86 @@
+load mr-sync-aadl-interpreter.maude
+
+(tomod MODEL-TEST is
+  including MODEL-TRANSITION-SYSTEM .
+
+  vars CR : ComponentRef .
+  var P : FeatureId .
+  var N : Nat .
+  var NZ : NzNat .
+  vars OBJ OBJ' OBJ'' : Object .
+  vars COMPS COMPS' CONSTCONF : ConstConf .
+  var PROPS : PropertyAssociation .
+  var PHI PHI' PHI'' PHI''' : SymExpr .
+  var REST CONCONF : ConstConf .
+  var CONF : Configuration .
+  var CONCONF : ConstConf .
+
+  ops top top2 : -> Object .
+  ops Thermostat controller subComp2 ctrlThread subComp1 subComp2 data1 currTemp y : -> ComponentId [ctor] .
+  ops init state1 state2 : -> Location [ctor] .
+  ops out tempMax tempMin outData oPort1 iPort2 : -> FeatureId [ctor] .
+  ops a b : -> VarId [ctor] .
+  ops init state1 state2 : -> Location [ctor] .
+
+  eq top = (< Thermostat : System |
+              rate : 1,
+              features : (none),
+              subcomponents : (
+                < controller : System |
+                    rate : 1,
+                    features : (
+                      < oPort1 : OutPort |
+                        content : [0.0],
+                        properties : none > ),
+                    subcomponents : (
+                      < ctrlThread : Thread |
+                                  rate : 1,
+                                  features : (
+                                        < outData : OutPort | content : nil,
+                                                                   properties : none >),
+                                  subcomponents : (
+								  < currTemp : Data | value : i("x",2),
+                                                                    features : (none),
+                                                                    subcomponents : (none),
+                                                                    properties : none,
+                                                                    connections : (empty) > 
+																	
+								  < tempMin : Data | value : [5],
+                                                                    features : (none),
+                                                                    subcomponents : (none),
+                                                                    properties : none,
+                                                                    connections : (empty) >
+
+								  < tempMax : Data | value : [50],
+                                                                    features : (none),
+                                                                    subcomponents : (none),
+                                                                    properties : none,
+                                                                    connections : (empty) >),
+                                   properties : ((TimingProperties::Period => {20}) ;
+                                                (HybridAADL::Synchronous => {true})),
+                                   currState : (init),
+                                   completeStates : (init),
+                                   variables : (a ; b),
+                                   transitions : (
+                                       (init -[ on dispatch ]-> state1 {
+                                         ({currTemp} := [currTemp] + [1])
+                                         }) ;
+                                       (state1 -[ ([currTemp] > [tempMax]) ]-> init {
+                                         ({currTemp} := [currTemp] - [10])
+                                         }) ;
+                                       (state1 -[ ([currTemp] < [tempMin]) ]-> init {
+                                         ({currTemp} := [currTemp] + [10])
+                                         }) ),
+                                    connections : (empty) >),
+                        properties : ((TimingProperties::Period => {20}) ;
+                                     (HybridAADL::Synchronous => {true})),
+                        connections : (
+                        (ctrlThread .. outData --> oPort1 ) 
+                        ) >),
+                connections : (empty),
+                properties : ((TimingProperties::Period => {20}) ;
+                             (HybridAADL::Synchronous => {true})) >) .
+endtom)
+
+
+

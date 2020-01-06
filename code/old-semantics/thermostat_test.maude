@@ -1,0 +1,109 @@
+
+load mr-sync-aadl-interpreter.maude
+
+(tomod MODEL-TEST is
+ including MODEL-TRANSITION-SYSTEM .
+
+ vars CR : ComponentRef .
+ var P : FeatureId .
+ var N : Nat .
+ var NZ : NzNat .
+ vars OBJ OBJ' OBJ'' : Object .
+ vars COMPS COMPS' CONSTCONF : ConstConf .
+ var PROPS : PropertyAssociation .
+ var PHI PHI' PHI'' PHI''' : SymExpr .
+ var REST CONCONF : ConstConf .
+ var CONF : Configuration .
+
+ op top : -> Object .
+ ops thermostat controller environment curComm envThread  ctrlThread data1 x upper lower K h : -> ComponentId [ctor] .
+ ops init state1 state2 : -> Location [ctor] .
+ ops temp cc : -> FeatureId [ctor] .
+ op a : -> VarId [ctor] .
+ ops init state1 : -> Location [ctor] .
+
+eq top = (< thermostat : System |
+				rate : 1,
+				features : (none),
+				subcomponents : (
+        < environment : System |
+        rate : 1,
+        features : (
+            < temp : OutPort | content : nil,
+                  properties : none >
+            < cc : InPort |	content : nil,
+									cache : bot,
+									properties : none > ),
+        subcomponents : (none),
+            properties : (
+                    (TimingProperties::Period => {20}) ;
+                    (HybridAADL::Synchronous => {true})),
+            connections : (empty) >
+
+						< controller : System |
+						rate : 1,
+						features : (
+                < cc : OutPort | content : nil,
+                      properties : none >
+                < temp : InPort |	content : nil,
+                      cache : bot,
+                      properties : none >),
+						subcomponents : (
+            < ctrlThread : Thread |
+            rate : 1,
+            features : (
+                < cc : OutPort | content : nil,
+                      properties : none >
+                < temp : InPort |	content : nil,
+                      cache : bot,
+                      properties : none >),
+            subcomponents : (< x : Data | value : i("x", 2),
+                features : (none),
+                subcomponents : (none),
+                properties : none,
+                connections : (empty) >
+                < curComm : Data | value : [false],
+                features : (none),
+                subcomponents : (none),
+                properties : none,
+                connections : (empty) >),
+            properties : (
+                (TimingProperties::Period => {20}) ;
+                (HybridAADL::Synchronous => {true})),
+            currState : (init),
+            completeStates : (init),
+            variables : (a),
+            transitions : (
+                (init -[ on dispatch ]-> state1 {
+                 ({a} := [temp]) ;
+                 ({x} := [a] - [1])
+                 }) ;
+                (state1 -[ ([x] >= [upper]) ]-> state2 {
+                 ({curComm} := [false])
+                 }) ;
+                (state1 -[ ([x] <= [lower]) ]-> state2 {
+                 ({curComm} := [true])
+                }) ;
+                (state1 -[ ([x] > [lower]) and ([x] < [upper]) ]-> state2 {
+                 skip
+                }) ;
+                (state2 -[ [true] ]-> init {
+                 ({cc} := [curComm])
+                })
+                ) ,
+            connections : (empty) >),
+        properties : (
+                (TimingProperties::Period => {20}) ;
+                (HybridAADL::Synchronous => {true})),
+        connections : (
+          (ctrlThread .. cc --> cc ) ;
+          (temp --> ctrlThread .. temp)
+            ) >),
+			connections : (
+          (environment .. temp --> controller .. temp) ;
+          (controller .. cc --> controller .. cc)
+      ),
+			properties : (
+          (TimingProperties::Period => {20}) ;
+					(HybridAADL::Synchronous => {true})) >) .
+endtom)

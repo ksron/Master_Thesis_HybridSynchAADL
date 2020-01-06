@@ -1,0 +1,17 @@
+name: Drones4_rendezvous_Instance;
+
+-- an AADL implementation
+model: Drones4::Drones4.rendezvous;
+
+
+-- a path for the corresponding instance model
+instance: "/4Drones_single_rendezvous3/package/instances/Drones4_Drones4_rendezvous_Instance.aaxl2";
+
+-- symbolic / distributed / random mode
+mode: "symbolic";
+
+-- reachability condition : initialCondition ==> FinalCondition in time INTEGER
+reachability [ "nickname1" ] : ( environment | x < 14.3 and x > 1.5 ) ==> ( environment | x > 3.4 ) in time 5 ;
+
+-- requirement condition : initialCondition ==> FinalCondition in time INTEGER
+requirement [ "nickname2" ] : ( environment | x < 14.3 and x > 1.5 ) ==>[] ( environment | x > 3.4 ) in time 10;

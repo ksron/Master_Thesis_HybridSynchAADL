@@ -1,0 +1,11 @@
+==========================================
+search [1] in TESTER : {initConst || cinitState,0,150} =>+ {B:BoolExp ||
+    O:Object,T:Time,150} such that check-sat(B:BoolExp and eval(
+    Drones3rendezvousInstance | (((abs(((drone1 . environment) | c[x]) - (
+    drone2 . environment) | c[x]) < [[1.0e-2]]) and (abs(((drone1 .
+    environment) | c[y]) - (drone2 . environment) | c[y]) < [[1.0e-2]])) or (((
+    abs(((drone1 . environment) | c[x]) - (drone3 . environment) | c[x]) < [[
+    1.0e-2]]) and (abs(((drone1 . environment) | c[y]) - (drone3 . environment)
+    | c[y]) < [[1.0e-2]])) or ((abs(((drone2 . environment) | c[x]) - (drone3 .
+    environment) | c[x]) < [[1.0e-2]]) and (abs(((drone2 . environment) | c[y])
+    - (drone3 . environment) | c[y]) < [[1.0e-2]])))), O:Object)) = true .

@@ -1,0 +1,19 @@
+==========================================
+reduce in TEST-BEHAVIOR-TRANSITION-SEMANTICS : execTrans(location(l1) complete(
+    l1) bcf trans(trans1)) .
+rewrites: 193
+result BATransResult: l1 | a |-> ([-1.0] # [(true).Bool] : [(true).Bool]), b
+    |-> [9.0] # [(true).Bool] | cr |=> [8.5099999999999994e+1] # [(true).Bool]
+==========================================
+reduce in TEST-BEHAVIOR-TRANSITION-SEMANTICS : execTrans(location(l1) complete(
+    l1) bcf trans(trans2)) .
+rewrites: 237
+result BATransResult: l1 | a |-> ([-1.0] # [(true).Bool] : [(true).Bool]), b
+    |-> [9.0] # [(true).Bool] | cr |=> [1.5e+1] # [(true).Bool]
+==========================================
+reduce in TEST-BEHAVIOR-TRANSITION-SEMANTICS : execTrans(location(l1) complete(
+    l1) bcf trans(trans3)) .
+rewrites: 252
+result BATransResult: l1 | a |-> ([-1.0] # [(true).Bool] : [(true).Bool]), b
+    |-> [9.0] # [(true).Bool] | cr |=> [1.3e+1] # [(true).Bool]
+Bye.

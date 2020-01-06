@@ -1,0 +1,26 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load module-component-dynamics.maude
+
+-------------------------------------------------------
+mod TEST-THREAD-DYNAMICS is
+  including TEST-THREAD-DYNAMICS-MOD .
+
+  eq @m@ = ['TEST-THREAD-DYNAMICS-MOD] .
+endm
+
+
+red finalConst(obj1) .
+
+red finalConst(obj2) .
+
+search executeStep([true], transIn(r(4) # [true], c1 .. inp) obj1, false) =>* C:ConstConfig .
+
+search executeStep([true], transIn(r(4) # [true], c1 .. inp) obj1, true) =>* C:ConstConfig .
+
+search executeStep([true], transIn(r(5) # [true], c2 .. inp) obj2, false) =>* C:ConstConfig .
+
+search executeStep([true], transIn(r(5) # [true], c2 .. inp) obj2, true) =>* C:ConstConfig .
+

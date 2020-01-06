@@ -1,0 +1,112 @@
+fmod SMT-Check is
+    protecting QID .
+    protecting REAL-INTEGER .
+    sorts IntegerVar BooleanVar RealVar Option SmtCheckResult SmtCheckEvalResult Formula .
+    sorts SatAssignment SatAssignmentSet .
+    subsort SatAssignment < SatAssignmentSet .
+    subsort IntegerVar < Integer .
+    subsort BooleanVar < Boolean .
+    subsort RealVar < Real .
+
+    ops tt ff : -> Option .
+    ops sat unsat unknown : -> SmtCheckResult [ctor] .
+    ops verified error : -> SmtCheckEvalResult [ctor] .
+    op {_} : SatAssignmentSet -> SmtCheckResult [ctor] .
+    op empty : -> SatAssignmentSet [ctor] .
+    op _,_ : SatAssignmentSet SatAssignmentSet -> SatAssignmentSet [ctor comm assoc id: empty] .
+
+    op _|->_ : IntegerVar Integer -> SatAssignment .
+    op _|->_ : BooleanVar Boolean -> SatAssignment .
+    op _|->_ : RealVar Real -> SatAssignment .
+
+    op i(_) : Qid -> IntegerVar [ctor] .
+    op b(_) : Qid -> Boolean [ctor] .
+    op r(_) : Qid -> RealVar [ctor] .
+
+    op smtCheck _ _ : Boolean Option -> SmtCheckResult
+    [special (id-hook SmtCheckerSymbol
+              op-hook satResultSymbol                    (sat : ~> SmtCheckResult)
+              op-hook unsatResultSymbol                  (unsat : ~> SmtCheckResult)
+              op-hook unknownResultSymbol                (unknown : ~> SmtCheckResult)
+              op-hook smtAssignmentResultSymbol          ({_} : SatAssignmentSet ~> SmtCheckResult)
+              op-hook emptySatAssignmentSetSymbol        (empty : ~> SatAssignmentSet)
+              op-hook concatSatAssignmentSetSymbol       (_,_ : SatAssignmentSet SatAssignmentSet ~> SatAssignmentSet)
+              op-hook trueFlagSymbol                     (tt : ~> Option)
+              op-hook falseFlagSymbol                    (ff : ~> Option)
+              op-hook intAssignmentSymbol                (_|->_ : IntegerVar Integer ~> SatAssignment)
+              op-hook boolAssignmentSymbol               (_|->_ : BooleanVar Boolean ~> SatAssignment)
+              op-hook realAssignmentSymbol               (_|->_ : RealVar Real ~> SatAssignment)
+
+              op-hook intVarSymbol                       (i(_) : Qid ~> IntegerVar)
+              op-hook boolVarSymbol                      (b(_) : Qid ~> Boolean)
+              op-hook realVarSymbol                      (r(_) : Qid ~> RealVar)
+
+              op-hook qidSymbol                          (<Qids> : ~> Qid)
+              op-hook integerSymbol                      (<Integers> : ~> Integer)
+              op-hook realSymbol                         (<Reals> : ~> Real)
+              term-hook trueTerm                         ((true).Boolean)
+              term-hook falseTerm                        ((false).Boolean)
+    )] .
+
+    op simplifyFormula _ : Universal -> Universal
+    [poly (1 0) special (id-hook SimplifyFormulaSymbol
+              op-hook intVarSymbol                       (i(_) : Qid ~> IntegerVar)
+              op-hook boolVarSymbol                      (b(_) : Qid ~> Boolean)
+              op-hook realVarSymbol                      (r(_) : Qid ~> RealVar)
+
+              op-hook qidSymbol                          (<Qids> : ~> Qid)
+              op-hook integerSymbol                      (<Integers> : ~> Integer)
+              op-hook realSymbol                         (<Reals> : ~> Real)
+              term-hook trueTerm                         ((true).Boolean)
+              term-hook falseTerm                        ((false).Boolean)
+
+              op-hook notBoolSymbol                      (not_ : Boolean ~> Boolean)
+              op-hook andBoolSymbol                      (_and_ : Boolean Boolean ~> Boolean)
+              op-hook xorBoolSymbol                      (_xor_ : Boolean Boolean ~> Boolean)
+              op-hook orBoolSymbol                       (_or_ : Boolean Boolean ~> Boolean)
+              op-hook impliesBoolSymbol                  (_implies_ : Boolean Boolean ~> Boolean)
+              op-hook eqBoolSymbol                       (_===_ : Boolean Boolean ~> Boolean)
+              op-hook neqBoolSymbol                      (_=/==_ : Boolean Boolean ~> Boolean)
+              op-hook iteBoolSymbol                      (_?_:_ : Boolean Boolean Boolean ~> Boolean)
+
+              op-hook unaryMinusIntSymbol                (-_ : Integer ~> Integer)
+              op-hook plusIntSymbol                      (_+_ : Integer Integer ~> Integer)
+              op-hook minusIntSymbol                     (_-_ : Integer Integer ~> Integer)
+              op-hook divIntSymbol                       (_div_ : Integer Integer ~> Integer)
+              op-hook mulIntSymbol                       (_*_ : Integer Integer ~> Integer)
+              op-hook modIntSymbol                       (_mod_ : Integer Integer ~> Integer)
+              op-hook ltIntSymbol                        (_<_ : Integer Integer ~> Boolean)
+              op-hook leqIntSymbol                       (_<=_ : Integer Integer ~> Boolean)
+              op-hook gtIntSymbol                        (_>_ : Integer Integer ~> Boolean)
+              op-hook geqIntSymbol                       (_>=_ : Integer Integer ~> Boolean)
+              op-hook eqIntSymbol                        (_===_ : Integer Integer ~> Boolean)
+              op-hook neqIntSymbol                       (_=/==_ : Integer Integer ~> Boolean)
+              op-hook iteIntSymbol                       (_?_:_ : Boolean Integer Integer ~> Integer)
+              op-hook divisibleIntSymbol                 (_divisible_ : Integer Integer ~> Boolean)
+
+              op-hook unaryMinusRealSymbol               (-_ : Real ~> Real)
+              op-hook plusRealSymbol                     (_+_ : Real Real ~> Real)
+              op-hook minusRealSymbol                    (_-_ : Real Real ~> Real)
+              op-hook divRealSymbol                      (_/_ : Real Real ~> Real)
+              op-hook mulRealSymbol                      (_*_ : Real Real ~> Real)
+              op-hook ltRealSymbol                       (_<_ : Real Real ~> Boolean)
+              op-hook leqRealSymbol                      (_<=_ : Real Real ~> Boolean)
+              op-hook gtRealSymbol                       (_>_ : Real Real ~> Boolean)
+              op-hook geqRealSymbol                      (_>=_ : Real Real ~> Boolean)
+              op-hook eqRealSymbol                       (_===_ : Real Real ~> Boolean)
+              op-hook neqRealSymbol                      (_=/==_ : Real Real ~> Boolean)
+              op-hook iteRealSymbol                      (_?_:_ : Boolean Real Real ~> Real)
+              op-hook toRealSymbol                       (toReal : Integer ~> Real)
+              op-hook toIntegerSymbol                    (toInteger : Real ~> Integer)
+              op-hook isIntegerSymbol                    (isInteger : Real ~> Boolean)
+
+    )] .
+
+***(
+    var assn : SmtCheckResult .
+    var assnN : SatAssignmentSet .
+    op eval _ : SmtCheckResult -> SatAssignmentSet .
+
+    ceq eval(assn) = assnN if assn = {assnN} .)
+
+endfm

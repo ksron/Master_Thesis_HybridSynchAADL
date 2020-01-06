@@ -1,0 +1,33 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load ../syntax/Airplane_nondet_Instance.maude
+
+
+red initialize(initial) .
+
+mod TEST-AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC-TRUE is
+    including AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC .
+    including MERGE-BEHAVIOR-TRANSITION-SEMANTICS .
+
+    eq MFlag = true .
+    eq @m@ = ['AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC] .
+endm
+
+mod TEST-AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC-FALSE is
+    including AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC .
+    including MERGE-BEHAVIOR-TRANSITION-SEMANTICS .
+
+    eq MFlag = false .
+    eq @m@ = ['AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC] .
+endm
+
+rew [5] in TEST-AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC-FALSE : {[true] || initialize(initial), 0, infty} .
+
+rew [5] in TEST-AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC-TRUE : {[true] || initialize(initial), 0, infty} .
+
+
+search [,5] in TEST-AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC-FALSE : {[true] || initialize(initial), 0, infty} =>* G:GlobalSystem .
+
+search [,5] in TEST-AIRPLANE_NONDET_INSTANCE-MODEL-SYMBOLIC-TRUE : {[true] || initialize(initial), 0, infty} =>* G:GlobalSystem .

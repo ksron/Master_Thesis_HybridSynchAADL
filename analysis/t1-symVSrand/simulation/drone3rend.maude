@@ -1,0 +1,33 @@
+load ../../../code/semantics/interpreter-random.maude
+load ../extractor.maude
+load ../../model/drones/Drones3_rendezvous_Instance2.maude 
+
+mod TEST-DRONE3-SYSTEM is
+  including DRONES3_RENDEZVOUS_INSTANCE-MODEL .
+  including MODEL-TRANSITION-SYSTEM .
+  including PRINT-DATA .
+
+  op initConst : -> BoolExp .
+  eq initConst = [true] .
+
+  op cinitState : -> Object .
+  eq cinitState = initialize(collapse(initial)) .
+  
+  var T : Time .
+  var TI : TimeInf .
+  var OBJ : Object . 
+  var PS : Set{PropSpec} .
+  var ES : Set{Exp} .
+  var N : Nat .
+
+  sort GSwithPrinter .
+  op printing : GlobalSystem Set{PropSpec} -> GSwithPrinter .
+  op result : GlobalSystem Set{Exp} -> GSwithPrinter [ctor] .
+
+  rl [pr]: 
+     printing({{OBJ, N}, T, TI}, PS) 
+  => 
+     result({{OBJ, N}, T, TI}, printData(PS, OBJ)) .
+
+endm
+

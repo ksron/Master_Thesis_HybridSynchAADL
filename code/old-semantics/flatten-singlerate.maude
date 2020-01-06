@@ -1,0 +1,133 @@
+
+(omod AADL-COMPOSITION is
+  including PORT .
+
+  vars P P' : FeatureId . var DL : List{DataContent} .  vars PROPS PROPS' : PropertyAssociation .
+
+--- combine two features: currently, only for two data input ports or two data output ports
+  op combine : Object Object -> Object [format(m! o)] .
+  eq combine(
+       < P  : InPort | content : nil, cache : bot, properties : PROPS >, 
+       < P' : InPort | content : DL,  cache : bot, properties : PROPS' >)
+   = 
+       < P  : InPort | content : DL, properties : compose(PROPS,PROPS') > .
+  eq combine(
+       < P  : OutPort | content : nil, properties : PROPS >, 
+       < P' : OutPort | content : DL,  properties : PROPS' >)
+   = 
+       < P  : OutPort | content : DL,  properties : compose(PROPS,PROPS') > .
+
+--- compose feature properties, e.g., input adaptors.
+--- Currently, we just take the set union of all properties..
+  op compose : PropertyAssociation PropertyAssociation -> PropertyAssociation [format(m! o)] .
+  eq compose(PROPS,PROPS') = PROPS ; PROPS' .
+
+endom)
+
+--- flatten the single-rate hierarchical structures, creating connection instances
+(omod COLLAPSE-SINGLE-RATE is
+  including  AADL-COMPOSITION .
+  including ENSEMBLE-COMPONENTS .
+
+
+  var OBJ' : Object . vars COMPS COMPS' PORTS PORTS' REST : Configuration .  
+  var CONX : Connection . vars CONXS CONXS' : Set{Connection} .  
+  vars C C' : ComponentId .  vars CR : ComponentRef .  
+  vars P P' : FeatureId . vars FR1 FR2 FR3 : FeatureRef .
+  var CLASS : Cid . var ATTS : AttributeSet . vars NZ NZ' : NzNat .
+  vars PROPS PROPS' : PropertyAssociation .
+
+  op collapse : Object ~> Object [format(m! o)] .
+  eq collapse(< C : Ensemble | subcomponents : COMPS > REST)
+   = open(< C : Ensemble | subcomponents : collapse(COMPS) >) collapse(REST) .
+  eq collapse(REST) = REST [owise] .
+
+--- open a single-rate ensemble 
+  op open : Object ~> Object [format(m! o)] .
+
+  --- a sub-ensemble has rate 1
+  eq open(
+       < C : Ensemble | 
+          connections : CONXS,
+          subcomponents : 
+	      < C' : Ensemble | rate : 1, 
+	                        features : PORTS',
+				properties : PROPS',
+	                        connections : CONXS', 
+				subcomponents : COMPS' > COMPS >)
+   = 
+     open(
+       < C : Ensemble | 
+          connections : link(CONXS ; sub(C', CONXS')), 
+	  subcomponents : sub(C', 1, PROPS', transFeature(PORTS',CONXS',COMPS')) COMPS >) .
+
+  --- a sub-ensemble has only a single component
+  eq open(
+       < C : Ensemble | 
+          connections : CONXS,
+          subcomponents : 
+	      < C' : Ensemble | rate : s(NZ), 
+	                        features : PORTS',
+				properties : PROPS',
+	                        connections : CONXS', 
+				subcomponents : OBJ' > COMPS >)
+   = 
+     open(
+       < C : Ensemble | 
+          connections : link(CONXS ; sub(C', CONXS')), 
+	  subcomponents : sub(C', s(NZ), PROPS', transFeature(PORTS',CONXS',OBJ')) COMPS >) .
+
+  eq open(< C : Component | >) = < C : Component | > [owise] .
+
+
+--- level-up identifiers
+  op sub : ComponentId Set{Connection} ~> Set{Connection} [format(m! o)] .
+  eq sub(C, (FR1 --> FR2) ; CONXS) = (paste(C,FR1) --> paste(C,FR2)) ; sub(C, CONXS) .
+  eq sub(C, empty) = empty .
+
+  op sub : ComponentId NzNat PropertyAssociation Configuration ~> Configuration [format(m! o)] .
+  eq sub(C, NZ, PROPS, < CR : CLASS | rate : NZ', properties : PROPS', ATTS > REST) 
+   = < paste(C,CR) : CLASS | rate : NZ * NZ', properties : compose(PROPS,PROPS'), ATTS > sub(C, NZ, PROPS, REST) .
+  eq sub(C, NZ, PROPS, none) = none .
+
+--- transfer feature properties, e.g., input adaptors, and initial values
+  op transFeature : Configuration Set{Connection} Configuration ~> Configuration [format(m! o)] .
+
+  eq transFeature(
+       < P : Feature | > PORTS, 
+       (P --> (CR .. P')) ; CONXS,
+       < CR : Component | features : < P' : Feature | > PORTS' > REST)
+   = transFeature(
+       < P : Feature | > PORTS,
+       CONXS,
+       < CR : Component | features : combine(< P' : Feature | >, < P : Feature | >) PORTS' > REST) .
+
+  eq transFeature(
+       < P : Feature | > PORTS, 
+       ((CR .. P') --> P) ; CONXS,
+       < CR : Component | features : < P' : Feature | > PORTS' > REST)
+   = transFeature(
+       < P : Feature | > PORTS,
+       CONXS,
+       < CR : Component | features : combine(< P' : Feature | >, < P : Feature | >) PORTS' > REST) .
+    
+  eq transFeature(PORTS, CONXS, REST) = REST [owise] .
+
+--- connecting connections
+  op link : Set{Connection} ~> Set{Connection} [format(m! o)] .
+  eq link((FR1 --> FR2) ; (FR2 --> FR3) ; CONXS) = link(linkAll(FR1 --> FR2, (FR2 --> FR3) ; CONXS)) .
+  eq link(CONXS) = CONXS [owise] .
+
+  op linkAll : Connection Set{Connection} ~> Set{Connection} [format(m! o)] .
+  eq linkAll(FR1 --> FR2, (FR2 --> FR3) ; CONXS) = (FR1 --> FR3) ; linkAll(FR1 --> FR2, CONXS) .
+  eq linkAll(CONX, CONXS) = CONXS [owise] .
+
+--- a flattened component id
+  op paste : ComponentId ComponentId ~> ComponentId [format(m! o)] .
+  eq paste(C, CR) = C . CR .
+
+  op paste : ComponentId FeatureRef ~> FeatureRef [format(m! o)] .
+  eq paste(C, CR .. P) = paste(C,CR) .. P .
+  eq paste(C, P)       = C .. P .
+endom)
+

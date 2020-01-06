@@ -1,0 +1,9 @@
+==========================================
+reduce in TEST-ENV-CONTINUOUS-SEMANTICS : execFlow([funcs], r("time", 0), bcf)
+    .
+rewrites: 71
+result DataValuation: x |=> [1] + [100] + [3/4] + r("time", 0) * r("time", 0) #
+    (b(0) and b(1) and [true] and [true] and [true]), y |=> ([1/2] + [
+    8458323050155213/140737488355328]) * ([3/4] - r("y", 0)) + r("time", 0) # (
+    b(1) and [true] and [true] and [true] and [true])
+Bye.

@@ -1,0 +1,12 @@
+search printing({{cinitState, 000}, 0, &&&}, 
+    ((Drones4rendezvousInstance | drone1 . environment | c[x]) ; 
+     (Drones4rendezvousInstance | drone1 . environment | c[y]) ;
+     (Drones4rendezvousInstance | drone2 . environment | c[x]) ;
+     (Drones4rendezvousInstance | drone2 . environment | c[y]) ;
+     (Drones4rendezvousInstance | drone3 . environment | c[x]) ;
+     (Drones4rendezvousInstance | drone3 . environment | c[y]) ; 
+     (Drones4rendezvousInstance | drone4 . environment | c[x]) ;
+     (Drones4rendezvousInstance | drone4 . environment | c[y]) 
+    )) 
+  =>*
+     result({C:ConfigWithRand, &&&, &&&},  E:Set{Exp}).

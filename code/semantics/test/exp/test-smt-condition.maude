@@ -1,0 +1,18 @@
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+select SMT-BOOL-EXP .
+red [true] .
+red b(2) .
+red b("a",2) .
+red [true] and b(2) or (b(4) === [false]) .
+
+
+select SMT-REAL-EXP .
+red [2/3] .
+red [4/3] + b(0) . --- kind
+red [4/3] + r(0) .
+red r("b",2) .
+red ([0] > r(2)) or (r(4) === r(5)) .
+

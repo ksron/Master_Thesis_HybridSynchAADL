@@ -1,0 +1,16 @@
+(fmod SYM-TRANS is
+  inc SMT-INTERFACE .
+  inc EXPRESSION-SYNTAX .
+
+  vars B1 B2 : Bool . vars I1 I2 : Int .
+  vars F1 F2 : Float . vars E1 E2 : SymExpr .
+  var E : SymExpr .
+  
+  --- checks if the given Symbolic expression is satisfiable
+  op check-sat : Bool SymExpr -> Bool .
+  eq check-sat(false, E) = true .
+  eq check-sat(true, E) = check-sat(< E >) .
+
+  op <_> : SymExpr -> Bool .
+
+endfm)

@@ -1,0 +1,8 @@
+--- COLLISION
+search [1] {initConst || cinitState, 0, &&&} =>+
+	     {B:BoolExp || O:Object, T:Time, &&&} such that check-sat(B:BoolExp and
+eval( Drones2rendezvousInstance |
+  ((abs((drone1 . environment | c[x]) - (drone2 . environment | c[x])) < [[0.4]])
+and
+   (abs((drone1 . environment | c[y]) - (drone2 . environment | c[y])) < [[0.4]]))
+,O:Object)) .

@@ -1,0 +1,16 @@
+/ba-exp-semantics.maude
+/ba-semantics.maude
+/component-dynamics.maude
+/env-io-operations.maude
+/env-semantics-common.maude
+/env-semantics.maude
+/io-operations.maude
+/merge-semantics.maude
+/smt-exp-simplification.maude
+/smt-exp.maude
+/smt-interface.maude
+/smt-prelude.maude
+/symbolic-analysis.maude
+/synchronous-model.maude
+/transfer-input.maude
+/transfer-results.maude

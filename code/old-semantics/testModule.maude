@@ -1,0 +1,2645 @@
+mod MODEL-TEST is
+  sorts Action ActionBlock ActionGroup ActionSequence ActionSet AssignmentAction AssignmentTarget
+    Attribute AttributeSet Bool BoolValue BranchAction BuiltinInputAdaptor Char CharValue Cid
+    ClassifierId ClockedSystem CommunicationAction Component ComponentId ComponentRef Configuration
+    Connection ConstConf ConxItem ConxTable Data DataContent DecFloat DispatchCond ElseIfs EmptyAction
+    EmptyConfiguration Ensemble Entry{FeatureId,DataContent}Entry{VarId,DataContent}ExecuteCond
+    Expression Feature FeatureId FeatureMap FeatureRef FindResult FiniteFloat Float FloatValue
+    GlobalBehaviorConf GlobalSystem InParameter InPort Int IntValue List{DataContent}LocalBehaviorConf
+    Location LoopAction ManyToOneInputAdaptor Msg MsgConfiguration NEConfiguration NEMsgConfiguration
+    NEObjectConfiguration Nat NeList{DataContent}NePropertyAssociation NeSet{Connection}NeSet{
+    FeatureRef}NeSet{Location}NeSet{Transition}NeSet{VarId}NzInt NzNat NzRat NzTime Object
+    ObjectConfiguration ObjectQueue Oid OneToManyInputAdaptor OutParameter OutPort Pair{Configuration,
+    FeatureMap}Parameter ParameterList PeriodicComponent Port PortValue Portal PosRat Process Property
+    PropertyAssociation PropertyId PropertyValue Rat Set{Connection}Set{FeatureRef}Set{Location}Set{
+    Transition}Set{VarId}String StringValue SymBoolVar SymCharVar SymExpr SymFloatVar SymIntVar
+    SymLocalBehaviorConf SymStringVar SymTransitionTuple SymVar System Thread ThreadGroup Time TimeInf
+    TransGuard Transition Tuple{Location,FeatureMap,Configuration}Value VarExpression VarId
+    VarValuation Zero cBoolValue cCharValue cFloatValue cIntValue cStringValue .
+  subsort Action < ActionSequence .
+  subsort Action < ActionSet .
+  subsort ActionBlock < Action .
+  subsort ActionSequence < ActionGroup .
+  subsort ActionSet < ActionGroup .
+  subsort AssignmentAction < Action .
+  subsort Attribute < AttributeSet .
+  subsort BoolValue < SymExpr .
+  subsort BranchAction < Action .
+  subsort Char < String .
+  subsort CharValue < StringValue .
+  subsort CharValue < SymExpr .
+  subsort CommunicationAction < Action .
+  subsort Component < Cid .
+  subsort ComponentId < ComponentRef .
+  subsort ComponentRef < Oid .
+  subsort Configuration < ConstConf .
+  subsort Configuration < System .
+  subsort Connection < NeSet{Connection}.
+  subsort ConxItem < ConxTable .
+  subsort Data < Cid .
+  subsort Data < Component .
+  subsort DataContent < NeList{DataContent}.
+  subsort DispatchCond < TransGuard .
+  subsort EmptyAction < ActionSequence .
+  subsort EmptyAction < ActionSet .
+  subsort EmptyConfiguration < MsgConfiguration .
+  subsort EmptyConfiguration < ObjectConfiguration .
+  subsort Ensemble < Cid .
+  subsort Ensemble < PeriodicComponent .
+  subsort Entry{FeatureId,DataContent}< FeatureMap .
+  subsort Entry{VarId,DataContent}< VarValuation .
+  subsort ExecuteCond < TransGuard .
+  subsort Expression < ExecuteCond .
+  subsort Expression < ParameterList .
+  subsort Feature < Cid .
+  subsort FeatureId < FeatureRef .
+  subsort FeatureId < Oid .
+  subsort FeatureRef < NeSet{FeatureRef}.
+  subsort FiniteFloat < Float .
+  subsort FloatValue < SymExpr .
+  subsort GlobalSystem < ClockedSystem .
+  subsort InParameter < Cid .
+  subsort InParameter < Parameter .
+  subsort InPort < Cid .
+  subsort InPort < Port .
+  subsort Int < Rat .
+  subsort IntValue < SymExpr .
+  subsort LocalBehaviorConf < SymLocalBehaviorConf .
+  subsort Location < NeSet{Location}.
+  subsort LoopAction < Action .
+  subsort ManyToOneInputAdaptor < BuiltinInputAdaptor .
+  subsort Msg < Configuration .
+  subsort Msg < NEMsgConfiguration .
+  subsort MsgConfiguration < Configuration .
+  subsort NEConfiguration < Configuration .
+  subsort NEMsgConfiguration < MsgConfiguration .
+  subsort NEMsgConfiguration < NEConfiguration .
+  subsort NEObjectConfiguration < NEConfiguration .
+  subsort NEObjectConfiguration < ObjectConfiguration .
+  subsort Nat < FindResult .
+  subsort Nat < Int .
+  subsort Nat < Time .
+  subsort NeList{DataContent}< List{DataContent}.
+  subsort NePropertyAssociation < PropertyAssociation .
+  subsort NeSet{Connection}< Set{Connection}.
+  subsort NeSet{FeatureRef}< Set{FeatureRef}.
+  subsort NeSet{Location}< Set{Location}.
+  subsort NeSet{Transition}< Set{Transition}.
+  subsort NeSet{VarId}< Set{VarId}.
+  subsort NzInt < Int .
+  subsort NzInt < NzRat .
+  subsort NzNat < Nat .
+  subsort NzNat < NzInt .
+  subsort NzNat < NzTime .
+  subsort NzNat < PosRat .
+  subsort NzRat < Rat .
+  subsort NzTime < Time .
+  subsort Object < Configuration .
+  subsort Object < NEObjectConfiguration .
+  subsort ObjectConfiguration < Configuration .
+  subsort OneToManyInputAdaptor < BuiltinInputAdaptor .
+  subsort OutParameter < Cid .
+  subsort OutParameter < Parameter .
+  subsort OutPort < Cid .
+  subsort OutPort < Port .
+  subsort Parameter < Cid .
+  subsort Parameter < Feature .
+  subsort PeriodicComponent < Cid .
+  subsort PeriodicComponent < Component .
+  subsort Port < Cid .
+  subsort Port < Feature .
+  subsort PortValue < DataContent .
+  subsort Portal < Configuration .
+  subsort PosRat < NzRat .
+  subsort Process < Cid .
+  subsort Process < Ensemble .
+  subsort Property < NePropertyAssociation .
+  subsort StringValue < SymExpr .
+  subsort SymBoolVar < BoolValue .
+  subsort SymBoolVar < SymVar .
+  subsort SymCharVar < CharValue .
+  subsort SymCharVar < SymStringVar .
+  subsort SymCharVar < SymVar .
+  subsort SymExpr < DataContent .
+  subsort SymExpr < Expression .
+  subsort SymFloatVar < FloatValue .
+  subsort SymFloatVar < SymVar .
+  subsort SymIntVar < IntValue .
+  subsort SymIntVar < SymVar .
+  subsort SymStringVar < StringValue .
+  subsort SymStringVar < SymVar .
+  subsort SymVar < SymExpr .
+  subsort System < Cid .
+  subsort System < Ensemble .
+  subsort Thread < Cid .
+  subsort Thread < PeriodicComponent .
+  subsort ThreadGroup < Cid .
+  subsort ThreadGroup < Ensemble .
+  subsort Time < TimeInf .
+  subsort Transition < NeSet{Transition}.
+  subsort Value < SymExpr .
+  subsort VarExpression < Expression .
+  subsort VarId < NeSet{VarId}.
+  subsort Zero < Nat .
+  subsort cBoolValue < BoolValue .
+  subsort cBoolValue < Value .
+  subsort cCharValue < CharValue .
+  subsort cCharValue < Value .
+  subsort cCharValue < cStringValue .
+  subsort cFloatValue < FloatValue .
+  subsort cFloatValue < Value .
+  subsort cIntValue < IntValue .
+  subsort cIntValue < Value .
+  subsort cStringValue < StringValue .
+  subsort cStringValue < Value .
+  op $card : PropertyAssociation Nat -> Nat .
+  op $card : Set{Connection}Nat -> Nat .
+  op $card : Set{FeatureRef}Nat -> Nat .
+  op $card : Set{Location}Nat -> Nat .
+  op $card : Set{Transition}Nat -> Nat .
+  op $card : Set{VarId}Nat -> Nat .
+  op $diff : PropertyAssociation PropertyAssociation PropertyAssociation -> PropertyAssociation .
+  op $diff : Set{Connection}Set{Connection}Set{Connection}-> Set{Connection}.
+  op $diff : Set{FeatureRef}Set{FeatureRef}Set{FeatureRef}-> Set{FeatureRef}.
+  op $diff : Set{Location}Set{Location}Set{Location}-> Set{Location}.
+  op $diff : Set{Transition}Set{Transition}Set{Transition}-> Set{Transition}.
+  op $diff : Set{VarId}Set{VarId}Set{VarId}-> Set{VarId}.
+  op $hasMapping : FeatureMap FeatureId -> Bool .
+  op $hasMapping : VarValuation VarId -> Bool .
+  op $intersect : PropertyAssociation PropertyAssociation PropertyAssociation -> PropertyAssociation .
+  op $intersect : Set{Connection}Set{Connection}Set{Connection}-> Set{Connection}.
+  op $intersect : Set{FeatureRef}Set{FeatureRef}Set{FeatureRef}-> Set{FeatureRef}.
+  op $intersect : Set{Location}Set{Location}Set{Location}-> Set{Location}.
+  op $intersect : Set{Transition}Set{Transition}Set{Transition}-> Set{Transition}.
+  op $intersect : Set{VarId}Set{VarId}Set{VarId}-> Set{VarId}.
+  op $reverse : List{DataContent}List{DataContent}-> List{DataContent}.
+  op $size : List{DataContent}Nat -> Nat .
+  op <_:_|`> : Oid Cid -> Object .
+  op Component : -> Component .
+  op Data : -> Data .
+  op Ensemble : -> Ensemble .
+  op Feature : -> Feature .
+  op INF : -> TimeInf .
+  op InParameter : -> InParameter .
+  op InPort : -> InPort .
+  op OutParameter : -> OutParameter .
+  op OutPort : -> OutPort .
+  op Parameter : -> Parameter .
+  op PeriodicComponent : -> PeriodicComponent .
+  op Port : -> Port .
+  op Process : -> Process .
+  op System : -> System .
+  op Thread : -> Thread .
+  op ThreadGroup : -> ThreadGroup .
+  op _in_ : Connection Set{Connection}-> Bool .
+  op _in_ : FeatureRef Set{FeatureRef}-> Bool .
+  op _in_ : Location Set{Location}-> Bool .
+  op _in_ : Property PropertyAssociation -> Bool .
+  op _in_ : Transition Set{Transition}-> Bool .
+  op _in_ : VarId Set{VarId}-> Bool .
+  op _psubset_ : PropertyAssociation PropertyAssociation -> Bool .
+  op _psubset_ : Set{Connection}Set{Connection}-> Bool .
+  op _psubset_ : Set{FeatureRef}Set{FeatureRef}-> Bool .
+  op _psubset_ : Set{Location}Set{Location}-> Bool .
+  op _psubset_ : Set{Transition}Set{Transition}-> Bool .
+  op _psubset_ : Set{VarId}Set{VarId}-> Bool .
+  op _subset_ : PropertyAssociation PropertyAssociation -> Bool .
+  op _subset_ : Set{Connection}Set{Connection}-> Bool .
+  op _subset_ : Set{FeatureRef}Set{FeatureRef}-> Bool .
+  op _subset_ : Set{Location}Set{Location}-> Bool .
+  op _subset_ : Set{Transition}Set{Transition}-> Bool .
+  op _subset_ : Set{VarId}Set{VarId}-> Bool .
+  op _|_ : SymExpr Tuple{Location,FeatureMap,Configuration}-> SymTransitionTuple .
+  op append : List{DataContent}List{DataContent}-> List{DataContent}.
+  op append : List{DataContent}NeList{DataContent}-> NeList{DataContent}.
+  op append : NeList{DataContent}List{DataContent}-> NeList{DataContent}.
+  op bool : cBoolValue -> Bool .
+  op ceiling : PosRat -> NzNat .
+  op ceiling : Rat -> Int .
+  op class : Object -> Cid .
+  op delete : Connection Set{Connection}-> Set{Connection}.
+  op delete : FeatureRef Set{FeatureRef}-> Set{FeatureRef}.
+  op delete : Location Set{Location}-> Set{Location}.
+  op delete : Property PropertyAssociation -> PropertyAssociation .
+  op delete : Transition Set{Transition}-> Set{Transition}.
+  op delete : VarId Set{VarId}-> Set{VarId}.
+  op float : cFloatValue -> Float .
+  op float : cIntValue -> Float .
+  op floor : PosRat -> Nat .
+  op floor : Rat -> Int .
+  op frac : Rat -> Rat .
+  op front : NeList{DataContent}-> List{DataContent}.
+  op guardConstraint : TransGuard LocalBehaviorConf -> SymExpr .
+  op head : NeList{DataContent}-> DataContent .
+  op insert : Connection Set{Connection}-> Set{Connection}.
+  op insert : FeatureRef Set{FeatureRef}-> Set{FeatureRef}.
+  op insert : Location Set{Location}-> Set{Location}.
+  op insert : Property PropertyAssociation -> PropertyAssociation .
+  op insert : Transition Set{Transition}-> Set{Transition}.
+  op insert : VarId Set{VarId}-> Set{VarId}.
+  op insert : FeatureId DataContent FeatureMap -> FeatureMap .
+  op insert : VarId DataContent VarValuation -> VarValuation .
+  op int : cIntValue -> Int .
+  op intersection : PropertyAssociation PropertyAssociation -> PropertyAssociation .
+  op intersection : Set{Connection}Set{Connection}-> Set{Connection}.
+  op intersection : Set{FeatureRef}Set{FeatureRef}-> Set{FeatureRef}.
+  op intersection : Set{Location}Set{Location}-> Set{Location}.
+  op intersection : Set{Transition}Set{Transition}-> Set{Transition}.
+  op intersection : Set{VarId}Set{VarId}-> Set{VarId}.
+  op last : NeList{DataContent}-> DataContent .
+  op occurs : DataContent List{DataContent}-> Bool .
+  op pi : -> FiniteFloat .
+  op reverse : List{DataContent}-> List{DataContent}.
+  op reverse : NeList{DataContent}-> NeList{DataContent}.
+  op size : List{DataContent}-> Nat .
+  op size : NeList{DataContent}-> NzNat .
+  op string : cStringValue -> String .
+  op tail : NeList{DataContent}-> List{DataContent}.
+  op top : -> Object .
+  op top2 : -> Object .
+  op trunc : PosRat -> Nat .
+  op trunc : Rat -> Int .
+  op union : NePropertyAssociation PropertyAssociation -> NePropertyAssociation .
+  op union : NeSet{Connection}Set{Connection}-> NeSet{Connection}.
+  op union : NeSet{FeatureRef}Set{FeatureRef}-> NeSet{FeatureRef}.
+  op union : NeSet{Location}Set{Location}-> NeSet{Location}.
+  op union : NeSet{Transition}Set{Transition}-> NeSet{Transition}.
+  op union : NeSet{VarId}Set{VarId}-> NeSet{VarId}.
+  op union : PropertyAssociation NePropertyAssociation -> NePropertyAssociation .
+  op union : PropertyAssociation PropertyAssociation -> PropertyAssociation .
+  op union : Set{Connection}NeSet{Connection}-> NeSet{Connection}.
+  op union : Set{Connection}Set{Connection}-> Set{Connection}.
+  op union : Set{FeatureRef}NeSet{FeatureRef}-> NeSet{FeatureRef}.
+  op union : Set{FeatureRef}Set{FeatureRef}-> Set{FeatureRef}.
+  op union : Set{Location}NeSet{Location}-> NeSet{Location}.
+  op union : Set{Location}Set{Location}-> Set{Location}.
+  op union : Set{Transition}NeSet{Transition}-> NeSet{Transition}.
+  op union : Set{Transition}Set{Transition}-> Set{Transition}.
+  op union : Set{VarId}NeSet{VarId}-> NeSet{VarId}.
+  op union : Set{VarId}Set{VarId}-> Set{VarId}.
+  op zero : -> Time .
+  op |_| : NePropertyAssociation -> NzNat .
+  op |_| : NeSet{Connection}-> NzNat .
+  op |_| : NeSet{FeatureRef}-> NzNat .
+  op |_| : NeSet{Location}-> NzNat .
+  op |_| : NeSet{Transition}-> NzNat .
+  op |_| : NeSet{VarId}-> NzNat .
+  op |_| : PropertyAssociation -> Nat .
+  op |_| : Set{Connection}-> Nat .
+  op |_| : Set{FeatureRef}-> Nat .
+  op |_| : Set{Location}-> Nat .
+  op |_| : Set{Transition}-> Nat .
+  op |_| : Set{VarId}-> Nat .
+  op -_ : FiniteFloat -> FiniteFloat
+    [prec 15 special(id-hook FloatOpSymbol(-)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op -_ : Float -> Float
+    [prec 15 special(id-hook FloatOpSymbol(-)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op -_ : Int -> Int
+    [special(id-hook MinusSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~>
+    NzInt))] .
+  op -_ : NzInt -> NzInt
+    [special(id-hook MinusSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~>
+    NzInt))] .
+  op -_ : NzNat -> NzInt
+    [ctor special(id-hook MinusSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ :
+    NzNat ~> NzInt))] .
+  op -_ : NzRat -> NzRat
+    [special(id-hook MinusSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~>
+    NzInt))] .
+  op -_ : Rat -> Rat
+    [special(id-hook MinusSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~>
+    NzInt))] .
+  op 0 : -> Zero
+    [ctor] .
+  op <> : -> Portal
+    [ctor] .
+  op <Floats> : -> FiniteFloat
+    [special(id-hook FloatSymbol)] .
+  op <Floats> : -> Float
+    [special(id-hook FloatSymbol)] .
+  op <Strings> : -> Char
+    [special(id-hook StringSymbol)] .
+  op <Strings> : -> String
+    [special(id-hook StringSymbol)] .
+  op <_:_|_> : Oid Cid AttributeSet -> Object
+    [ctor object] .
+  op <_`,_`,_> : Int String Int -> DecFloat
+    [ctor] .
+  op HybridAADL::InputAdaptor : -> PropertyId
+    [ctor] .
+  op HybridAADL::Nondeterministic : -> PropertyId
+    [ctor] .
+  op HybridAADL::Synchronous : -> PropertyId
+    [ctor] .
+  op MathLib::angle : -> ClassifierId
+    [ctor] .
+  op MathLib::cos : -> ClassifierId
+    [ctor] .
+  op MathLib::log : -> ClassifierId
+    [ctor] .
+  op MathLib::min : -> ClassifierId
+    [ctor] .
+  op MathLib::sin : -> ClassifierId
+    [ctor] .
+  op MathLib::sqrt : -> ClassifierId
+    [ctor] .
+  op MathLib::tan : -> ClassifierId
+    [ctor] .
+  op TimingProperties::Period : -> PropertyId
+    [ctor] .
+  op _! : ClassifierId -> CommunicationAction
+    [ctor] .
+  op _! : ComponentId -> CommunicationAction
+    [ctor] .
+  op _!=_ : Expression Expression -> Expression
+    [ctor] .
+  op _!=_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _!=_ : Value Value -> Value
+    [ctor] .
+  op _!`(_`) : ClassifierId ParameterList -> CommunicationAction
+    [ctor] .
+  op _!`(_`) : ComponentId ParameterList -> CommunicationAction
+    [ctor] .
+  op _&_ : ActionSet ActionSet -> ActionSet
+    [assoc comm ctor] .
+  op _&_ : Int Int -> Int
+    [assoc comm prec 53 special(id-hook ACU_NumberOpSymbol(&)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _&_ : Nat Int -> Nat
+    [assoc comm prec 53 special(id-hook ACU_NumberOpSymbol(&)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _&_ : Nat Nat -> Nat
+    [assoc comm prec 53 special(id-hook ACU_NumberOpSymbol(&)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _**_ : Expression Expression -> Expression
+    [ctor] .
+  op _**_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _**_ : Value Value -> Value
+    [ctor] .
+  op _*_ : Expression Expression -> Expression
+    [ctor] .
+  op _*_ : Float Float -> Float
+    [prec 31 gather(E e)special(id-hook FloatOpSymbol(*)op-hook floatSymbol(<Floats> : ~>
+    FiniteFloat))] .
+  op _*_ : Int Int -> Int
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _*_ : Nat Nat -> Nat
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _*_ : NzInt NzInt -> NzInt
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _*_ : NzNat NzNat -> NzNat
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _*_ : NzRat NzRat -> NzRat
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _*_ : PosRat PosRat -> PosRat
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _*_ : Rat Rat -> Rat
+    [assoc comm prec 31 special(id-hook ACU_NumberOpSymbol(*)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _*_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _*_ : Value Value -> Value
+    [ctor] .
+  op _+_ : Expression Expression -> Expression
+    [ctor] .
+  op _+_ : Float Float -> Float
+    [prec 33 gather(E e)special(id-hook FloatOpSymbol(+)op-hook floatSymbol(<Floats> : ~>
+    FiniteFloat))] .
+  op _+_ : Int Int -> Int
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _+_ : Nat Nat -> Nat
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _+_ : NzNat Nat -> NzNat
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _+_ : PosRat Nat -> PosRat
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _+_ : PosRat PosRat -> PosRat
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _+_ : Rat Rat -> Rat
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _+_ : String String -> String
+    [prec 33 gather(E e)special(id-hook StringOpSymbol(+)op-hook stringSymbol(<Strings> : ~> Char))] .
+  op _+_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _+_ : TimeInf TimeInf -> TimeInf
+    [assoc comm prec 33 special(id-hook ACU_NumberOpSymbol(+)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _+_ : Value Value -> Value
+    [ctor] .
+  op _-->_ : FeatureRef FeatureRef -> Connection
+    [ctor] .
+  op _-_ : Expression Expression -> Expression
+    [ctor] .
+  op _-_ : Float Float -> Float
+    [prec 33 gather(E e)special(id-hook FloatOpSymbol(-)op-hook floatSymbol(<Floats> : ~>
+    FiniteFloat))] .
+  op _-_ : Int Int -> Int
+    [prec 33 gather(E e)special(id-hook NumberOpSymbol(-)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _-_ : Rat Rat -> Rat
+    [prec 33 gather(E e)special(id-hook NumberOpSymbol(-)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _-_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _-_ : Value Value -> Value
+    [ctor] .
+  op _-`[_`]->__ : Location TransGuard Location ActionBlock -> Transition
+    [ctor] .
+  op _.._ : ComponentRef FeatureId -> FeatureRef
+    [ctor] .
+  op _._ : ComponentRef ComponentRef -> ComponentRef
+    [assoc ctor] .
+  op _/_ : Expression Expression -> Expression
+    [ctor] .
+  op _/_ : NzInt NzNat -> NzRat
+    [prec 31 gather(E e)ctor special(id-hook DivisionSymbol op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _/_ : NzNat NzNat -> PosRat
+    [prec 31 gather(E e)ctor special(id-hook DivisionSymbol op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _/_ : NzRat NzRat -> NzRat
+    [prec 31 gather(E e)special(id-hook DivisionSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _/_ : PosRat PosRat -> PosRat
+    [prec 31 gather(E e)special(id-hook DivisionSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _/_ : Rat NzRat -> Rat
+    [prec 31 gather(E e)special(id-hook DivisionSymbol op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _/_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _/_ : Value Value -> Value
+    [ctor] .
+  op _/_ :[Float][Float]->[Float]
+    [prec 31 gather(E e)special(id-hook FloatOpSymbol(/)op-hook floatSymbol(<Floats> : ~>
+    FiniteFloat))] .
+  op _::_ : ConstConf ObjectQueue -> ObjectQueue
+    [ctor frozen(2)] .
+  op _:=_ : AssignmentTarget Expression -> AssignmentAction
+    [ctor] .
+  op _:_ : Value Bool -> PortValue
+    [ctor] .
+  op _;_ : ActionSequence ActionSequence -> ActionSequence
+    [assoc ctor] .
+  op _;_ : NePropertyAssociation PropertyAssociation -> NePropertyAssociation
+    [assoc comm id:(none).PropertyAssociation ctor] .
+  op _;_ : NeSet{Connection}Set{Connection}-> NeSet{Connection}
+    [assoc comm id:(empty).Set{Connection}ctor] .
+  op _;_ : NeSet{Transition}Set{Transition}-> NeSet{Transition}
+    [assoc comm id:(empty).Set{Transition}ctor] .
+  op _;_ : NeSet{VarId}Set{VarId}-> NeSet{VarId}
+    [assoc comm id:(empty).Set{VarId}ctor] .
+  op _;_ : ParameterList ParameterList -> ParameterList
+    [assoc ctor] .
+  op _;_ : PropertyAssociation PropertyAssociation -> PropertyAssociation
+    [assoc comm id:(none).PropertyAssociation ctor] .
+  op _;_ : Set{Connection}Set{Connection}-> Set{Connection}
+    [assoc comm id:(empty).Set{Connection}ctor] .
+  op _;_ : Set{Transition}Set{Transition}-> Set{Transition}
+    [assoc comm id:(empty).Set{Transition}ctor] .
+  op _;_ : Set{VarId}Set{VarId}-> Set{VarId}
+    [assoc comm id:(empty).Set{VarId}ctor] .
+  op _;_ : VarValuation VarValuation -> VarValuation
+    [assoc comm id:(empty).VarValuation ctor] .
+  op _<<_ : Int Nat -> Int
+    [prec 35 gather(E e)special(id-hook NumberOpSymbol(<<)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _<<_ : Nat Nat -> Nat
+    [prec 35 gather(E e)special(id-hook NumberOpSymbol(<<)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _<=_ : Expression Expression -> Expression
+    [ctor] .
+  op _<=_ : Float Float -> Bool
+    [prec 51 special(id-hook FloatOpSymbol(<=)op-hook floatSymbol(<Floats> : ~> FiniteFloat)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _<=_ : Int Int -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<=)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _<=_ : Nat Nat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<=)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _<=_ : Rat Rat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<=)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _<=_ : String String -> Bool
+    [prec 37 special(id-hook StringOpSymbol(<=)op-hook stringSymbol(<Strings> : ~> Char)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _<=_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _<=_ : TimeInf TimeInf -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<=)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _<=_ : Value Value -> Value
+    [ctor] .
+  op _<_ : Expression Expression -> Expression
+    [ctor] .
+  op _<_ : Float Float -> Bool
+    [prec 51 special(id-hook FloatOpSymbol(<)op-hook floatSymbol(<Floats> : ~> FiniteFloat)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _<_ : Int Int -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(
+    -_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _<_ : Nat Nat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _<_ : Rat Rat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(
+    -_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _<_ : String String -> Bool
+    [prec 37 special(id-hook StringOpSymbol(<)op-hook stringSymbol(<Strings> : ~> Char)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _<_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _<_ : TimeInf TimeInf -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(<)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _<_ : Value Value -> Value
+    [ctor] .
+  op _=/=_ : Universal Universal -> Bool
+    [poly(1 2)prec 51 special(id-hook EqualitySymbol term-hook equalTerm(false)term-hook notEqualTerm(
+    true))] .
+  op _==_ : Universal Universal -> Bool
+    [poly(1 2)prec 51 special(id-hook EqualitySymbol term-hook equalTerm(true)term-hook notEqualTerm(
+    false))] .
+  op _=>_ : PropertyId PropertyValue -> Property
+    [ctor] .
+  op _=_ : Expression Expression -> Expression
+    [ctor] .
+  op _=_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _=_ : Value Value -> Value
+    [ctor] .
+  op _=`[_`]_ : Float FiniteFloat Float -> Bool
+    [prec 51 format(d d d d d s d)] .
+  op _>=_ : Expression Expression -> Expression
+    [ctor] .
+  op _>=_ : Float Float -> Bool
+    [prec 51 special(id-hook FloatOpSymbol(>=)op-hook floatSymbol(<Floats> : ~> FiniteFloat)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _>=_ : Int Int -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>=)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _>=_ : Nat Nat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>=)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _>=_ : Rat Rat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>=)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _>=_ : String String -> Bool
+    [prec 37 special(id-hook StringOpSymbol(>=)op-hook stringSymbol(<Strings> : ~> Char)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _>=_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _>=_ : TimeInf TimeInf -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>=)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _>=_ : Value Value -> Value
+    [ctor] .
+  op _>>_ : Int Nat -> Int
+    [prec 35 gather(E e)special(id-hook NumberOpSymbol(>>)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _>>_ : Nat Nat -> Nat
+    [prec 35 gather(E e)special(id-hook NumberOpSymbol(>>)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _>_ : Expression Expression -> Expression
+    [ctor] .
+  op _>_ : Float Float -> Bool
+    [prec 51 special(id-hook FloatOpSymbol(>)op-hook floatSymbol(<Floats> : ~> FiniteFloat)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _>_ : Int Int -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(
+    -_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _>_ : Nat Nat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _>_ : Rat Rat -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(
+    -_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _>_ : String String -> Bool
+    [prec 37 special(id-hook StringOpSymbol(>)op-hook stringSymbol(<Strings> : ~> Char)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _>_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _>_ : TimeInf TimeInf -> Bool
+    [prec 37 special(id-hook NumberOpSymbol(>)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook trueTerm(
+    true)term-hook falseTerm(false))] .
+  op _>_ : Value Value -> Value
+    [ctor] .
+  op _\_ : PropertyAssociation PropertyAssociation -> PropertyAssociation
+    [gather(E e)] .
+  op _\_ : Set{Connection}Set{Connection}-> Set{Connection}
+    [gather(E e)] .
+  op _\_ : Set{FeatureRef}Set{FeatureRef}-> Set{FeatureRef}
+    [gather(E e)] .
+  op _\_ : Set{Location}Set{Location}-> Set{Location}
+    [gather(E e)] .
+  op _\_ : Set{Transition}Set{Transition}-> Set{Transition}
+    [gather(E e)] .
+  op _\_ : Set{VarId}Set{VarId}-> Set{VarId}
+    [gather(E e)] .
+  op _^_ : Int Nat -> Int
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _^_ : Nat Nat -> Nat
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _^_ : NzInt Nat -> NzInt
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _^_ : NzNat Nat -> NzNat
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _^_ : NzRat Nat -> NzRat
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _^_ : PosRat Nat -> PosRat
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _^_ : Rat Nat -> Rat
+    [prec 29 gather(E e)special(id-hook NumberOpSymbol(^)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _^_ :[Float][Float]->[Float]
+    [prec 29 gather(E e)special(id-hook FloatOpSymbol(^)op-hook floatSymbol(<Floats> : ~>
+    FiniteFloat))] .
+  op __ : Configuration Configuration -> Configuration
+    [assoc comm id:(none).Configuration ctor config] .
+  op __ : ConstConf ConstConf -> ConstConf
+    [assoc comm id:(none).Configuration ctor config] .
+  op __ : ConxTable ConxTable -> ConxTable
+    [assoc comm id:(none).ConxTable ctor] .
+  op __ : ElseIfs ElseIfs -> ElseIfs
+    [assoc ctor] .
+  op __ : EmptyConfiguration EmptyConfiguration -> EmptyConfiguration
+    [assoc comm id:(none).Configuration config] .
+  op __ : List{DataContent}List{DataContent}-> List{DataContent}
+    [assoc id:(nil).List{DataContent}prec 25 ctor] .
+  op __ : List{DataContent}NeList{DataContent}-> NeList{DataContent}
+    [assoc id:(nil).List{DataContent}prec 25 ctor] .
+  op __ : MsgConfiguration MsgConfiguration -> MsgConfiguration
+    [assoc comm id:(none).Configuration config] .
+  op __ : NEConfiguration NEConfiguration -> NEConfiguration
+    [assoc comm id:(none).Configuration config] .
+  op __ : NEMsgConfiguration NEMsgConfiguration -> NEMsgConfiguration
+    [assoc comm id:(none).Configuration config] .
+  op __ : NEObjectConfiguration NEObjectConfiguration -> NEObjectConfiguration
+    [assoc comm id:(none).Configuration config] .
+  op __ : NeList{DataContent}List{DataContent}-> NeList{DataContent}
+    [assoc id:(nil).List{DataContent}prec 25 ctor] .
+  op __ : NeSet{Location}Set{Location}-> NeSet{Location}
+    [assoc comm id:(empty).Set{Location}ctor] .
+  op __ : ObjectConfiguration ObjectConfiguration -> ObjectConfiguration
+    [assoc comm id:(none).Configuration config] .
+  op __ : Set{Location}Set{Location}-> Set{Location}
+    [assoc comm id:(empty).Set{Location}ctor] .
+  op _`,_ : AttributeSet AttributeSet -> AttributeSet
+    [assoc comm id:(none).AttributeSet ctor] .
+  op _`,_ : FeatureMap FeatureMap -> FeatureMap
+    [assoc comm id:(empty).FeatureMap prec 121 format(d r os d)ctor] .
+  op _`,_ : NeSet{FeatureRef}Set{FeatureRef}-> NeSet{FeatureRef}
+    [assoc comm id:(empty).Set{FeatureRef}prec 121 format(d r os d)ctor] .
+  op _`,_ : ParameterList ParameterList -> ParameterList
+    [assoc ctor] .
+  op _`,_ : Set{FeatureRef}Set{FeatureRef}-> Set{FeatureRef}
+    [assoc comm id:(empty).Set{FeatureRef}prec 121 format(d r os d)ctor] .
+  op _`[_`] : FeatureMap FeatureId ->[DataContent]
+    [prec 23] .
+  op _`[_`] : VarValuation VarId ->[DataContent]
+    [prec 23] .
+  op _and-then_ : Bool Bool -> Bool
+    [strat(1 0)prec 55 gather(e E)] .
+  op _and_ : Bool Bool -> Bool
+    [assoc comm prec 55] .
+  op _and_ : Expression Expression -> Expression
+    [ctor] .
+  op _and_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _and_ : Value Value -> Value
+    [ctor] .
+  op _divides_ : NzInt Int -> Bool
+    [prec 51 special(id-hook NumberOpSymbol(divides)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _divides_ : NzNat Nat -> Bool
+    [prec 51 special(id-hook NumberOpSymbol(divides)op-hook succSymbol(s_ : Nat ~> NzNat)term-hook
+    trueTerm(true)term-hook falseTerm(false))] .
+  op _divides_ : NzRat Rat -> Bool
+    [prec 51 special(id-hook NumberOpSymbol(divides)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt)term-hook trueTerm(true)term-hook falseTerm(false))] .
+  op _ge_ : Time Time -> Bool
+    [prec 37] .
+  op _ge_ : TimeInf TimeInf -> Bool
+    [prec 37] .
+  op _gt_ : Time Time -> Bool
+    [prec 37] .
+  op _gt_ : TimeInf TimeInf -> Bool
+    [prec 37] .
+  op _implies_ : Bool Bool -> Bool
+    [prec 61 gather(e E)] .
+  op _in`time_ : GlobalSystem Time -> ClockedSystem
+    [format(o g g y o)] .
+  op _le_ : Time Time -> Bool
+    [prec 37] .
+  op _le_ : TimeInf TimeInf -> Bool
+    [prec 37] .
+  op _lt_ : Time Time -> Bool
+    [prec 37] .
+  op _lt_ : TimeInf TimeInf -> Bool
+    [prec 37] .
+  op _mod_ : Expression Expression -> Expression
+    [ctor] .
+  op _mod_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _mod_ : Value Value -> Value
+    [ctor] .
+  op _monus_ : Time Time -> Time
+    [prec 33 gather(E e)] .
+  op _monus_ : TimeInf Time -> TimeInf
+    [prec 33 gather(E e)] .
+  op _or-else_ : Bool Bool -> Bool
+    [strat(1 0)prec 59 gather(e E)] .
+  op _or_ : Bool Bool -> Bool
+    [assoc comm prec 59] .
+  op _or_ : Expression Expression -> Expression
+    [ctor] .
+  op _or_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _or_ : Value Value -> Value
+    [ctor] .
+  op _plus_ : Time Time -> Time
+    [assoc comm prec 33 gather(E e)] .
+  op _plus_ : TimeInf TimeInf -> TimeInf
+    [assoc comm prec 33 gather(E e)] .
+  op _quo_ : Int NzInt -> Int
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(quo)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _quo_ : Nat NzNat -> Nat
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(quo)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _quo_ : PosRat PosRat -> Nat
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(quo)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _quo_ : Rat NzRat -> Int
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(quo)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _rem_ : Expression Expression -> Expression
+    [ctor] .
+  op _rem_ : Int NzInt -> Int
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(rem)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _rem_ : Nat NzNat -> Nat
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(rem)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _rem_ : Rat NzRat -> Rat
+    [prec 31 gather(E e)special(id-hook NumberOpSymbol(rem)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _rem_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _rem_ : Value Value -> Value
+    [ctor] .
+  op _rem_ :[Float][Float]->[Float]
+    [prec 31 gather(E e)special(id-hook FloatOpSymbol(rem)op-hook floatSymbol(<Floats> : ~>
+    FiniteFloat))] .
+  op _xor_ : Bool Bool -> Bool
+    [assoc comm prec 57] .
+  op _xor_ : Expression Expression -> Expression
+    [ctor] .
+  op _xor_ : Int Int -> Int
+    [assoc comm prec 55 special(id-hook ACU_NumberOpSymbol(xor)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _xor_ : Nat Nat -> Nat
+    [assoc comm prec 55 special(id-hook ACU_NumberOpSymbol(xor)op-hook succSymbol(s_ : Nat ~> NzNat))]
+    .
+  op _xor_ : SymExpr SymExpr -> SymExpr
+    [ctor] .
+  op _xor_ : Value Value -> Value
+    [ctor] .
+  op _|->_ : FeatureId DataContent -> Entry{FeatureId,DataContent}
+    [ctor] .
+  op _|->_ : FeatureRef NeSet{FeatureRef}-> ConxItem
+    [ctor] .
+  op _|->_ : VarId DataContent -> Entry{VarId,DataContent}
+    [ctor] .
+  op _|_ : Configuration FeatureMap -> Pair{Configuration,FeatureMap}
+    [ctor] .
+  op _|_ : Int Int -> Int
+    [assoc comm prec 57 special(id-hook ACU_NumberOpSymbol(|)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _|_ : Nat Nat -> Nat
+    [assoc comm prec 57 special(id-hook ACU_NumberOpSymbol(|)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _|_ : NzInt Int -> NzInt
+    [assoc comm prec 57 special(id-hook ACU_NumberOpSymbol(|)op-hook succSymbol(s_ : Nat ~>
+    NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt))] .
+  op _|_ : NzNat Nat -> NzNat
+    [assoc comm prec 57 special(id-hook ACU_NumberOpSymbol(|)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op _|_ : SymExpr LocalBehaviorConf -> SymLocalBehaviorConf
+    [ctor] .
+  op _|_ : VarValuation GlobalBehaviorConf -> LocalBehaviorConf
+    [ctor] .
+  op _|_ :[ObjectQueue][ConstConf]->[ConstConf]
+    [ctor] .
+  op _|_|_ : FeatureMap Configuration PropertyAssociation -> GlobalBehaviorConf
+    [ctor] .
+  op _|_|_ : Location FeatureMap Configuration -> Tuple{Location,FeatureMap,Configuration}
+    [ctor] .
+  op _||_ : SymExpr Configuration -> ConstConf
+    [ctor] .
+  op `[_`] : Bool -> cBoolValue
+    [ctor] .
+  op `[_`] : Char -> cCharValue
+    [ctor] .
+  op `[_`] : ComponentRef -> Expression
+    [ctor] .
+  op `[_`] : FeatureId -> Expression
+    [ctor] .
+  op `[_`] : Float -> cFloatValue
+    [ctor] .
+  op `[_`] : Int -> cIntValue
+    [ctor] .
+  op `[_`] : PropertyId -> Expression
+    [ctor] .
+  op `[_`] : String -> cStringValue
+    [ctor] .
+  op `[_`] : VarId -> Expression
+    [ctor] .
+  op `{_`} : ActionGroup -> ActionBlock
+    [ctor] .
+  op `{_`} : Bool -> PropertyValue
+    [ctor] .
+  op `{_`} : BuiltinInputAdaptor -> PropertyValue
+    [ctor] .
+  op `{_`} : ComponentRef -> AssignmentTarget
+    [ctor] .
+  op `{_`} : FeatureId -> AssignmentTarget
+    [ctor] .
+  op `{_`} : Float -> PropertyValue
+    [ctor] .
+  op `{_`} : Int -> PropertyValue
+    [ctor] .
+  op `{_`} : String -> PropertyValue
+    [ctor] .
+  op `{_`} : System -> GlobalSystem
+    [format(g o g so)] .
+  op `{_`} : VarId -> AssignmentTarget
+    [ctor] .
+  op a : -> VarId
+    [ctor] .
+  op abs : Expression -> Expression
+    [ctor] .
+  op abs : FiniteFloat -> FiniteFloat
+    [special(id-hook FloatOpSymbol(abs)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op abs : Float -> Float
+    [special(id-hook FloatOpSymbol(abs)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op abs : Int -> Nat
+    [special(id-hook NumberOpSymbol(abs)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ :
+    NzNat ~> NzInt))] .
+  op abs : NzInt -> NzNat
+    [special(id-hook NumberOpSymbol(abs)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ :
+    NzNat ~> NzInt))] .
+  op abs : NzRat -> PosRat
+    [special(id-hook NumberOpSymbol(abs)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ :
+    NzNat ~> NzInt))] .
+  op abs : Rat -> Rat
+    [special(id-hook NumberOpSymbol(abs)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ :
+    NzNat ~> NzInt))] .
+  op abs : SymExpr -> SymExpr
+    [ctor] .
+  op abs : Value -> SymExpr
+    [ctor] .
+  op acos :[Float]->[Float]
+    [special(id-hook FloatOpSymbol(acos)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op adaptor : BuiltinInputAdaptor NeList{DataContent}NzNat -> NeList{DataContent}
+    [format(m! o)] .
+  op adaptor : OneToManyInputAdaptor DataContent Nat NeList{DataContent}-> NeList{DataContent}
+    [format(m! o)] .
+  op angle : Float -> Float
+    [format(m! o)] .
+  op applyAdaptors : Configuration -> Configuration
+    [format(m! o)] .
+  op applyAdaptors : NzNat Configuration Configuration -> Object
+    [format(m! o)] .
+  op applyAdaptorsSub : Object -> Object
+    [format(m! o)] .
+  op ascii : Char -> Nat
+    [special(id-hook StringOpSymbol(ascii)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(
+    s_ : Nat ~> NzNat))] .
+  op asin :[Float]->[Float]
+    [special(id-hook FloatOpSymbol(asin)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op atan : Float -> Float
+    [special(id-hook FloatOpSymbol(atan)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op atan : Float Float -> Float
+    [special(id-hook FloatOpSymbol(atan)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op average : -> ManyToOneInputAdaptor
+    [ctor] .
+  op b : Nat -> SymBoolVar
+    [ctor] .
+  op b : -> VarId
+    [ctor] .
+  op bot : -> DataContent
+    [ctor] .
+  op c : Nat -> SymCharVar
+    [ctor] .
+  op cache`:_ : DataContent -> Attribute
+    [gather(&)] .
+  op ceiling : Float -> Float
+    [special(id-hook FloatOpSymbol(ceiling)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op char :[FindResult]->[String]
+    [special(id-hook StringOpSymbol(char)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(s_
+    : Nat ~> NzNat))] .
+  op collapse :[Object]->[Object]
+    [format(m! o)] .
+  op combine : Object Object -> Object
+    [format(m! o)] .
+  op completeStates`:_ : Set{Location}-> Attribute
+    [gather(&)] .
+  op compose : PropertyAssociation PropertyAssociation -> PropertyAssociation
+    [format(m! o)] .
+  op connections`:_ : Set{Connection}-> Attribute
+    [gather(&)] .
+  op contains? :[FeatureRef][ConxTable]->[Bool]
+    [memo format(m! o)] .
+  op content`:_ : DataContent -> Attribute
+    [gather(&)] .
+  op content`:_ : List{DataContent}-> Attribute
+    [gather(&)] .
+  op cos : Float -> Float
+    [special(id-hook FloatOpSymbol(cos)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op count : FeatureId -> VarExpression
+    [ctor] .
+  op currState`:_ : Location -> Attribute
+    [gather(&)] .
+  op data1 : -> ComponentId
+    [ctor] .
+  op decFloat : Float Nat -> DecFloat
+    [special(id-hook StringOpSymbol(decFloat)op-hook stringSymbol(<Strings> : ~> Char)op-hook
+    succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt)op-hook floatSymbol(<Floats> :
+    ~> FiniteFloat)op-hook decFloatSymbol(<_`,_`,_> : Int String Int ~> DecFloat))] .
+  op defaultValuation : Set{VarId}-> VarValuation
+    [format(m! o)] .
+  op defaultValuation : Set{VarId}VarValuation -> VarValuation
+    [format(m! o)] .
+  op do_until`(_`) : ActionGroup Expression -> LoopAction
+    [ctor] .
+  op elsif`(_`)_ : Expression ActionGroup -> ElseIfs
+    [ctor] .
+  op empty : -> FeatureMap
+    [ctor] .
+  op empty : -> Set{Connection}
+    [ctor] .
+  op empty : -> Set{FeatureRef}
+    [ctor] .
+  op empty : -> Set{Location}
+    [ctor] .
+  op empty : -> Set{Transition}
+    [ctor] .
+  op empty : -> Set{VarId}
+    [ctor] .
+  op empty : -> VarValuation
+    [ctor] .
+  op eval : Expression LocalBehaviorConf -> SymExpr
+    [format(m! o)] .
+  op execAction :[Action][SymLocalBehaviorConf]->[SymLocalBehaviorConf]
+    [format(m! o)] .
+  op execTransSystem :[Location][Set{Location}][Set{Transition}][VarValuation][GlobalBehaviorConf][
+    SymExpr]->[SymTransitionTuple]
+    [format(m! o)] .
+  op executeStep :[ConstConf]->[ConstConf]
+    [format(m! o)] .
+  op executeStepRead :[Pair{Configuration,FeatureMap}][Object]->[ConstConf]
+    [format(m! o)] .
+  op executeStepTrans :[Configuration][SymTransitionTuple][Object]->[ConstConf]
+    [format(m! o)] .
+  op exp : Float -> Float
+    [special(id-hook FloatOpSymbol(exp)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op f : Nat -> SymFloatVar
+    [ctor] .
+  op false : -> Bool
+    [ctor special(id-hook SystemFalse)] .
+  op features`:_ : Configuration -> Attribute
+    [gather(&)] .
+  op find : String String Nat -> FindResult
+    [special(id-hook StringOpSymbol(find)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(s_
+    : Nat ~> NzNat)term-hook notFoundTerm(notFound))] .
+  op first : -> ManyToOneInputAdaptor
+    [ctor] .
+  op float : Rat -> Float
+    [special(id-hook FloatOpSymbol(float)op-hook floatSymbol(<Floats> : ~> FiniteFloat)op-hook
+    succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt)op-hook divisionSymbol(_/_ :
+    NzInt NzNat ~> NzRat))] .
+  op float :[String]->[Float]
+    [special(id-hook StringOpSymbol(float)op-hook stringSymbol(<Strings> : ~> Char)op-hook floatSymbol(
+    <Floats> : ~> FiniteFloat))] .
+  op floor : Float -> Float
+    [special(id-hook FloatOpSymbol(floor)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op fresh : FeatureId -> VarExpression
+    [ctor] .
+  op gcd : Int Int -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(gcd)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op gcd : Nat Nat -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(gcd)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op gcd : NzInt Int -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(gcd)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op gcd : NzNat Nat -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(gcd)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op gcd : NzRat Rat -> PosRat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(gcd)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op gcd : Rat Rat -> Rat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(gcd)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op global :[LocalBehaviorConf]->[GlobalBehaviorConf]
+    [format(m! o)] .
+  op i : Nat -> SymIntVar
+    [ctor] .
+  op iPort2 : -> ComponentId
+    [ctor] .
+  op if_then_else_fi : Bool Universal Universal -> Universal
+    [poly(2 3 0)special(id-hook BranchSymbol term-hook 1(true)term-hook 2(false))] .
+  op if`(_`)__else_end`if : Expression ActionGroup ElseIfs ActionGroup -> BranchAction
+    [ctor] .
+  op if`(_`)__end`if : Expression ActionGroup ElseIfs -> BranchAction
+    [ctor] .
+  op if`(_`)_else_end`if : Expression ActionGroup ActionGroup -> BranchAction
+    [ctor] .
+  op if`(_`)_end`if : Expression ActionGroup -> BranchAction
+    [ctor] .
+  op init : -> Location
+    [ctor] .
+  op inner-tb :[Set{Connection}]->[ConxTable]
+    [memo format(m! o)] .
+  op inner-tb :[Set{Connection}][ConxTable]->[ConxTable]
+    [format(m! o)] .
+  op k-executeStep :[SymExpr][Nat][Object]->[ConstConf]
+    [format(m! o)] .
+  op last : -> ManyToOneInputAdaptor
+    [ctor] .
+  op lcm : Int Int -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(lcm)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op lcm : Nat Nat -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(lcm)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op lcm : NzInt NzInt -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(lcm)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op lcm : NzNat NzNat -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(lcm)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op lcm : NzRat NzRat -> PosRat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(lcm)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op lcm : Rat Rat -> Rat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(lcm)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op length : String -> Nat
+    [special(id-hook StringOpSymbol(length)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(
+    s_ : Nat ~> NzNat))] .
+  op link :[Set{Connection}]->[Set{Connection}]
+    [format(m! o)] .
+  op linkAll :[Connection][Set{Connection}]->[Set{Connection}]
+    [format(m! o)] .
+  op log :[Float]->[Float]
+    [special(id-hook FloatOpSymbol(log)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op max : -> ManyToOneInputAdaptor
+    [ctor] .
+  op max : Float Float -> Float
+    [special(id-hook FloatOpSymbol(max)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op max : Int Int -> Int
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : Nat Int -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : Nat Nat -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op max : NzInt NzInt -> NzInt
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : NzNat Int -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : NzNat Nat -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op max : NzRat NzRat -> NzRat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : PosRat Rat -> PosRat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : Rat Rat -> Rat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : TimeInf Int -> TimeInf
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op max : TimeInf TimeInf -> TimeInf
+    [assoc comm special(id-hook ACU_NumberOpSymbol(max)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op maximum : Time Time -> Time
+    [assoc comm] .
+  op maximum : TimeInf TimeInf -> TimeInf
+    [assoc comm] .
+  op min : -> ManyToOneInputAdaptor
+    [ctor] .
+  op min : Float Float -> Float
+    [special(id-hook FloatOpSymbol(min)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op min : Int Int -> Int
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op min : Nat Nat -> Nat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op min : NzInt NzInt -> NzInt
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op min : NzNat NzNat -> NzNat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op min : NzRat NzRat -> NzRat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op min : PosRat PosRat -> PosRat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op min : Rat Rat -> Rat
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook
+    minusSymbol(-_ : NzNat ~> NzInt))] .
+  op min : TimeInf TimeInf -> TimeInf
+    [assoc comm special(id-hook ACU_NumberOpSymbol(min)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op minimum : Time Time -> Time
+    [assoc comm] .
+  op minimum : TimeInf TimeInf -> TimeInf
+    [assoc comm] .
+  op minus : Expression -> Expression
+    [ctor] .
+  op minus : SymExpr -> SymExpr
+    [ctor] .
+  op minus : Value -> Value
+    [ctor] .
+  op modExp :[Nat][Nat][Nat]->[Nat]
+    [special(id-hook NumberOpSymbol(modExp)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op nil : -> List{DataContent}
+    [ctor] .
+  op nil : -> ObjectQueue
+    [ctor] .
+  op none : -> AttributeSet
+    [ctor] .
+  op none : -> Configuration
+    [ctor] .
+  op none : -> ConxTable
+    [ctor] .
+  op none : -> PropertyAssociation
+    [ctor] .
+  op normalize :[ConxTable]->[ConxTable]
+    [format(m! o)] .
+  op not : Expression -> Expression
+    [ctor] .
+  op not : SymExpr -> SymExpr
+    [ctor] .
+  op not : Value -> Value
+    [ctor] .
+  op notFound : -> FindResult
+    [ctor] .
+  op not_ : Bool -> Bool
+    [prec 53] .
+  op numAdap : ManyToOneInputAdaptor DataContent List{DataContent}-> DataContent
+    [format(m! o)] .
+  op oPort1 : -> ComponentId
+    [ctor] .
+  op on`dispatch : -> DispatchCond
+    [ctor] .
+  op open :[Object]->[Object]
+    [format(m! o)] .
+  op otherwise : -> ExecuteCond
+    [ctor] .
+  op out : -> FeatureId
+    [ctor] .
+  op outData : -> FeatureId
+    [ctor] .
+  op outer-tb :[Set{Connection}]->[ConxTable]
+    [memo format(m! o)] .
+  op outer-tb :[Set{Connection}][ConxTable]->[ConxTable]
+    [format(m! o)] .
+  op paste :[ComponentId][ComponentId]->[ComponentId]
+    [format(m! o)] .
+  op paste :[ComponentId][FeatureRef]->[FeatureRef]
+    [format(m! o)] .
+  op plus : Expression -> Expression
+    [ctor] .
+  op plus : SymExpr -> SymExpr
+    [ctor] .
+  op plus : Value -> Value
+    [ctor] .
+  op prepareExec :[SymExpr][Configuration][ObjectQueue]->[ConstConf]
+    [format(m! o)] .
+  op prepareExecSub :[SymExpr][Object]->[ConstConf]
+    [format(m! o)] .
+  op properties`:_ : PropertyAssociation -> Attribute
+    [gather(&)] .
+  op rat : FiniteFloat -> Rat
+    [special(id-hook FloatOpSymbol(rat)op-hook floatSymbol(<Floats> : ~> FiniteFloat)op-hook
+    succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt)op-hook divisionSymbol(_/_ :
+    NzInt NzNat ~> NzRat))] .
+  op rat :[String][Rat]->[Rat]
+    [special(id-hook StringOpSymbol(rat)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(s_
+    : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt)op-hook divisionSymbol(_/_ : NzInt NzNat ~>
+    NzRat))] .
+  op rate`:_ : NzNat -> Attribute
+    [gather(&)] .
+  op readFeature : Configuration -> Pair{Configuration,FeatureMap}
+    [format(m! o)] .
+  op readFeature : Configuration Configuration FeatureMap -> Pair{Configuration,FeatureMap}
+    [format(m! o)] .
+  op repeat`input : -> OneToManyInputAdaptor
+    [ctor] .
+  op rfind : String String Nat -> FindResult
+    [special(id-hook StringOpSymbol(rfind)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(
+    s_ : Nat ~> NzNat)term-hook notFoundTerm(notFound))] .
+  op s : Nat -> SymStringVar
+    [ctor] .
+  op s_ : Nat -> NzNat
+    [ctor iter special(id-hook SuccSymbol term-hook zeroTerm(0))] .
+  op sd : Nat Nat -> Nat
+    [comm special(id-hook CUI_NumberOpSymbol(sd)op-hook succSymbol(s_ : Nat ~> NzNat))] .
+  op sin : Float -> Float
+    [special(id-hook FloatOpSymbol(sin)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op skip : -> EmptyAction
+    [ctor] .
+  op sqrt :[Float]->[Float]
+    [special(id-hook FloatOpSymbol(sqrt)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op state1 : -> Location
+    [ctor] .
+  op state2 : -> Location
+    [ctor] .
+  op string : Float -> String
+    [special(id-hook StringOpSymbol(string)op-hook stringSymbol(<Strings> : ~> Char)op-hook
+    floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op string :[Rat][Rat]->[String]
+    [special(id-hook StringOpSymbol(string)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(
+    s_ : Nat ~> NzNat)op-hook minusSymbol(-_ : NzNat ~> NzInt)op-hook divisionSymbol(_/_ : NzInt NzNat
+    ~> NzRat))] .
+  op sub :[ComponentId][Set{Connection}]->[Set{Connection}]
+    [format(m! o)] .
+  op sub :[ComponentId][NzNat][PropertyAssociation][Configuration]->[Configuration]
+    [format(m! o)] .
+  op subComp1 : -> ComponentId
+    [ctor] .
+  op subComp2 : -> ComponentId
+    [ctor] .
+  op subThread : -> ComponentId
+    [ctor] .
+  op subcomponents`:_ : Configuration -> Attribute
+    [gather(&)] .
+  op substr : String Nat Nat -> String
+    [special(id-hook StringOpSymbol(substr)op-hook stringSymbol(<Strings> : ~> Char)op-hook succSymbol(
+    s_ : Nat ~> NzNat))] .
+  op sum : -> ManyToOneInputAdaptor
+    [ctor] .
+  op tan : Float -> Float
+    [special(id-hook FloatOpSymbol(tan)op-hook floatSymbol(<Floats> : ~> FiniteFloat))] .
+  op target : VarExpression -> AssignmentTarget
+    [format(m! o)] .
+  op topEnsemble : -> ComponentId
+    [ctor] .
+  op transEnvIn :[Configuration][ConxTable]->[Configuration]
+    [format(m! o)] .
+  op transEnvOut :[Configuration][ConxTable][ConxTable]->[Configuration]
+    [format(m! o)] .
+  op transFBOut :[Configuration][ConxTable]->[Configuration]
+    [format(m! o)] .
+  op transFeature :[Configuration][Set{Connection}][Configuration]->[Configuration]
+    [format(m! o)] .
+  op transIn :[NeList{DataContent}][Set{FeatureRef}]->[Msg]
+    [format(b! o)] .
+  op transOut :[NeList{DataContent}][Set{FeatureRef}]->[Msg]
+    [format(b! o)] .
+  op transferInputs :[Object]->[Object]
+    [format(m! o)] .
+  op transferResults : Object -> ConstConf
+    [format(m! o)] .
+  op transferResultsAux :[Object]->[Object]
+    [format(m! o)] .
+  op transitionResult : Location LocalBehaviorConf -> Tuple{Location,FeatureMap,Configuration}
+    [format(m! o)] .
+  op transitions`:_ : Set{Transition}-> Attribute
+    [gather(&)] .
+  op true : -> Bool
+    [ctor special(id-hook SystemTrue)] .
+  op undefined : ->[DataContent]
+    [ctor] .
+  op use`element_ : Nat -> ManyToOneInputAdaptor
+    [ctor] .
+  op use`in`first`iteration : -> OneToManyInputAdaptor
+    [ctor] .
+  op use`in`iteration_ : Nat -> OneToManyInputAdaptor
+    [ctor] .
+  op use`in`last`iteration : -> OneToManyInputAdaptor
+    [ctor] .
+  op value : PropertyValue -> Value
+    [format(m! o)] .
+  op value`:_ : DataContent -> Attribute
+    [gather(&)] .
+  op variables`:_ : Set{VarId}-> Attribute
+    [gather(&)] .
+  op while`(_`)`{_`} : Expression ActionGroup -> LoopAction
+    [ctor] .
+  op writeFeature : FeatureMap Configuration -> Configuration
+    [format(m! o)] .
+  op writeFeature : FeatureMap Configuration Configuration -> Configuration
+    [format(m! o)] .
+  op x : -> ComponentId
+    [ctor] .
+  op y : -> ComponentId
+    [ctor] .
+  op ~_ : Int -> Int
+    [special(id-hook NumberOpSymbol(~)op-hook succSymbol(s_ : Nat ~> NzNat)op-hook minusSymbol(-_ :
+    NzNat ~> NzInt))] .
+  eq pi
+    = 3.1415926535897931 .
+  eq top
+    = < topEnsemble : System | rate : 1,features : none,subcomponents : < subComp2 : System | rate : 1,
+    features : < iPort2 : InPort | content : nil,cache : nil,properties : none >,subcomponents : none,
+    properties :((TimingProperties::Period =>{10}); HybridAADL::Synchronous =>{true}),connections :
+    empty >,connections : empty,properties :((TimingProperties::Period =>{40}); HybridAADL::Synchronous
+    =>{true})> .
+  eq top2
+    = < topEnsemble : System | rate : 1,features : none,subcomponents : < subThread : Thread | rate :
+    1,features : < outData : OutPort | content : nil,properties : none >,subcomponents :(< x : Data |
+    value : i(2),features : none,subcomponents : none,properties : none,connections : empty > < y :
+    Data | value :[1.0],features : none,subcomponents : none,properties : none,connections : empty >),
+    properties : none,currState : init,completeStates : state2,variables :(a ; b),transitions :((init
+    -[on dispatch]-> state1{({x}:=([x]+[1]));{y}:=[1]}); state1 -[[x]>[y]]-> state2{{y}:=([y]+[1])}),
+    connections : empty >,connections : empty,properties : none > .
+  eq zero
+    = 0 .
+  eq $card((empty).Set{Connection},C:Nat)
+    = C:Nat .
+  eq $card((empty).Set{FeatureRef},C:Nat)
+    = C:Nat .
+  eq $card((empty).Set{Location},C:Nat)
+    = C:Nat .
+  eq $card((empty).Set{Transition},C:Nat)
+    = C:Nat .
+  eq $card((empty).Set{VarId},C:Nat)
+    = C:Nat .
+  eq $card((none).PropertyAssociation,C:Nat)
+    = C:Nat .
+  eq $card(N:NePropertyAssociation ; N:NePropertyAssociation ; S:PropertyAssociation,C:Nat)
+    = $card(N:NePropertyAssociation ; S:PropertyAssociation,C:Nat) .
+  eq $card(N:NeSet{Connection}; N:NeSet{Connection}; S:Set{Connection},C:Nat)
+    = $card(N:NeSet{Connection}; S:Set{Connection},C:Nat) .
+  eq $card(N:NeSet{Transition}; N:NeSet{Transition}; S:Set{Transition},C:Nat)
+    = $card(N:NeSet{Transition}; S:Set{Transition},C:Nat) .
+  eq $card(N:NeSet{VarId}; N:NeSet{VarId}; S:Set{VarId},C:Nat)
+    = $card(N:NeSet{VarId}; S:Set{VarId},C:Nat) .
+  eq $card(N:NeSet{Location}N:NeSet{Location}S:Set{Location},C:Nat)
+    = $card(N:NeSet{Location}S:Set{Location},C:Nat) .
+  eq $card((N:NeSet{FeatureRef}, N:NeSet{FeatureRef}, S:Set{FeatureRef}),C:Nat)
+    = $card((N:NeSet{FeatureRef}, S:Set{FeatureRef}),C:Nat) .
+  eq $diff((empty).Set{Connection},S':Set{Connection},A:Set{Connection})
+    = A:Set{Connection} .
+  eq $diff((empty).Set{FeatureRef},S':Set{FeatureRef},A:Set{FeatureRef})
+    = A:Set{FeatureRef} .
+  eq $diff((empty).Set{Location},S':Set{Location},A:Set{Location})
+    = A:Set{Location} .
+  eq $diff((empty).Set{Transition},S':Set{Transition},A:Set{Transition})
+    = A:Set{Transition} .
+  eq $diff((empty).Set{VarId},S':Set{VarId},A:Set{VarId})
+    = A:Set{VarId} .
+  eq $diff((none).PropertyAssociation,S':PropertyAssociation,A:PropertyAssociation)
+    = A:PropertyAssociation .
+  eq $diff(E:Connection ; S:Set{Connection},S':Set{Connection},A:Set{Connection})
+    = $diff(S:Set{Connection},S':Set{Connection},if E:Connection in S':Set{Connection}then A:Set{
+    Connection}else E:Connection ; A:Set{Connection}fi) .
+  eq $diff(E:Property ; S:PropertyAssociation,S':PropertyAssociation,A:PropertyAssociation)
+    = $diff(S:PropertyAssociation,S':PropertyAssociation,if E:Property in S':PropertyAssociation then
+    A:PropertyAssociation else E:Property ; A:PropertyAssociation fi) .
+  eq $diff(E:Transition ; S:Set{Transition},S':Set{Transition},A:Set{Transition})
+    = $diff(S:Set{Transition},S':Set{Transition},if E:Transition in S':Set{Transition}then A:Set{
+    Transition}else E:Transition ; A:Set{Transition}fi) .
+  eq $diff(E:VarId ; S:Set{VarId},S':Set{VarId},A:Set{VarId})
+    = $diff(S:Set{VarId},S':Set{VarId},if E:VarId in S':Set{VarId}then A:Set{VarId}else E:VarId ;
+    A:Set{VarId}fi) .
+  eq $diff(E:Location S:Set{Location},S':Set{Location},A:Set{Location})
+    = $diff(S:Set{Location},S':Set{Location},if E:Location in S':Set{Location}then A:Set{Location}else
+    E:Location A:Set{Location}fi) .
+  eq $diff((E:FeatureRef, S:Set{FeatureRef}),S':Set{FeatureRef},A:Set{FeatureRef})
+    = $diff(S:Set{FeatureRef},S':Set{FeatureRef},if E:FeatureRef in S':Set{FeatureRef}then A:Set{
+    FeatureRef}else E:FeatureRef, A:Set{FeatureRef}fi) .
+  eq $hasMapping(M:VarValuation ; D:VarId |-> R:DataContent,D:VarId)
+    = true .
+  eq $hasMapping((M:FeatureMap, D:FeatureId |-> R:DataContent),D:FeatureId)
+    = true .
+  eq $intersect((empty).Set{Connection},S':Set{Connection},A:Set{Connection})
+    = A:Set{Connection} .
+  eq $intersect((empty).Set{FeatureRef},S':Set{FeatureRef},A:Set{FeatureRef})
+    = A:Set{FeatureRef} .
+  eq $intersect((empty).Set{Location},S':Set{Location},A:Set{Location})
+    = A:Set{Location} .
+  eq $intersect((empty).Set{Transition},S':Set{Transition},A:Set{Transition})
+    = A:Set{Transition} .
+  eq $intersect((empty).Set{VarId},S':Set{VarId},A:Set{VarId})
+    = A:Set{VarId} .
+  eq $intersect((none).PropertyAssociation,S':PropertyAssociation,A:PropertyAssociation)
+    = A:PropertyAssociation .
+  eq $intersect(E:Connection ; S:Set{Connection},S':Set{Connection},A:Set{Connection})
+    = $intersect(S:Set{Connection},S':Set{Connection},if E:Connection in S':Set{Connection}then
+    E:Connection ; A:Set{Connection}else A:Set{Connection}fi) .
+  eq $intersect(E:Property ; S:PropertyAssociation,S':PropertyAssociation,A:PropertyAssociation)
+    = $intersect(S:PropertyAssociation,S':PropertyAssociation,if E:Property in S':PropertyAssociation
+    then E:Property ; A:PropertyAssociation else A:PropertyAssociation fi) .
+  eq $intersect(E:Transition ; S:Set{Transition},S':Set{Transition},A:Set{Transition})
+    = $intersect(S:Set{Transition},S':Set{Transition},if E:Transition in S':Set{Transition}then
+    E:Transition ; A:Set{Transition}else A:Set{Transition}fi) .
+  eq $intersect(E:VarId ; S:Set{VarId},S':Set{VarId},A:Set{VarId})
+    = $intersect(S:Set{VarId},S':Set{VarId},if E:VarId in S':Set{VarId}then E:VarId ; A:Set{VarId}else
+    A:Set{VarId}fi) .
+  eq $intersect(E:Location S:Set{Location},S':Set{Location},A:Set{Location})
+    = $intersect(S:Set{Location},S':Set{Location},if E:Location in S':Set{Location}then E:Location
+    A:Set{Location}else A:Set{Location}fi) .
+  eq $intersect((E:FeatureRef, S:Set{FeatureRef}),S':Set{FeatureRef},A:Set{FeatureRef})
+    = $intersect(S:Set{FeatureRef},S':Set{FeatureRef},if E:FeatureRef in S':Set{FeatureRef}then
+    E:FeatureRef, A:Set{FeatureRef}else A:Set{FeatureRef}fi) .
+  eq $reverse(nil,A:List{DataContent})
+    = A:List{DataContent} .
+  eq $reverse(E:DataContent L:List{DataContent},A:List{DataContent})
+    = $reverse(L:List{DataContent},E:DataContent A:List{DataContent}) .
+  eq $size(nil,C:Nat)
+    = C:Nat .
+  eq $size(E:DataContent L:List{DataContent},C:Nat)
+    = $size(L:List{DataContent},C:Nat + 1) .
+  eq -(I:NzInt / N:NzNat)
+    = - I:NzInt / N:NzNat .
+  eq < CR:ComponentRef : V#0:Ensemble | rate : V#3:NzNat,properties : V#2:PropertyAssociation,
+    connections : V#1:Set{Connection},subcomponents :(transOut(NDL:NeList{DataContent},PNS:Set{
+    FeatureRef})KCS:[ConstConf,Cid]),features : KPS:[ConstConf,Cid],none,V#4:AttributeSet >
+    = < CR:ComponentRef : V#0:Ensemble | features :(KPS:[ConstConf,Cid]transOut(NDL:NeList{
+    DataContent},PNS:Set{FeatureRef})),subcomponents : KCS:[ConstConf,Cid],connections : V#1:Set{
+    Connection},properties : V#2:PropertyAssociation,rate : V#3:NzNat,V#4:AttributeSet > .
+  eq < CR:ComponentRef : V#5:Ensemble | rate : V#8:NzNat,properties : V#7:PropertyAssociation,
+    connections : V#6:Set{Connection},subcomponents : KCS:[ConstConf,Cid],features :(KPS:[ConstConf,
+    Cid]transIn(NDL:NeList{DataContent},PNS:Set{FeatureRef})),none,V#9:AttributeSet >
+    = < CR:ComponentRef : V#5:Ensemble | features : KPS:[ConstConf,Cid],subcomponents :(transIn(
+    NDL:NeList{DataContent},PNS:Set{FeatureRef})KCS:[ConstConf,Cid]),connections : V#6:Set{Connection},
+    properties : V#7:PropertyAssociation,rate : V#8:NzNat,V#9:AttributeSet > .
+  eq V1:Expression != V2:Expression
+    = not(V1:Expression = V2:Expression) .
+  eq [F1:Float]**[F2:Float]
+    = [F1:Float ^ F2:Float] .
+  eq [F1:Float]**[I2:Int]
+    = [F1:Float ^ float(I2:Int)] .
+  eq [I1:Int]**[F2:Float]
+    = [float(I1:Int)^ F2:Float] .
+  eq [I1:Int]**[I2:Int]
+    = [I1:Int ^ I2:Int] .
+  eq 0 * Q:NzRat
+    = 0 .
+  eq K:Int *(I:NzInt / N:NzNat)
+    = (I:NzInt * K:Int)/ N:NzNat .
+  eq (I:NzInt / N:NzNat)*(J:NzInt / M:NzNat)
+    = (I:NzInt * J:NzInt)/(N:NzNat * M:NzNat) .
+  eq [F1:Float]*[F2:Float]
+    = [F1:Float * F2:Float] .
+  eq [F1:Float]*[I2:Int]
+    = [F1:Float * float(I2:Int)] .
+  eq [I1:Int]*[F2:Float]
+    = [float(I1:Int)* F2:Float] .
+  eq [I1:Int]*[I2:Int]
+    = [I1:Int * I2:Int] .
+  eq INF + TI:TimeInf
+    = INF .
+  eq K:Int + I:NzInt / N:NzNat
+    = (I:NzInt + N:NzNat * K:Int)/ N:NzNat .
+  eq I:NzInt / N:NzNat + J:NzInt / M:NzNat
+    = (I:NzInt * M:NzNat + J:NzInt * N:NzNat)/(N:NzNat * M:NzNat) .
+  eq [F1:Float]+[F2:Float]
+    = [F1:Float + F2:Float] .
+  eq [F1:Float]+[I2:Int]
+    = [F1:Float + float(I2:Int)] .
+  eq [I1:Int]+[F2:Float]
+    = [float(I1:Int)+ F2:Float] .
+  eq [I1:Int]+[I2:Int]
+    = [I1:Int + I2:Int] .
+  eq K:Int - J:NzInt / M:NzNat
+    = (M:NzNat * K:Int - J:NzInt)/ M:NzNat .
+  eq I:NzInt / N:NzNat - K:Int
+    = (I:NzInt - N:NzNat * K:Int)/ N:NzNat .
+  eq I:NzInt / N:NzNat - J:NzInt / M:NzNat
+    = (I:NzInt * M:NzNat - J:NzInt * N:NzNat)/(N:NzNat * M:NzNat) .
+  eq [F1:Float]-[F2:Float]
+    = [F1:Float - F2:Float] .
+  eq [F1:Float]-[I2:Int]
+    = [F1:Float - float(I2:Int)] .
+  eq [I1:Int]-[F2:Float]
+    = [float(I1:Int)- F2:Float] .
+  eq [I1:Int]-[I2:Int]
+    = [I1:Int - I2:Int] .
+  eq 0 / Q:NzRat
+    = 0 .
+  eq I:NzInt / - N:NzNat
+    = - I:NzInt / N:NzNat .
+  eq I:NzInt /(J:NzInt / M:NzNat)
+    = (I:NzInt * M:NzNat)/ J:NzInt .
+  eq I:NzInt / N:NzNat / J:NzInt
+    = I:NzInt /(J:NzInt * N:NzNat) .
+  eq I:NzInt / N:NzNat /(J:NzInt / M:NzNat)
+    = (I:NzInt * M:NzNat)/(J:NzInt * N:NzNat) .
+  eq [F1:Float]/[F2:Float]
+    = [F1:Float / F2:Float] .
+  eq [F1:Float]/[I2:Int]
+    = [F1:Float / float(I2:Int)] .
+  eq [I1:Int]/[F2:Float]
+    = [float(I1:Int)/ F2:Float] .
+  eq [I1:Int]/[I2:Int]
+    = [float(I1:Int)/ float(I2:Int)] .
+  eq N:NePropertyAssociation ; N:NePropertyAssociation
+    = N:NePropertyAssociation .
+  eq N:NeSet{Connection}; N:NeSet{Connection}
+    = N:NeSet{Connection} .
+  eq N:NeSet{Transition}; N:NeSet{Transition}
+    = N:NeSet{Transition} .
+  eq N:NeSet{VarId}; N:NeSet{VarId}
+    = N:NeSet{VarId} .
+  eq INF <= N:Nat
+    = false .
+  eq K:Int <= J:NzInt / M:NzNat
+    = M:NzNat * K:Int <= J:NzInt .
+  eq TI:TimeInf <= INF
+    = true .
+  eq V1:Expression <= V2:Expression
+    = not(V1:Expression > V2:Expression) .
+  eq I:NzInt / N:NzNat <= K:Int
+    = I:NzInt <= N:NzNat * K:Int .
+  eq I:NzInt / N:NzNat <= J:NzInt / M:NzNat
+    = I:NzInt * M:NzNat <= J:NzInt * N:NzNat .
+  eq INF < TI:TimeInf
+    = false .
+  eq K:Int < J:NzInt / M:NzNat
+    = M:NzNat * K:Int < J:NzInt .
+  eq N:Nat < INF
+    = true .
+  eq I:NzInt / N:NzNat < K:Int
+    = I:NzInt < N:NzNat * K:Int .
+  eq I:NzInt / N:NzNat < J:NzInt / M:NzNat
+    = I:NzInt * M:NzNat < J:NzInt * N:NzNat .
+  eq [F1:Float]<[F2:Float]
+    = [F1:Float < F2:Float] .
+  eq [F1:Float]<[I2:Int]
+    = [F1:Float < float(I2:Int)] .
+  eq [I1:Int]<[F2:Float]
+    = [float(I1:Int)< F2:Float] .
+  eq [I1:Int]<[I2:Int]
+    = [I1:Int < I2:Int] .
+  eq [F1:Float]=[I2:Int]
+    = [F1:Float == float(I2:Int)] .
+  eq [I1:Int]=[F2:Float]
+    = [float(I1:Int)== F2:Float] .
+  eq X:Float =[Z:FiniteFloat] Y:Float
+    = abs(X:Float - Y:Float)< Z:FiniteFloat .
+  eq INF >= TI:TimeInf
+    = true .
+  eq K:Int >= J:NzInt / M:NzNat
+    = M:NzNat * K:Int >= J:NzInt .
+  eq N:Nat >= INF
+    = false .
+  eq V1:Expression >= V2:Expression
+    = not(V1:Expression < V2:Expression) .
+  eq I:NzInt / N:NzNat >= K:Int
+    = I:NzInt >= N:NzNat * K:Int .
+  eq I:NzInt / N:NzNat >= J:NzInt / M:NzNat
+    = I:NzInt * M:NzNat >= J:NzInt * N:NzNat .
+  eq INF > N:Nat
+    = true .
+  eq K:Int > J:NzInt / M:NzNat
+    = M:NzNat * K:Int > J:NzInt .
+  eq TI:TimeInf > INF
+    = false .
+  eq I:NzInt / N:NzNat > K:Int
+    = I:NzInt > N:NzNat * K:Int .
+  eq I:NzInt / N:NzNat > J:NzInt / M:NzNat
+    = I:NzInt * M:NzNat > J:NzInt * N:NzNat .
+  eq [F1:Float]>[F2:Float]
+    = [F1:Float > F2:Float] .
+  eq [F1:Float]>[I2:Int]
+    = [F1:Float > float(I2:Int)] .
+  eq [I1:Int]>[F2:Float]
+    = [float(I1:Int)> F2:Float] .
+  eq [I1:Int]>[I2:Int]
+    = [I1:Int > I2:Int] .
+  eq S:PropertyAssociation \ N:NePropertyAssociation
+    = $diff(S:PropertyAssociation,N:NePropertyAssociation,(none).PropertyAssociation) .
+  eq S:PropertyAssociation \(none).PropertyAssociation
+    = S:PropertyAssociation .
+  eq S:Set{Connection}\ N:NeSet{Connection}
+    = $diff(S:Set{Connection},N:NeSet{Connection},(empty).Set{Connection}) .
+  eq S:Set{Connection}\(empty).Set{Connection}
+    = S:Set{Connection} .
+  eq S:Set{FeatureRef}\ N:NeSet{FeatureRef}
+    = $diff(S:Set{FeatureRef},N:NeSet{FeatureRef},(empty).Set{FeatureRef}) .
+  eq S:Set{FeatureRef}\(empty).Set{FeatureRef}
+    = S:Set{FeatureRef} .
+  eq S:Set{Location}\ N:NeSet{Location}
+    = $diff(S:Set{Location},N:NeSet{Location},(empty).Set{Location}) .
+  eq S:Set{Location}\(empty).Set{Location}
+    = S:Set{Location} .
+  eq S:Set{Transition}\ N:NeSet{Transition}
+    = $diff(S:Set{Transition},N:NeSet{Transition},(empty).Set{Transition}) .
+  eq S:Set{Transition}\(empty).Set{Transition}
+    = S:Set{Transition} .
+  eq S:Set{VarId}\ N:NeSet{VarId}
+    = $diff(S:Set{VarId},N:NeSet{VarId},(empty).Set{VarId}) .
+  eq S:Set{VarId}\(empty).Set{VarId}
+    = S:Set{VarId} .
+  eq (I:NzInt / N:NzNat)^ Z:Nat
+    = I:NzInt ^ Z:Nat / N:NzNat ^ Z:Nat .
+  eq N:NeSet{Location}N:NeSet{Location}
+    = N:NeSet{Location} .
+  eq (PHI:SymExpr || CONF:Configuration)PHI':SymExpr || CONF':Configuration
+    = (PHI:SymExpr and PHI':SymExpr)|| CONF:Configuration CONF':Configuration .
+  eq (PHI:SymExpr || OBJ:Object)OBJ':Object
+    = PHI:SymExpr || OBJ:Object OBJ':Object .
+  eq (PHI:SymExpr || OBJ:Object)PHI':SymExpr || OBJ':Object
+    = (PHI:SymExpr and PHI':SymExpr)|| OBJ:Object OBJ':Object .
+  eq transIn(NDL:NeList{DataContent},(CR:ComponentRef .. P:FeatureId, PNS:Set{FeatureRef}))<
+    CR:ComponentRef : V#14:Component | subcomponents : V#17:Configuration,properties :
+    V#16:PropertyAssociation,connections : V#15:Set{Connection},features :(< P:FeatureId : V#10:InPort
+    | properties : V#12:PropertyAssociation,cache : V#11:DataContent,content : nil,none,
+    V#13:AttributeSet > PORTS:Configuration),none,V#18:AttributeSet >
+    = transIn(NDL:NeList{DataContent},PNS:Set{FeatureRef})< CR:ComponentRef : V#14:Component | features
+    :(< P:FeatureId : V#10:InPort | content : NDL:NeList{DataContent},cache : V#11:DataContent,
+    properties : V#12:PropertyAssociation,V#13:AttributeSet > PORTS:Configuration),connections :
+    V#15:Set{Connection},properties : V#16:PropertyAssociation,subcomponents : V#17:Configuration,
+    V#18:AttributeSet > .
+  eq transOut(NDL:NeList{DataContent},(P:FeatureId, PNS:Set{FeatureRef}))< P:FeatureId : V#19:OutPort |
+    properties : V#20:PropertyAssociation,content : DL:List{DataContent},none,V#21:AttributeSet >
+    = transOut(NDL:NeList{DataContent},PNS:Set{FeatureRef})< P:FeatureId : V#19:OutPort | content :(
+    DL:List{DataContent}NDL:NeList{DataContent}),properties : V#20:PropertyAssociation,
+    V#21:AttributeSet > .
+  eq N:NeSet{FeatureRef}, N:NeSet{FeatureRef}
+    = N:NeSet{FeatureRef} .
+  eq (M:VarValuation ; D:VarId |-> R:DataContent)[D:VarId]
+    = if $hasMapping(M:VarValuation,D:VarId)then undefined else R:DataContent fi .
+  eq (M:FeatureMap, D:FeatureId |-> R:DataContent)[D:FeatureId]
+    = if $hasMapping(M:FeatureMap,D:FeatureId)then undefined else R:DataContent fi .
+  eq false and-then B:[Bool]
+    = false .
+  eq true and-then B:[Bool]
+    = B:[Bool] .
+  eq A:Bool and A:Bool
+    = A:Bool .
+  eq A:Bool and(B:Bool xor C:Bool)
+    = A:Bool and B:Bool xor A:Bool and C:Bool .
+  eq SE:SymExpr and[false]
+    = [false] .
+  eq SE:SymExpr and[true]
+    = SE:SymExpr .
+  eq false and A:Bool
+    = false .
+  eq true and A:Bool
+    = A:Bool .
+  eq [B1:Bool]and[B2:Bool]
+    = [B1:Bool and B2:Bool] .
+  eq [false]and SE:SymExpr
+    = [false] .
+  eq [true]and SE:SymExpr
+    = SE:SymExpr .
+  eq Q:NzRat divides J:NzInt / M:NzNat
+    = Q:NzRat * M:NzNat divides J:NzInt .
+  eq I:NzInt / N:NzNat divides K:Int
+    = I:NzInt divides N:NzNat * K:Int .
+  eq R:Time ge R':Time
+    = R':Time le R:Time .
+  eq TI:TimeInf ge TI':TimeInf
+    = TI':TimeInf le TI:TimeInf .
+  eq R:Time gt R':Time
+    = R':Time lt R:Time .
+  eq TI:TimeInf gt TI':TimeInf
+    = TI':TimeInf lt TI:TimeInf .
+  eq A:Bool implies B:Bool
+    = not(A:Bool xor A:Bool and B:Bool) .
+  eq E:Connection in E:Connection ; S:Set{Connection}
+    = true .
+  eq E:FeatureRef in(E:FeatureRef, S:Set{FeatureRef})
+    = true .
+  eq E:Location in E:Location S:Set{Location}
+    = true .
+  eq E:Property in E:Property ; S:PropertyAssociation
+    = true .
+  eq E:Transition in E:Transition ; S:Set{Transition}
+    = true .
+  eq E:VarId in E:VarId ; S:Set{VarId}
+    = true .
+  eq CLS:ClockedSystem in time R:Time in time R':Time
+    = CLS:ClockedSystem in time R:Time plus R':Time .
+  eq INF le R:Time
+    = false .
+  eq R:Time le R':Time
+    = R:Time lt R':Time or R:Time == R':Time .
+  eq TI:TimeInf le INF
+    = true .
+  eq INF lt TI:TimeInf
+    = false .
+  eq N:Nat lt N':Nat
+    = N:Nat < N':Nat .
+  eq R:Time lt INF
+    = true .
+  eq [I1:Int]mod[I2:Int]
+    = [I1:Int rem I2:Int] .
+  eq INF monus R:Time
+    = INF .
+  eq N:Nat monus N':Nat
+    = if N:Nat > N':Nat then sd(N:Nat,N':Nat)else 0 fi .
+  eq false or-else B:[Bool]
+    = B:[Bool] .
+  eq true or-else B:[Bool]
+    = true .
+  eq A:Bool or B:Bool
+    = A:Bool and B:Bool xor A:Bool xor B:Bool .
+  eq SE:SymExpr or[false]
+    = SE:SymExpr .
+  eq SE:SymExpr or[true]
+    = [true] .
+  eq [B1:Bool]or[B2:Bool]
+    = [B1:Bool or B2:Bool] .
+  eq [false]or SE:SymExpr
+    = SE:SymExpr .
+  eq [true]or SE:SymExpr
+    = [true] .
+  eq INF plus TI:TimeInf
+    = INF .
+  eq N:Nat plus N':Nat
+    = N:Nat + N':Nat .
+  eq zero plus R:Time
+    = R:Time .
+  eq S:PropertyAssociation psubset S':PropertyAssociation
+    = S:PropertyAssociation =/= S':PropertyAssociation and-then S:PropertyAssociation subset
+    S':PropertyAssociation .
+  eq S:Set{Connection}psubset S':Set{Connection}
+    = S:Set{Connection}=/= S':Set{Connection}and-then S:Set{Connection}subset S':Set{Connection} .
+  eq S:Set{FeatureRef}psubset S':Set{FeatureRef}
+    = S:Set{FeatureRef}=/= S':Set{FeatureRef}and-then S:Set{FeatureRef}subset S':Set{FeatureRef} .
+  eq S:Set{Location}psubset S':Set{Location}
+    = S:Set{Location}=/= S':Set{Location}and-then S:Set{Location}subset S':Set{Location} .
+  eq S:Set{Transition}psubset S':Set{Transition}
+    = S:Set{Transition}=/= S':Set{Transition}and-then S:Set{Transition}subset S':Set{Transition} .
+  eq S:Set{VarId}psubset S':Set{VarId}
+    = S:Set{VarId}=/= S':Set{VarId}and-then S:Set{VarId}subset S':Set{VarId} .
+  eq K:Int quo(J:NzInt / M:NzNat)
+    = (M:NzNat * K:Int)quo J:NzInt .
+  eq I:NzInt / N:NzNat quo Q:NzRat
+    = I:NzInt quo(Q:NzRat * N:NzNat) .
+  eq K:Int rem(J:NzInt / M:NzNat)
+    = (M:NzNat * K:Int)rem J:NzInt / M:NzNat .
+  eq I:NzInt / N:NzNat rem J:NzInt
+    = I:NzInt rem(J:NzInt * N:NzNat)/ N:NzNat .
+  eq I:NzInt / N:NzNat rem(J:NzInt / M:NzNat)
+    = (I:NzInt * M:NzNat)rem(J:NzInt * N:NzNat)/(N:NzNat * M:NzNat) .
+  eq [I1:Int]rem[I2:Int]
+    = [I1:Int rem I2:Int] .
+  eq (empty).Set{Connection}subset S':Set{Connection}
+    = true .
+  eq (empty).Set{FeatureRef}subset S':Set{FeatureRef}
+    = true .
+  eq (empty).Set{Location}subset S':Set{Location}
+    = true .
+  eq (empty).Set{Transition}subset S':Set{Transition}
+    = true .
+  eq (empty).Set{VarId}subset S':Set{VarId}
+    = true .
+  eq (none).PropertyAssociation subset S':PropertyAssociation
+    = true .
+  eq (E:Connection ; S:Set{Connection})subset S':Set{Connection}
+    = E:Connection in S':Set{Connection}and-then S:Set{Connection}subset S':Set{Connection} .
+  eq (E:Property ; S:PropertyAssociation)subset S':PropertyAssociation
+    = E:Property in S':PropertyAssociation and-then S:PropertyAssociation subset S':PropertyAssociation
+    .
+  eq (E:Transition ; S:Set{Transition})subset S':Set{Transition}
+    = E:Transition in S':Set{Transition}and-then S:Set{Transition}subset S':Set{Transition} .
+  eq (E:VarId ; S:Set{VarId})subset S':Set{VarId}
+    = E:VarId in S':Set{VarId}and-then S:Set{VarId}subset S':Set{VarId} .
+  eq (E:Location S:Set{Location})subset S':Set{Location}
+    = E:Location in S':Set{Location}and-then S:Set{Location}subset S':Set{Location} .
+  eq (E:FeatureRef, S:Set{FeatureRef})subset S':Set{FeatureRef}
+    = E:FeatureRef in S':Set{FeatureRef}and-then S:Set{FeatureRef}subset S':Set{FeatureRef} .
+  eq A:Bool xor A:Bool
+    = false .
+  eq false xor A:Bool
+    = A:Bool .
+  eq [B1:Bool]xor[B2:Bool]
+    = [B1:Bool xor B2:Bool] .
+  eq (nil).ObjectQueue | COMPS:ConstConf
+    = COMPS:ConstConf .
+  eq (CONCONF:ConstConf :: QUEUE:[ObjectQueue])| COMPS:ConstConf
+    = QUEUE:[ObjectQueue]| COMPS:ConstConf CONCONF:ConstConf .
+  eq abs(I:NzInt / N:NzNat)
+    = abs(I:NzInt)/ N:NzNat .
+  eq abs([F1:Float])
+    = [abs(F1:Float)] .
+  eq abs([I1:Int])
+    = [abs(I1:Int)] .
+  eq adaptor(OTMA:OneToManyInputAdaptor,D:DataContent,NZ:NzNat)
+    = adaptor(OTMA:OneToManyInputAdaptor,D:DataContent,NZ:NzNat,nil) .
+  eq adaptor(average,NDL:NeList{DataContent},1)
+    = [float(adaptor(sum,NDL:NeList{DataContent},1))/ float(size(NDL:NeList{DataContent}))] .
+  eq adaptor(first,D:DataContent DL:List{DataContent},1)
+    = D:DataContent .
+  eq adaptor(last,DL:List{DataContent}D:DataContent,1)
+    = D:DataContent .
+  eq adaptor(max,D:DataContent DL:List{DataContent},1)
+    = numAdap(max,D:DataContent,DL:List{DataContent}) .
+  eq adaptor(min,D:DataContent DL:List{DataContent},1)
+    = numAdap(min,D:DataContent,DL:List{DataContent}) .
+  eq adaptor(sum,D:DataContent DL:List{DataContent},1)
+    = numAdap(sum,D:DataContent,DL:List{DataContent}) .
+  eq adaptor(OTMA:OneToManyInputAdaptor,D:DataContent,0,NDL:NeList{DataContent})
+    = NDL:NeList{DataContent} .
+  eq adaptor(repeat input,D:DataContent,s N:Nat,DL:List{DataContent})
+    = adaptor(repeat input,D:DataContent,N:Nat,DL:List{DataContent}D:DataContent) .
+  eq adaptor(use in first iteration,D:DataContent,N:Nat,DL:List{DataContent})
+    = adaptor(use in iteration 1,D:DataContent,N:Nat,DL:List{DataContent}) .
+  eq adaptor(use in last iteration,D:DataContent,N:Nat,DL:List{DataContent})
+    = adaptor(use in iteration N:Nat,D:DataContent,N:Nat,DL:List{DataContent}) .
+  eq adaptor(use in iteration 0,D:DataContent,s N:Nat,DL:List{DataContent})
+    = adaptor(use in iteration 0,D:DataContent,N:Nat,DL:List{DataContent}bot) .
+  eq adaptor(use in iteration 1,D:DataContent,s N:Nat,DL:List{DataContent})
+    = adaptor(use in iteration 0,D:DataContent,N:Nat,DL:List{DataContent}D:DataContent) .
+  eq adaptor(use in iteration s s M:Nat,D:DataContent,s N:Nat,DL:List{DataContent})
+    = adaptor(use in iteration s M:Nat,D:DataContent,N:Nat,DL:List{DataContent}bot) .
+  eq angle(F:Float)
+    = if F:Float > 1.8e+2 then angle(F:Float - 3.6e+2)else if F:Float <= -1.8e+2 then angle(F:Float +
+    3.6e+2)else F:Float fi fi .
+  eq append(A:List{DataContent},L:List{DataContent})
+    = A:List{DataContent}L:List{DataContent} .
+  eq applyAdaptors(none)
+    = (none).Configuration .
+  eq applyAdaptors(NZ:NzNat,< P:FeatureId : V#0:InPort | cache : V#1:DataContent,properties :((
+    HybridAADL::InputAdaptor =>{IA:BuiltinInputAdaptor}); PROPS:PropertyAssociation),content :
+    NDL:NeList{DataContent},none,V#2:AttributeSet > PORTS:Configuration,PORTS':Configuration)
+    = applyAdaptors(NZ:NzNat,PORTS:Configuration,PORTS':Configuration < P:FeatureId : V#0:InPort |
+    content : adaptor(IA:BuiltinInputAdaptor,NDL:NeList{DataContent},NZ:NzNat),cache : V#1:DataContent,
+    properties :((HybridAADL::InputAdaptor =>{IA:BuiltinInputAdaptor}); PROPS:PropertyAssociation),
+    V#2:AttributeSet >) .
+  eq applyAdaptors(< CR:ComponentRef : V#3:PeriodicComponent | subcomponents : V#6:Configuration,
+    properties : V#5:PropertyAssociation,connections : V#4:Set{Connection},features :
+    PORTS:Configuration,rate : NZ:NzNat,none,V#7:AttributeSet > REST:Configuration)
+    = < CR:ComponentRef : V#3:PeriodicComponent | features : applyAdaptors(NZ:NzNat,
+    PORTS:Configuration,none),connections : V#4:Set{Connection},properties : V#5:PropertyAssociation,
+    rate : NZ:NzNat,subcomponents : V#6:Configuration,V#7:AttributeSet > applyAdaptors(
+    REST:Configuration) .
+  eq applyAdaptorsSub(< CR:ComponentRef : V#0:Ensemble | rate : V#4:NzNat,properties :
+    V#3:PropertyAssociation,features : V#2:Configuration,connections : V#1:Set{Connection},
+    subcomponents : COMPS:ConstConf,none,V#5:AttributeSet >)
+    = < CR:ComponentRef : V#0:Ensemble | subcomponents : applyAdaptors(COMPS:ConstConf),connections :
+    V#1:Set{Connection},features : V#2:Configuration,properties : V#3:PropertyAssociation,rate :
+    V#4:NzNat,V#5:AttributeSet > .
+  eq bool([B:Bool])
+    = B:Bool .
+  eq ceiling(K:Int)
+    = K:Int .
+  eq ceiling(N:NzNat / M:NzNat)
+    = ((N:NzNat + M:NzNat)- 1)quo M:NzNat .
+  eq ceiling(- N:NzNat / M:NzNat)
+    = - floor(N:NzNat / M:NzNat) .
+  eq class(< O:Oid : C:Cid | A:AttributeSet >)
+    = C:Cid .
+  eq collapse(< C:ComponentId : V#0:Ensemble | rate : V#4:NzNat,properties : V#3:PropertyAssociation,
+    features : V#2:Configuration,connections : V#1:Set{Connection},subcomponents : COMPS:Configuration,
+    none,V#5:AttributeSet > REST:Configuration)
+    = open(< C:ComponentId : V#0:Ensemble | subcomponents : collapse(COMPS:Configuration),connections :
+    V#1:Set{Connection},features : V#2:Configuration,properties : V#3:PropertyAssociation,rate :
+    V#4:NzNat,V#5:AttributeSet >)collapse(REST:Configuration) .
+  eq combine(< P:FeatureId : V#0:InPort | properties : PROPS:PropertyAssociation,cache : bot,content :
+    nil,none,V#1:AttributeSet >,< P':FeatureId : V#2:InPort | properties : PROPS':PropertyAssociation,
+    cache : bot,content : DL:List{DataContent},none,V#3:AttributeSet >)
+    = < P:FeatureId : V#0:InPort | content : DL:List{DataContent},properties : compose(
+    PROPS:PropertyAssociation,PROPS':PropertyAssociation),cache : bot,V#1:AttributeSet > .
+  eq combine(< P:FeatureId : V#4:OutPort | properties : PROPS:PropertyAssociation,content : nil,none,
+    V#5:AttributeSet >,< P':FeatureId : V#6:OutPort | properties : PROPS':PropertyAssociation,content :
+    DL:List{DataContent},none,V#7:AttributeSet >)
+    = < P:FeatureId : V#4:OutPort | content : DL:List{DataContent},properties : compose(
+    PROPS:PropertyAssociation,PROPS':PropertyAssociation),V#5:AttributeSet > .
+  eq compose(PROPS:PropertyAssociation,PROPS':PropertyAssociation)
+    = PROPS:PropertyAssociation ; PROPS':PropertyAssociation .
+  eq contains?(PN:FeatureRef,(PN:FeatureRef |-> NPS:NeSet{FeatureRef})CTB:ConxTable)
+    = true .
+  eq defaultValuation(VIS:Set{VarId})
+    = defaultValuation(VIS:Set{VarId},empty) .
+  eq defaultValuation(empty,VAL:VarValuation)
+    = VAL:VarValuation .
+  eq defaultValuation(VI:VarId ; VIS:Set{VarId},VAL:VarValuation)
+    = defaultValuation(VIS:Set{VarId},(VI:VarId |-> bot); VAL:VarValuation) .
+  eq delete(E:Connection,E:Connection ; S:Set{Connection})
+    = delete(E:Connection,S:Set{Connection}) .
+  eq delete(E:FeatureRef,(E:FeatureRef, S:Set{FeatureRef}))
+    = delete(E:FeatureRef,S:Set{FeatureRef}) .
+  eq delete(E:Location,E:Location S:Set{Location})
+    = delete(E:Location,S:Set{Location}) .
+  eq delete(E:Property,E:Property ; S:PropertyAssociation)
+    = delete(E:Property,S:PropertyAssociation) .
+  eq delete(E:Transition,E:Transition ; S:Set{Transition})
+    = delete(E:Transition,S:Set{Transition}) .
+  eq delete(E:VarId,E:VarId ; S:Set{VarId})
+    = delete(E:VarId,S:Set{VarId}) .
+  eq eval(V:SymExpr,LCF:LocalBehaviorConf)
+    = V:SymExpr .
+  eq eval(E1:Expression != E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)!= eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression ** E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)** eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression * E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)* eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression + E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)+ eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression - E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)- eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression / E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)/ eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression <= E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)<= eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression < E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)< eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression = E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)= eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression >= E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)>= eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression > E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)> eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression and E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)and eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression mod E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)mod eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression or E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)or eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression rem E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)rem eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval(E1:Expression xor E2:Expression,LCF:LocalBehaviorConf)
+    = eval(E1:Expression,LCF:LocalBehaviorConf)xor eval(E2:Expression,LCF:LocalBehaviorConf) .
+  eq eval([CR:ComponentRef],VAL:VarValuation | FMAP:FeatureMap | < CR:ComponentRef : V#0:Data |
+    subcomponents : V#4:Configuration,properties : V#3:PropertyAssociation,features :
+    V#2:Configuration,connections : V#1:Set{Connection},value : V:SymExpr,none,V#5:AttributeSet >
+    COMPS:Configuration | PROPS:PropertyAssociation)
+    = V:SymExpr .
+  eq eval([PI:FeatureId],VAL:VarValuation |(PI:FeatureId |-> V:SymExpr, FMAP:FeatureMap)|
+    COMPS:Configuration | PROPS:PropertyAssociation)
+    = V:SymExpr .
+  eq eval([PI:FeatureId],VAL:VarValuation |(PI:FeatureId |->(V:SymExpr : B:Bool), FMAP:FeatureMap)|
+    COMPS:Configuration | PROPS:PropertyAssociation)
+    = V:SymExpr .
+  eq eval([PR:PropertyId],VAL:VarValuation | FMAP:FeatureMap | COMPS:Configuration |(PR:PropertyId =>
+    PV:PropertyValue); PROPS:PropertyAssociation)
+    = value(PV:PropertyValue) .
+  eq eval([VI:VarId],((VI:VarId |-> V:SymExpr); VAL:VarValuation)| GCF:GlobalBehaviorConf)
+    = V:SymExpr .
+  eq eval(abs(E1:Expression),LCF:LocalBehaviorConf)
+    = abs(eval(E1:Expression,LCF:LocalBehaviorConf)) .
+  eq eval(count(PI:FeatureId),VAL:VarValuation |(PI:FeatureId |->(V:SymExpr : B:Bool),
+    FMAP:FeatureMap)| COMPS:Configuration | PROPS:PropertyAssociation)
+    = [if B:Bool then 1 else 0 fi] .
+  eq eval(fresh(PI:FeatureId),VAL:VarValuation |(PI:FeatureId |->(V:SymExpr : B:Bool),
+    FMAP:FeatureMap)| COMPS:Configuration | PROPS:PropertyAssociation)
+    = [B:Bool] .
+  eq eval(minus(E1:Expression),LCF:LocalBehaviorConf)
+    = minus(eval(E1:Expression,LCF:LocalBehaviorConf)) .
+  eq eval(not(E1:Expression),LCF:LocalBehaviorConf)
+    = not(eval(E1:Expression,LCF:LocalBehaviorConf)) .
+  eq eval(plus(E1:Expression),LCF:LocalBehaviorConf)
+    = plus(eval(E1:Expression,LCF:LocalBehaviorConf)) .
+  eq execAction(MathLib::angle !(E:Expression,E':Expression),PHI:SymExpr | LCF:LocalBehaviorConf)
+    = execAction(target(E':Expression):=[angle(float(eval(E:Expression,LCF:LocalBehaviorConf)))],
+    PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction(MathLib::cos !(E:Expression,E':Expression),PHI:SymExpr | LCF:LocalBehaviorConf)
+    = execAction(target(E':Expression):=[cos(float(eval(E:Expression,LCF:LocalBehaviorConf)))],
+    PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction(MathLib::log !(E:Expression,E':Expression),PHI:SymExpr | LCF:LocalBehaviorConf)
+    = execAction(target(E':Expression):=[log(float(eval(E:Expression,LCF:LocalBehaviorConf)))],
+    PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction(MathLib::min !(E:Expression,E':Expression,E'':Expression),PHI:SymExpr |
+    LCF:LocalBehaviorConf)
+    = execAction(target(E'':Expression):=[min(float(eval(E:Expression,LCF:LocalBehaviorConf)),float(
+    eval(E':Expression,LCF:LocalBehaviorConf)))],PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction(MathLib::sin !(E:Expression,E':Expression),PHI:SymExpr | LCF:LocalBehaviorConf)
+    = execAction(target(E':Expression):=[sin(float(eval(E:Expression,LCF:LocalBehaviorConf)))],
+    PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction(MathLib::sqrt !(E:Expression,E':Expression),PHI:SymExpr | LCF:LocalBehaviorConf)
+    = execAction(target(E':Expression):=[sqrt(float(eval(E:Expression,LCF:LocalBehaviorConf)))],
+    PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction(MathLib::tan !(E:Expression,E':Expression),PHI:SymExpr | LCF:LocalBehaviorConf)
+    = execAction(target(E':Expression):=[tan(float(eval(E:Expression,LCF:LocalBehaviorConf)))],
+    PHI:SymExpr | LCF:LocalBehaviorConf) .
+  eq execAction({CR:ComponentRef}:= E:Expression,PHI:SymExpr | VAL:VarValuation | FMAP:FeatureMap | <
+    CR:ComponentRef : V#0:Data | subcomponents : V#4:Configuration,properties :
+    V#3:PropertyAssociation,features : V#2:Configuration,connections : V#1:Set{Connection},value :
+    DC:DataContent,none,V#5:AttributeSet > COMPS:Configuration | PROPS:PropertyAssociation)
+    = PHI:SymExpr | VAL:VarValuation | FMAP:FeatureMap | < CR:ComponentRef : V#0:Data | value : eval(
+    E:Expression,VAL:VarValuation | FMAP:FeatureMap | < CR:ComponentRef : V#0:Data | value :
+    DC:DataContent,connections : V#1:Set{Connection},features : V#2:Configuration,properties :
+    V#3:PropertyAssociation,subcomponents : V#4:Configuration,V#5:AttributeSet > COMPS:Configuration |
+    PROPS:PropertyAssociation),connections : V#1:Set{Connection},features : V#2:Configuration,
+    properties : V#3:PropertyAssociation,subcomponents : V#4:Configuration,V#5:AttributeSet >
+    COMPS:Configuration | PROPS:PropertyAssociation .
+  eq execAction({PI:FeatureId}:= E:Expression,PHI:SymExpr | VAL:VarValuation |(PI:FeatureId |->
+    DC:DataContent, FMAP:FeatureMap)| COMPS:Configuration | PROPS:PropertyAssociation)
+    = PHI:SymExpr | VAL:VarValuation |(PI:FeatureId |-> eval(E:Expression,VAL:VarValuation |(
+    PI:FeatureId |-> DC:DataContent, FMAP:FeatureMap)| COMPS:Configuration |
+    PROPS:PropertyAssociation), FMAP:FeatureMap)| COMPS:Configuration | PROPS:PropertyAssociation .
+  eq execAction({VI:VarId}:= E:Expression,PHI:SymExpr |((VI:VarId |-> DC:DataContent);
+    VAL:VarValuation)| FMAP:FeatureMap | COMPS:Configuration | PROPS:PropertyAssociation)
+    = PHI:SymExpr |((VI:VarId |-> eval(E:Expression,((VI:VarId |-> DC:DataContent); VAL:VarValuation)|
+    FMAP:FeatureMap | COMPS:Configuration | PROPS:PropertyAssociation)); VAL:VarValuation)|
+    FMAP:FeatureMap | COMPS:Configuration | PROPS:PropertyAssociation .
+  eq execAction({A:Action},SYMLCF:SymLocalBehaviorConf)
+    = execAction(A:Action,SYMLCF:SymLocalBehaviorConf) .
+  eq execAction({skip},SYMLCF:SymLocalBehaviorConf)
+    = SYMLCF:SymLocalBehaviorConf .
+  eq execAction({A:Action ; REST:ActionGroup},SYMLCF:SymLocalBehaviorConf)
+    = execAction({REST:ActionGroup},execAction(A:Action,SYMLCF:SymLocalBehaviorConf)) .
+  eq executeStep(PHI:SymExpr || < CR:ComponentRef : V#0:Thread | variables : V#8:Set{VarId},transitions
+    : V#7:Set{Transition},subcomponents : V#6:Configuration,rate : V#5:NzNat,properties :
+    V#4:PropertyAssociation,currState : V#3:Location,connections : V#2:Set{Connection},completeStates :
+    V#1:Set{Location},features : PORTS:Configuration,none,V#9:AttributeSet >)
+    = executeStepRead(readFeature(PORTS:Configuration),< CR:ComponentRef : V#0:Thread | features :
+    PORTS:Configuration,completeStates : V#1:Set{Location},connections : V#2:Set{Connection},currState
+    : V#3:Location,properties : V#4:PropertyAssociation,rate : V#5:NzNat,subcomponents :
+    V#6:Configuration,transitions : V#7:Set{Transition},variables : V#8:Set{VarId},V#9:AttributeSet >)
+    .
+  eq executeStep(PHI:SymExpr || < CR:ComponentRef : V#6:Ensemble | subcomponents : V#11:Configuration,
+    rate : V#10:NzNat,properties : V#9:PropertyAssociation,features : V#8:Configuration,connections :
+    V#7:Set{Connection},none,V#12:AttributeSet >)
+    = transferResults(prepareExecSub(PHI:SymExpr,applyAdaptorsSub(transferInputs(< CR:ComponentRef :
+    V#6:Ensemble | connections : V#7:Set{Connection},features : V#8:Configuration,properties :
+    V#9:PropertyAssociation,rate : V#10:NzNat,subcomponents : V#11:Configuration,V#12:AttributeSet
+    >)))) .
+  eq executeStepRead(PORTS':Configuration | FMAP:FeatureMap,< CR:ComponentRef : V#10:Thread | rate :
+    V#13:NzNat,features : V#12:Configuration,connections : V#11:Set{Connection},transitions : TRS:Set{
+    Transition},variables : VIS:Set{VarId},completeStates : LS:Set{Location},currState : L:Location,
+    properties : PROPS:PropertyAssociation,subcomponents : COMPS:Configuration,none,V#14:AttributeSet
+    >)
+    = executeStepTrans(PORTS':Configuration,execTransSystem(L:Location,LS:Set{Location},TRS:Set{
+    Transition},defaultValuation(VIS:Set{VarId}),FMAP:FeatureMap | COMPS:Configuration |
+    PROPS:PropertyAssociation,[true]),< CR:ComponentRef : V#10:Thread | completeStates : LS:Set{
+    Location},connections : V#11:Set{Connection},currState : L:Location,features : V#12:Configuration,
+    properties : PROPS:PropertyAssociation,rate : V#13:NzNat,subcomponents : COMPS:Configuration,
+    transitions : TRS:Set{Transition},variables : VIS:Set{VarId},V#14:AttributeSet >) .
+  eq executeStepTrans(PORTS':Configuration,PHI:SymExpr | L':Location | FMAP':FeatureMap |
+    COMPS':Configuration,< CR:ComponentRef : V#15:Thread | variables : V#24:Set{VarId},transitions :
+    V#23:Set{Transition},subcomponents : V#22:Configuration,rate : V#21:NzNat,properties :
+    V#20:PropertyAssociation,features : V#19:Configuration,currState : V#18:Location,connections :
+    V#17:Set{Connection},completeStates : V#16:Set{Location},none,V#25:AttributeSet >)
+    = PHI:SymExpr || < CR:ComponentRef : V#15:Thread | features : writeFeature(FMAP':FeatureMap,
+    PORTS':Configuration),subcomponents : COMPS':Configuration,currState : L':Location,completeStates :
+    V#16:Set{Location},connections : V#17:Set{Connection},properties : V#20:PropertyAssociation,rate :
+    V#21:NzNat,transitions : V#23:Set{Transition},variables : V#24:Set{VarId},V#25:AttributeSet > .
+  eq float([F:Float])
+    = F:Float .
+  eq float([I:Int])
+    = float(I:Int) .
+  eq floor(K:Int)
+    = K:Int .
+  eq floor(N:NzNat / M:NzNat)
+    = N:NzNat quo M:NzNat .
+  eq floor(- N:NzNat / M:NzNat)
+    = - ceiling(N:NzNat / M:NzNat) .
+  eq frac(K:Int)
+    = 0 .
+  eq frac(I:NzInt / N:NzNat)
+    = I:NzInt rem N:NzNat / N:NzNat .
+  eq front(L:List{DataContent}E:DataContent)
+    = L:List{DataContent} .
+  eq gcd(R:Rat,I:NzInt / N:NzNat)
+    = gcd(I:NzInt,N:NzNat * R:Rat)/ N:NzNat .
+  eq global(VAL:VarValuation | GCF:GlobalBehaviorConf)
+    = GCF:GlobalBehaviorConf .
+  eq guardConstraint(E:Expression,LCF:LocalBehaviorConf)
+    = eval(E:Expression,LCF:LocalBehaviorConf) .
+  eq guardConstraint(on dispatch,LCF:LocalBehaviorConf)
+    = [true] .
+  eq head(E:DataContent L:List{DataContent})
+    = E:DataContent .
+  eq inner-tb(CONXS:Set{Connection})
+    = inner-tb(CONXS:Set{Connection},none) .
+  eq inner-tb((PN:FeatureRef -->(CR:ComponentRef .. P:FeatureId)); CONXS:Set{Connection},CTB:ConxTable)
+    = inner-tb(CONXS:Set{Connection},(PN:FeatureRef |->(CR:ComponentRef .. P:FeatureId))CTB:ConxTable)
+    .
+  eq insert(E:Connection,S:Set{Connection})
+    = E:Connection ; S:Set{Connection} .
+  eq insert(E:FeatureRef,S:Set{FeatureRef})
+    = E:FeatureRef, S:Set{FeatureRef} .
+  eq insert(E:Location,S:Set{Location})
+    = E:Location S:Set{Location} .
+  eq insert(E:Property,S:PropertyAssociation)
+    = E:Property ; S:PropertyAssociation .
+  eq insert(E:Transition,S:Set{Transition})
+    = E:Transition ; S:Set{Transition} .
+  eq insert(E:VarId,S:Set{VarId})
+    = E:VarId ; S:Set{VarId} .
+  eq insert(D:FeatureId,R:DataContent,(M:FeatureMap, D:FeatureId |-> R':DataContent))
+    = if $hasMapping(M:FeatureMap,D:FeatureId)then insert(D:FeatureId,R:DataContent,M:FeatureMap)else
+    M:FeatureMap, D:FeatureId |-> R:DataContent fi .
+  eq insert(D:VarId,R:DataContent,M:VarValuation ; D:VarId |-> R':DataContent)
+    = if $hasMapping(M:VarValuation,D:VarId)then insert(D:VarId,R:DataContent,M:VarValuation)else
+    M:VarValuation ; D:VarId |-> R:DataContent fi .
+  eq int([I:Int])
+    = I:Int .
+  eq intersection(S:PropertyAssociation,N:NePropertyAssociation)
+    = $intersect(S:PropertyAssociation,N:NePropertyAssociation,(none).PropertyAssociation) .
+  eq intersection(S:PropertyAssociation,(none).PropertyAssociation)
+    = (none).PropertyAssociation .
+  eq intersection(S:Set{Connection},N:NeSet{Connection})
+    = $intersect(S:Set{Connection},N:NeSet{Connection},(empty).Set{Connection}) .
+  eq intersection(S:Set{Connection},(empty).Set{Connection})
+    = (empty).Set{Connection} .
+  eq intersection(S:Set{FeatureRef},N:NeSet{FeatureRef})
+    = $intersect(S:Set{FeatureRef},N:NeSet{FeatureRef},(empty).Set{FeatureRef}) .
+  eq intersection(S:Set{FeatureRef},(empty).Set{FeatureRef})
+    = (empty).Set{FeatureRef} .
+  eq intersection(S:Set{Location},N:NeSet{Location})
+    = $intersect(S:Set{Location},N:NeSet{Location},(empty).Set{Location}) .
+  eq intersection(S:Set{Location},(empty).Set{Location})
+    = (empty).Set{Location} .
+  eq intersection(S:Set{Transition},N:NeSet{Transition})
+    = $intersect(S:Set{Transition},N:NeSet{Transition},(empty).Set{Transition}) .
+  eq intersection(S:Set{Transition},(empty).Set{Transition})
+    = (empty).Set{Transition} .
+  eq intersection(S:Set{VarId},N:NeSet{VarId})
+    = $intersect(S:Set{VarId},N:NeSet{VarId},(empty).Set{VarId}) .
+  eq intersection(S:Set{VarId},(empty).Set{VarId})
+    = (empty).Set{VarId} .
+  eq k-executeStep(PHI:SymExpr,0,OBJ:Object)
+    = PHI:SymExpr || OBJ:Object .
+  eq k-executeStep(PHI:SymExpr,s N:Nat,OBJ:Object)
+    = executeStep(k-executeStep(PHI:SymExpr,N:Nat,OBJ:Object)) .
+  eq last(L:List{DataContent}E:DataContent)
+    = E:DataContent .
+  eq lcm(R:Rat,I:NzInt / N:NzNat)
+    = lcm(I:NzInt,N:NzNat * R:Rat)/ N:NzNat .
+  eq link((FR1:FeatureRef --> FR2:FeatureRef);(FR2:FeatureRef --> FR3:FeatureRef); CONXS:Set{
+    Connection})
+    = link(linkAll(FR1:FeatureRef --> FR2:FeatureRef,(FR2:FeatureRef --> FR3:FeatureRef); CONXS:Set{
+    Connection})) .
+  eq linkAll(FR1:FeatureRef --> FR2:FeatureRef,(FR2:FeatureRef --> FR3:FeatureRef); CONXS:Set{
+    Connection})
+    = (FR1:FeatureRef --> FR3:FeatureRef); linkAll(FR1:FeatureRef --> FR2:FeatureRef,CONXS:Set{
+    Connection}) .
+  eq max(INF,TI:TimeInf)
+    = INF .
+  eq max(R:Rat,I:NzInt / N:NzNat)
+    = max(I:NzInt,N:NzNat * R:Rat)/ N:NzNat .
+  eq maximum(INF,TI:TimeInf)
+    = INF .
+  eq min(INF,TI:TimeInf)
+    = TI:TimeInf .
+  eq min(R:Rat,I:NzInt / N:NzNat)
+    = min(I:NzInt,N:NzNat * R:Rat)/ N:NzNat .
+  eq minimum(INF,TI:TimeInf)
+    = TI:TimeInf .
+  eq minus([F1:Float])
+    = [- F1:Float] .
+  eq minus([I1:Int])
+    = [- I1:Int] .
+  eq normalize((PN:FeatureRef |-> NPS:NeSet{FeatureRef})(PN:FeatureRef |-> NPS':NeSet{
+    FeatureRef})CTB:ConxTable)
+    = normalize((PN:FeatureRef |->(NPS:NeSet{FeatureRef}, NPS':NeSet{FeatureRef}))CTB:ConxTable) .
+  eq not([B1:Bool])
+    = [not B1:Bool] .
+  eq not A:Bool
+    = true xor A:Bool .
+  eq numAdap(max,[F1:Float],nil)
+    = [F1:Float] .
+  eq numAdap(max,[F1:Float],[F2:Float]DL:List{DataContent})
+    = numAdap(max,[max(F1:Float,F2:Float)],DL:List{DataContent}) .
+  eq numAdap(max,[I1:Int],nil)
+    = [I1:Int] .
+  eq numAdap(max,[I1:Int],[I2:Int]DL:List{DataContent})
+    = numAdap(max,[max(I1:Int,I2:Int)],DL:List{DataContent}) .
+  eq numAdap(min,[F1:Float],nil)
+    = [F1:Float] .
+  eq numAdap(min,[F1:Float],[F2:Float]DL:List{DataContent})
+    = numAdap(min,[min(F1:Float,F2:Float)],DL:List{DataContent}) .
+  eq numAdap(min,[I1:Int],nil)
+    = [I1:Int] .
+  eq numAdap(min,[I1:Int],[I2:Int]DL:List{DataContent})
+    = numAdap(min,[min(I1:Int,I2:Int)],DL:List{DataContent}) .
+  eq numAdap(sum,[F1:Float],nil)
+    = [F1:Float] .
+  eq numAdap(sum,[F1:Float],[F2:Float]DL:List{DataContent})
+    = numAdap(sum,[F1:Float + F2:Float],DL:List{DataContent}) .
+  eq numAdap(sum,[I1:Int],nil)
+    = [I1:Int] .
+  eq numAdap(sum,[I1:Int],[I2:Int]DL:List{DataContent})
+    = numAdap(sum,[I1:Int + I2:Int],DL:List{DataContent}) .
+  eq occurs(E:DataContent,nil)
+    = false .
+  eq occurs(E:DataContent,E':DataContent L:List{DataContent})
+    = if E:DataContent == E':DataContent then true else occurs(E:DataContent,L:List{DataContent})fi .
+  eq open(< C:ComponentId : V#15:Ensemble | rate : V#18:NzNat,properties : V#17:PropertyAssociation,
+    features : V#16:Configuration,subcomponents :(< C':ComponentId : V#13:Ensemble | subcomponents :
+    OBJ':Object,connections : CONXS':Set{Connection},properties : PROPS':PropertyAssociation,features :
+    PORTS':Configuration,rate : s NZ:NzNat,none,V#14:AttributeSet > COMPS:Configuration),connections :
+    CONXS:Set{Connection},none,V#19:AttributeSet >)
+    = open(< C:ComponentId : V#15:Ensemble | connections : link(CONXS:Set{Connection}; sub(
+    C':ComponentId,CONXS':Set{Connection})),subcomponents :(sub(C':ComponentId,s NZ:NzNat,
+    PROPS':PropertyAssociation,transFeature(PORTS':Configuration,CONXS':Set{Connection},
+    OBJ':Object))COMPS:Configuration),features : V#16:Configuration,properties :
+    V#17:PropertyAssociation,rate : V#18:NzNat,V#19:AttributeSet >) .
+  eq open(< C:ComponentId : V#8:Ensemble | rate : V#11:NzNat,properties : V#10:PropertyAssociation,
+    features : V#9:Configuration,subcomponents :(< C':ComponentId : V#6:Ensemble | subcomponents :
+    COMPS':Configuration,connections : CONXS':Set{Connection},properties : PROPS':PropertyAssociation,
+    features : PORTS':Configuration,rate : 1,none,V#7:AttributeSet > COMPS:Configuration),connections :
+    CONXS:Set{Connection},none,V#12:AttributeSet >)
+    = open(< C:ComponentId : V#8:Ensemble | connections : link(CONXS:Set{Connection}; sub(
+    C':ComponentId,CONXS':Set{Connection})),subcomponents :(sub(C':ComponentId,1,
+    PROPS':PropertyAssociation,transFeature(PORTS':Configuration,CONXS':Set{Connection},
+    COMPS':Configuration))COMPS:Configuration),features : V#9:Configuration,properties :
+    V#10:PropertyAssociation,rate : V#11:NzNat,V#12:AttributeSet >) .
+  eq outer-tb(CONXS:Set{Connection})
+    = outer-tb(CONXS:Set{Connection},none) .
+  eq outer-tb((PN:FeatureRef --> P:FeatureId); CONXS:Set{Connection},CTB:ConxTable)
+    = outer-tb(CONXS:Set{Connection},(PN:FeatureRef |-> P:FeatureId)CTB:ConxTable) .
+  eq paste(C:ComponentId,CR:ComponentRef)
+    = C:ComponentId . CR:ComponentRef .
+  eq paste(C:ComponentId,P:FeatureId)
+    = C:ComponentId .. P:FeatureId .
+  eq paste(C:ComponentId,CR:ComponentRef .. P:FeatureId)
+    = paste(C:ComponentId,CR:ComponentRef).. P:FeatureId .
+  eq plus(SF1:SymFloatVar)
+    = SF1:SymFloatVar .
+  eq plus(SI1:SymIntVar)
+    = SI1:SymIntVar .
+  eq plus([F1:Float])
+    = [F1:Float] .
+  eq plus([I1:Int])
+    = [I1:Int] .
+  eq prepareExec(PHI:SymExpr,< CR:ComponentRef : V#13:PeriodicComponent | subcomponents :
+    V#17:Configuration,properties : V#16:PropertyAssociation,features : V#15:Configuration,connections
+    : V#14:Set{Connection},rate : NZ:NzNat,none,V#18:AttributeSet > COMPS:ConstConf,QUEUE:[
+    ObjectQueue])
+    = prepareExec(PHI:SymExpr,COMPS:ConstConf,k-executeStep(PHI:SymExpr,NZ:NzNat,< CR:ComponentRef :
+    V#13:PeriodicComponent | connections : V#14:Set{Connection},features : V#15:Configuration,
+    properties : V#16:PropertyAssociation,rate : NZ:NzNat,subcomponents : V#17:Configuration,
+    V#18:AttributeSet >):: QUEUE:[ObjectQueue]) .
+  eq prepareExecSub(PHI:SymExpr,< CR:ComponentRef : V#19:Ensemble | rate : V#23:NzNat,properties :
+    V#22:PropertyAssociation,features : V#21:Configuration,connections : V#20:Set{Connection},
+    subcomponents : COMPS:ConstConf,none,V#24:AttributeSet >)
+    = < CR:ComponentRef : V#19:Ensemble | subcomponents : prepareExec(PHI:SymExpr,COMPS:ConstConf,nil),
+    connections : V#20:Set{Connection},features : V#21:Configuration,properties :
+    V#22:PropertyAssociation,rate : V#23:NzNat,V#24:AttributeSet > .
+  eq readFeature(FTS:Configuration)
+    = readFeature(FTS:Configuration,none,empty) .
+  eq readFeature(none,FTS':Configuration,FMAP:FeatureMap)
+    = FTS':Configuration | FMAP:FeatureMap .
+  eq readFeature(< PI:FeatureId : V#0:InParameter | properties : V#1:PropertyAssociation,content :
+    V:Value,none,V#2:AttributeSet > FTS:Configuration,FTS':Configuration,FMAP:FeatureMap)
+    = readFeature(FTS:Configuration,< PI:FeatureId : V#0:InParameter | content : bot,properties :
+    V#1:PropertyAssociation,V#2:AttributeSet > FTS':Configuration,insert(PI:FeatureId,V:Value,
+    FMAP:FeatureMap)) .
+  eq readFeature(< PI:FeatureId : V#13:OutParameter | properties : V#15:PropertyAssociation,content :
+    V#14:DataContent,none,V#16:AttributeSet > FTS:Configuration,FTS':Configuration,FMAP:FeatureMap)
+    = readFeature(FTS:Configuration,< PI:FeatureId : V#13:OutParameter | content : V#14:DataContent,
+    properties : V#15:PropertyAssociation,V#16:AttributeSet > FTS':Configuration,insert(PI:FeatureId,
+    bot,FMAP:FeatureMap)) .
+  eq readFeature(< PI:FeatureId : V#17:OutPort | properties : V#19:PropertyAssociation,content :
+    V#18:List{DataContent},none,V#20:AttributeSet > FTS:Configuration,FTS':Configuration,
+    FMAP:FeatureMap)
+    = readFeature(FTS:Configuration,< PI:FeatureId : V#17:OutPort | content : V#18:List{DataContent},
+    properties : V#19:PropertyAssociation,V#20:AttributeSet > FTS':Configuration,insert(PI:FeatureId,
+    bot,FMAP:FeatureMap)) .
+  eq readFeature(< PI:FeatureId : V#3:InPort | properties : V#4:PropertyAssociation,cache : V:Value,
+    content :(bot DCL:List{DataContent}),none,V#5:AttributeSet > FTS:Configuration,FTS':Configuration,
+    FMAP:FeatureMap)
+    = readFeature(FTS:Configuration,< PI:FeatureId : V#3:InPort | content : DCL:List{DataContent},cache
+    : V:Value,properties : V#4:PropertyAssociation,V#5:AttributeSet > FTS':Configuration,insert(
+    PI:FeatureId,V:Value : false,FMAP:FeatureMap)) .
+  eq readFeature(< PI:FeatureId : V#6:InPort | properties : V#7:PropertyAssociation,cache : bot,content
+    :(bot DCL:List{DataContent}),none,V#8:AttributeSet > FTS:Configuration,FTS':Configuration,
+    FMAP:FeatureMap)
+    = readFeature(FTS:Configuration,< PI:FeatureId : V#6:InPort | content : DCL:List{DataContent},cache
+    : bot,properties : V#7:PropertyAssociation,V#8:AttributeSet > FTS':Configuration,FMAP:FeatureMap) .
+  eq readFeature(< PI:FeatureId : V#9:InPort | properties : V#11:PropertyAssociation,cache :
+    V#10:DataContent,content :(V:Value DCL:List{DataContent}),none,V#12:AttributeSet >
+    FTS:Configuration,FTS':Configuration,FMAP:FeatureMap)
+    = readFeature(FTS:Configuration,< PI:FeatureId : V#9:InPort | content : DCL:List{DataContent},cache
+    : V:Value,properties : V#11:PropertyAssociation,V#12:AttributeSet > FTS':Configuration,insert(
+    PI:FeatureId,V:Value : true,FMAP:FeatureMap)) .
+  eq reverse(L:List{DataContent})
+    = $reverse(L:List{DataContent},nil) .
+  eq size(L:List{DataContent})
+    = $size(L:List{DataContent},0) .
+  eq string([S:String])
+    = S:String .
+  eq sub(C:ComponentId,empty)
+    = (empty).Set{Connection} .
+  eq sub(C:ComponentId,(FR1:FeatureRef --> FR2:FeatureRef); CONXS:Set{Connection})
+    = (paste(C:ComponentId,FR1:FeatureRef)--> paste(C:ComponentId,FR2:FeatureRef)); sub(C:ComponentId,
+    CONXS:Set{Connection}) .
+  eq sub(C:ComponentId,NZ:NzNat,PROPS:PropertyAssociation,none)
+    = (none).Configuration .
+  eq sub(C:ComponentId,NZ:NzNat,PROPS:PropertyAssociation,< CR:ComponentRef : CLASS:Cid | rate :
+    NZ':NzNat,properties : PROPS':PropertyAssociation,ATTS:AttributeSet > REST:Configuration)
+    = < paste(C:ComponentId,CR:ComponentRef): CLASS:Cid | rate :(NZ:NzNat * NZ':NzNat),properties :
+    compose(PROPS:PropertyAssociation,PROPS':PropertyAssociation),ATTS:AttributeSet > sub(
+    C:ComponentId,NZ:NzNat,PROPS:PropertyAssociation,REST:Configuration) .
+  eq tail(E:DataContent L:List{DataContent})
+    = L:List{DataContent} .
+  eq target([CR:ComponentRef])
+    = {CR:ComponentRef} .
+  eq target([PI:FeatureId])
+    = {PI:FeatureId} .
+  eq target([VI:VarId])
+    = {VI:VarId} .
+  eq transEnvIn(< P:FeatureId : V#0:InPort | properties : V#2:PropertyAssociation,cache :
+    V#1:DataContent,content :(D:DataContent DL:List{DataContent}),none,V#3:AttributeSet >
+    PORTS:Configuration,(P:FeatureId |-> NPS:NeSet{FeatureRef})ICTB:ConxTable)
+    = transIn(D:DataContent,NPS:NeSet{FeatureRef})transEnvIn(< P:FeatureId : V#0:InPort | content :
+    DL:List{DataContent},cache : V#1:DataContent,properties : V#2:PropertyAssociation,V#3:AttributeSet
+    > PORTS:Configuration,ICTB:ConxTable) .
+  eq transEnvOut(< CR:ComponentRef : V#7:Component | subcomponents : V#10:Configuration,properties :
+    V#9:PropertyAssociation,connections : V#8:Set{Connection},features :(< P:FeatureId : V#4:OutPort |
+    properties : V#5:PropertyAssociation,content : NDL:NeList{DataContent},none,V#6:AttributeSet >
+    PORTS:Configuration),none,V#11:AttributeSet > COMPS:Configuration,((CR:ComponentRef ..
+    P:FeatureId)|-> NPS:NeSet{FeatureRef})OCTB:ConxTable,ICTB:ConxTable)
+    = transOut(NDL:NeList{DataContent},NPS:NeSet{FeatureRef})transEnvOut(< CR:ComponentRef :
+    V#7:Component | features :(< P:FeatureId : V#4:OutPort | content : if contains?(CR:ComponentRef ..
+    P:FeatureId,ICTB:ConxTable)then NDL:NeList{DataContent}else nil fi,properties :
+    V#5:PropertyAssociation,V#6:AttributeSet > PORTS:Configuration),connections : V#8:Set{Connection},
+    properties : V#9:PropertyAssociation,subcomponents : V#10:Configuration,V#11:AttributeSet >
+    COMPS:Configuration,OCTB:ConxTable,ICTB:ConxTable) .
+  eq transFBOut(< CR:ComponentRef : V#15:Component | subcomponents : V#18:Configuration,properties :
+    V#17:PropertyAssociation,connections : V#16:Set{Connection},features :(< P:FeatureId : V#12:OutPort
+    | properties : V#13:PropertyAssociation,content : NDL:NeList{DataContent},none,V#14:AttributeSet >
+    PORTS:Configuration),none,V#19:AttributeSet > COMPS:Configuration,((CR:ComponentRef ..
+    P:FeatureId)|-> NPS:NeSet{FeatureRef})ICTB:ConxTable)
+    = transIn(NDL:NeList{DataContent},NPS:NeSet{FeatureRef})transFBOut(< CR:ComponentRef :
+    V#15:Component | features :(< P:FeatureId : V#12:OutPort | content : nil,properties :
+    V#13:PropertyAssociation,V#14:AttributeSet > PORTS:Configuration),connections : V#16:Set{
+    Connection},properties : V#17:PropertyAssociation,subcomponents : V#18:Configuration,
+    V#19:AttributeSet > COMPS:Configuration,ICTB:ConxTable) .
+  eq transFeature(< P:FeatureId : V#26:Feature | properties : V#27:PropertyAssociation,none,
+    V#28:AttributeSet > PORTS:Configuration,(P:FeatureId -->(CR:ComponentRef .. P':FeatureId));
+    CONXS:Set{Connection},< CR:ComponentRef : V#32:Component | subcomponents : V#35:Configuration,
+    properties : V#34:PropertyAssociation,connections : V#33:Set{Connection},features :(< P':FeatureId
+    : V#29:Feature | properties : V#30:PropertyAssociation,none,V#31:AttributeSet >
+    PORTS':Configuration),none,V#36:AttributeSet > REST:Configuration)
+    = transFeature(< P:FeatureId : V#26:Feature | properties : V#27:PropertyAssociation,
+    V#28:AttributeSet > PORTS:Configuration,CONXS:Set{Connection},< CR:ComponentRef : V#32:Component |
+    features :(combine(< P':FeatureId : V#29:Feature | properties : V#30:PropertyAssociation,
+    V#31:AttributeSet >,< P:FeatureId : V#26:Feature | properties : V#27:PropertyAssociation,
+    V#28:AttributeSet >)PORTS':Configuration),connections : V#33:Set{Connection},properties :
+    V#34:PropertyAssociation,subcomponents : V#35:Configuration,V#36:AttributeSet > REST:Configuration)
+    .
+  eq transFeature(< P:FeatureId : V#37:Feature | properties : V#38:PropertyAssociation,none,
+    V#39:AttributeSet > PORTS:Configuration,((CR:ComponentRef .. P':FeatureId)--> P:FeatureId);
+    CONXS:Set{Connection},< CR:ComponentRef : V#43:Component | subcomponents : V#46:Configuration,
+    properties : V#45:PropertyAssociation,connections : V#44:Set{Connection},features :(< P':FeatureId
+    : V#40:Feature | properties : V#41:PropertyAssociation,none,V#42:AttributeSet >
+    PORTS':Configuration),none,V#47:AttributeSet > REST:Configuration)
+    = transFeature(< P:FeatureId : V#37:Feature | properties : V#38:PropertyAssociation,
+    V#39:AttributeSet > PORTS:Configuration,CONXS:Set{Connection},< CR:ComponentRef : V#43:Component |
+    features :(combine(< P':FeatureId : V#40:Feature | properties : V#41:PropertyAssociation,
+    V#42:AttributeSet >,< P:FeatureId : V#37:Feature | properties : V#38:PropertyAssociation,
+    V#39:AttributeSet >)PORTS':Configuration),connections : V#44:Set{Connection},properties :
+    V#45:PropertyAssociation,subcomponents : V#46:Configuration,V#47:AttributeSet > REST:Configuration)
+    .
+  eq transIn(NDL:NeList{DataContent},empty)
+    = (none).Configuration .
+  eq transOut(NDL:NeList{DataContent},empty)
+    = (none).Configuration .
+  eq transferInputs(< CR:ComponentRef : V#20:Ensemble | rate : V#22:NzNat,properties :
+    V#21:PropertyAssociation,connections : CONXS:Set{Connection},subcomponents : COMPS:Configuration,
+    features : PORTS:Configuration,none,V#23:AttributeSet >)
+    = < CR:ComponentRef : V#20:Ensemble | features : transEnvIn(PORTS:Configuration,inner-tb(CONXS:Set{
+    Connection})),subcomponents : transFBOut(COMPS:Configuration,inner-tb(CONXS:Set{Connection})),
+    connections : CONXS:Set{Connection},properties : V#21:PropertyAssociation,rate : V#22:NzNat,
+    V#23:AttributeSet > .
+  eq transferResults(< CR:ComponentRef : V#25:Ensemble | rate : V#29:NzNat,properties :
+    V#28:PropertyAssociation,features : V#27:Configuration,connections : V#26:Set{Connection},
+    subcomponents : CONF:Configuration,none,V#30:AttributeSet >)
+    = [true]|| transferResultsAux(< CR:ComponentRef : V#25:Ensemble | subcomponents :
+    CONF:Configuration,connections : V#26:Set{Connection},features : V#27:Configuration,properties :
+    V#28:PropertyAssociation,rate : V#29:NzNat,V#30:AttributeSet >) .
+  eq transferResults(< CR:ComponentRef : V#31:Ensemble | rate : V#35:NzNat,properties :
+    V#34:PropertyAssociation,features : V#33:Configuration,connections : V#32:Set{Connection},
+    subcomponents : PHI:SymExpr || CONF:Configuration,none,V#36:AttributeSet >)
+    = PHI:SymExpr || transferResultsAux(< CR:ComponentRef : V#31:Ensemble | subcomponents :
+    CONF:Configuration,connections : V#32:Set{Connection},features : V#33:Configuration,properties :
+    V#34:PropertyAssociation,rate : V#35:NzNat,V#36:AttributeSet >) .
+  eq transferResultsAux(< CR:ComponentRef : V#24:Ensemble | rate : V#27:NzNat,properties :
+    V#26:PropertyAssociation,features : V#25:Configuration,connections : CONXS:Set{Connection},
+    subcomponents : COMPS:Configuration,none,V#28:AttributeSet >)
+    = < CR:ComponentRef : V#24:Ensemble | subcomponents : transEnvOut(COMPS:Configuration,outer-tb(
+    CONXS:Set{Connection}),inner-tb(CONXS:Set{Connection})),connections : CONXS:Set{Connection},
+    features : V#25:Configuration,properties : V#26:PropertyAssociation,rate : V#27:NzNat,
+    V#28:AttributeSet > .
+  eq transitionResult(L:Location,VAL:VarValuation | FMAP:FeatureMap | COMPS:Configuration |
+    PROPS:PropertyAssociation)
+    = L:Location | FMAP:FeatureMap | COMPS:Configuration .
+  eq trunc(K:Int)
+    = K:Int .
+  eq trunc(I:NzInt / N:NzNat)
+    = I:NzInt quo N:NzNat .
+  eq union(S:PropertyAssociation,S':PropertyAssociation)
+    = S:PropertyAssociation ; S':PropertyAssociation .
+  eq union(S:Set{Connection},S':Set{Connection})
+    = S:Set{Connection}; S':Set{Connection} .
+  eq union(S:Set{FeatureRef},S':Set{FeatureRef})
+    = S:Set{FeatureRef}, S':Set{FeatureRef} .
+  eq union(S:Set{Location},S':Set{Location})
+    = S:Set{Location}S':Set{Location} .
+  eq union(S:Set{Transition},S':Set{Transition})
+    = S:Set{Transition}; S':Set{Transition} .
+  eq union(S:Set{VarId},S':Set{VarId})
+    = S:Set{VarId}; S':Set{VarId} .
+  eq value({B:Bool})
+    = [B:Bool] .
+  eq value({F:Float})
+    = [F:Float] .
+  eq value({I:Int})
+    = [I:Int] .
+  eq value({S:String})
+    = [S:String] .
+  eq writeFeature(FMAP:FeatureMap,FTS:Configuration)
+    = writeFeature(FMAP:FeatureMap,FTS:Configuration,none) .
+  eq writeFeature(FMAP:FeatureMap,< PI:FeatureId : V#21:OutPort | properties :
+    V#22:PropertyAssociation,content : DCL:List{DataContent},none,V#23:AttributeSet >
+    FTS:Configuration,FTS':Configuration)
+    = if $hasMapping(FMAP:FeatureMap,PI:FeatureId)and FMAP:FeatureMap[PI:FeatureId]:: Value then
+    writeFeature(FMAP:FeatureMap,FTS:Configuration,< PI:FeatureId : V#21:OutPort | content :(DCL:List{
+    DataContent}FMAP:FeatureMap[PI:FeatureId]),properties : V#22:PropertyAssociation,V#23:AttributeSet
+    > FTS':Configuration)else writeFeature(FMAP:FeatureMap,FTS:Configuration,< PI:FeatureId :
+    V#21:OutPort | content :(DCL:List{DataContent}bot),properties : V#22:PropertyAssociation,
+    V#23:AttributeSet > FTS':Configuration)fi .
+  eq writeFeature((PI:FeatureId |-> V:Value, FMAP:FeatureMap),< PI:FeatureId : V#24:OutParameter |
+    properties : V#25:PropertyAssociation,content : bot,none,V#26:AttributeSet > FTS:Configuration,
+    FTS':Configuration)
+    = writeFeature(FMAP:FeatureMap,FTS:Configuration,< PI:FeatureId : V#24:OutParameter | content :
+    V:Value,properties : V#25:PropertyAssociation,V#26:AttributeSet > FTS':Configuration) .
+  eq | S:PropertyAssociation |
+    = $card(S:PropertyAssociation,0) .
+  eq | S:Set{Connection}|
+    = $card(S:Set{Connection},0) .
+  eq | S:Set{FeatureRef}|
+    = $card(S:Set{FeatureRef},0) .
+  eq | S:Set{Location}|
+    = $card(S:Set{Location},0) .
+  eq | S:Set{Transition}|
+    = $card(S:Set{Transition},0) .
+  eq | S:Set{VarId}|
+    = $card(S:Set{VarId},0) .
+  ceq maximum(R:Time,R':Time)
+    = R:Time
+    if R':Time le R:Time = true .
+  ceq minimum(R:Time,R':Time)
+    = R':Time
+    if R':Time le R:Time = true .
+  eq $card(E:Connection ; S:Set{Connection},C:Nat)
+    = $card(S:Set{Connection},C:Nat + 1) [owise] .
+  eq $card(E:Property ; S:PropertyAssociation,C:Nat)
+    = $card(S:PropertyAssociation,C:Nat + 1) [owise] .
+  eq $card(E:Transition ; S:Set{Transition},C:Nat)
+    = $card(S:Set{Transition},C:Nat + 1) [owise] .
+  eq $card(E:VarId ; S:Set{VarId},C:Nat)
+    = $card(S:Set{VarId},C:Nat + 1) [owise] .
+  eq $card(E:Location S:Set{Location},C:Nat)
+    = $card(S:Set{Location},C:Nat + 1) [owise] .
+  eq $card((E:FeatureRef, S:Set{FeatureRef}),C:Nat)
+    = $card(S:Set{FeatureRef},C:Nat + 1) [owise] .
+  eq $hasMapping(M:FeatureMap,D:FeatureId)
+    = false [owise] .
+  eq $hasMapping(M:VarValuation,D:VarId)
+    = false [owise] .
+  eq V1:Expression = V2:Expression
+    = [V1:Expression == V2:Expression] [owise] .
+  eq M:FeatureMap[D:FeatureId]
+    = undefined [owise] .
+  eq M:VarValuation[D:VarId]
+    = undefined [owise] .
+  eq E:Connection in S:Set{Connection}
+    = false [owise] .
+  eq E:FeatureRef in S:Set{FeatureRef}
+    = false [owise] .
+  eq E:Location in S:Set{Location}
+    = false [owise] .
+  eq E:Property in S:PropertyAssociation
+    = false [owise] .
+  eq E:Transition in S:Set{Transition}
+    = false [owise] .
+  eq E:VarId in S:Set{VarId}
+    = false [owise] .
+  eq applyAdaptors(NZ:NzNat,PORTS:Configuration,PORTS':Configuration)
+    = PORTS:Configuration PORTS':Configuration [owise] .
+  eq collapse(REST:Configuration)
+    = REST:Configuration [owise] .
+  eq contains?(PN:FeatureRef,CTB:ConxTable)
+    = false [owise] .
+  eq delete(E:Connection,S:Set{Connection})
+    = S:Set{Connection} [owise] .
+  eq delete(E:FeatureRef,S:Set{FeatureRef})
+    = S:Set{FeatureRef} [owise] .
+  eq delete(E:Location,S:Set{Location})
+    = S:Set{Location} [owise] .
+  eq delete(E:Property,S:PropertyAssociation)
+    = S:PropertyAssociation [owise] .
+  eq delete(E:Transition,S:Set{Transition})
+    = S:Set{Transition} [owise] .
+  eq delete(E:VarId,S:Set{VarId})
+    = S:Set{VarId} [owise] .
+  eq inner-tb(CONXS:Set{Connection},CTB:ConxTable)
+    = normalize(CTB:ConxTable) [owise] .
+  eq insert(D:FeatureId,R:DataContent,M:FeatureMap)
+    = M:FeatureMap, D:FeatureId |-> R:DataContent [owise] .
+  eq insert(D:VarId,R:DataContent,M:VarValuation)
+    = M:VarValuation ; D:VarId |-> R:DataContent [owise] .
+  eq link(CONXS:Set{Connection})
+    = CONXS:Set{Connection} [owise] .
+  eq linkAll(CONX:Connection,CONXS:Set{Connection})
+    = CONXS:Set{Connection} [owise] .
+  eq normalize(CTB:ConxTable)
+    = CTB:ConxTable [owise] .
+  eq open(< C:ComponentId : V#20:Component | subcomponents : V#24:Configuration,properties :
+    V#23:PropertyAssociation,features : V#22:Configuration,connections : V#21:Set{Connection},none,
+    V#25:AttributeSet >)
+    = < C:ComponentId : V#20:Component | connections : V#21:Set{Connection},features :
+    V#22:Configuration,properties : V#23:PropertyAssociation,subcomponents : V#24:Configuration,
+    V#25:AttributeSet > [owise] .
+  eq outer-tb(CONXS:Set{Connection},CTB:ConxTable)
+    = normalize(CTB:ConxTable) [owise] .
+  eq prepareExec(PHI:SymExpr,COMPS:ConstConf,QUEUE:[ObjectQueue])
+    = QUEUE:[ObjectQueue]| COMPS:ConstConf [owise] .
+  eq transEnvIn(PORTS:Configuration,ICTB:ConxTable)
+    = PORTS:Configuration [owise] .
+  eq transEnvOut(COMPS:Configuration,OCTB:ConxTable,ICTB:ConxTable)
+    = COMPS:Configuration [owise] .
+  eq transFBOut(COMPS:Configuration,ICTB:ConxTable)
+    = COMPS:Configuration [owise] .
+  eq transFeature(PORTS:Configuration,CONXS:Set{Connection},REST:Configuration)
+    = REST:Configuration [owise] .
+  eq writeFeature(FMAP:FeatureMap,FTS:Configuration,FTS':Configuration)
+    = FTS:Configuration FTS':Configuration [owise] .
+  rl execAction({A:Action & REST:ActionGroup},SYMLCF:SymLocalBehaviorConf)
+    => execAction({REST:ActionGroup},execAction(A:Action,SYMLCF:SymLocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup((elsif(
+    E':Expression)AS':ActionGroup)ELSIFS:ElseIfs)else AS'':ActionGroup end if,PHI:SymExpr |
+    LCF:LocalBehaviorConf)
+    => execAction(AS:ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and eval(E:Expression,LCF:LocalBehaviorConf) .
+  crl execAction(if(E:Expression)AS:ActionGroup((elsif(
+    E':Expression)AS':ActionGroup)ELSIFS:ElseIfs)else AS'':ActionGroup end if,PHI:SymExpr |
+    LCF:LocalBehaviorConf)
+    => execAction(if(E':Expression)AS':ActionGroup ELSIFS:ElseIfs else AS'':ActionGroup end if,
+    PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and not(eval(E:Expression,LCF:LocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup(elsif(E':Expression)AS':ActionGroup)else
+    AS'':ActionGroup end if,PHI:SymExpr | LCF:LocalBehaviorConf)
+    => execAction(AS:ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and eval(E:Expression,LCF:LocalBehaviorConf) .
+  crl execAction(if(E:Expression)AS:ActionGroup(elsif(E':Expression)AS':ActionGroup)else
+    AS'':ActionGroup end if,PHI:SymExpr | LCF:LocalBehaviorConf)
+    => execAction(if(E':Expression)AS':ActionGroup else AS'':ActionGroup end if,PHI':SymExpr |
+    LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and not(eval(E:Expression,LCF:LocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup((elsif(E':Expression)AS':ActionGroup)ELSIFS:ElseIfs)end
+    if,PHI:SymExpr | LCF:LocalBehaviorConf)
+    => execAction(AS:ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and eval(E:Expression,LCF:LocalBehaviorConf) .
+  crl execAction(if(E:Expression)AS:ActionGroup((elsif(E':Expression)AS':ActionGroup)ELSIFS:ElseIfs)end
+    if,PHI:SymExpr | LCF:LocalBehaviorConf)
+    => execAction(if(E':Expression)AS':ActionGroup ELSIFS:ElseIfs end if,PHI':SymExpr |
+    LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and not(eval(E:Expression,LCF:LocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup(elsif(E':Expression)AS':ActionGroup)end if,PHI:SymExpr
+    | LCF:LocalBehaviorConf)
+    => execAction(AS:ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and eval(E:Expression,LCF:LocalBehaviorConf) .
+  crl execAction(if(E:Expression)AS:ActionGroup(elsif(E':Expression)AS':ActionGroup)end if,PHI:SymExpr
+    | LCF:LocalBehaviorConf)
+    => execAction(if(E':Expression)AS':ActionGroup end if,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and not(eval(E:Expression,LCF:LocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup else AS':ActionGroup end if,PHI:SymExpr |
+    LCF:LocalBehaviorConf)
+    => execAction(AS':ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and not(eval(E:Expression,LCF:LocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup else AS':ActionGroup end if,PHI:SymExpr |
+    LCF:LocalBehaviorConf)
+    => execAction(AS:ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and eval(E:Expression,LCF:LocalBehaviorConf) .
+  crl execAction(if(E:Expression)AS:ActionGroup end if,PHI:SymExpr | LCF:LocalBehaviorConf)
+    => PHI':SymExpr | LCF:LocalBehaviorConf
+    if PHI':SymExpr := PHI:SymExpr and not(eval(E:Expression,LCF:LocalBehaviorConf)) .
+  crl execAction(if(E:Expression)AS:ActionGroup end if,PHI:SymExpr | LCF:LocalBehaviorConf)
+    => execAction(AS:ActionGroup,PHI':SymExpr | LCF:LocalBehaviorConf)
+    if PHI':SymExpr := PHI:SymExpr and eval(E:Expression,LCF:LocalBehaviorConf) .
+  crl {PHI:SymExpr || < C:ComponentId : V#0:System | subcomponents : V#3:Configuration,rate :
+    V#2:NzNat,connections : V#1:Set{Connection},properties :((TimingProperties::Period =>{T:Time});(
+    HybridAADL::Synchronous =>{true}); PROPS:PropertyAssociation),features : none,none,V#4:AttributeSet
+    >}
+    => {PHI'':SymExpr || OBJ:Object} in time T:Time
+    if executeStep(PHI:SymExpr || < C:ComponentId : V#0:System | connections : V#1:Set{Connection},
+    features : none,properties :((TimingProperties::Period =>{T:Time});(HybridAADL::Synchronous =>{
+    true}); PROPS:PropertyAssociation),rate : V#2:NzNat,subcomponents : V#3:Configuration,
+    V#4:AttributeSet >)=> PHI':SymExpr || OBJ:Object /\ PHI'':SymExpr := PHI:SymExpr and PHI':SymExpr [
+    label step] .
+  crl execTransSystem(L:Location,LS:Set{Location},(L:Location -[GUARD:TransGuard]-> L':Location
+    ACTION:ActionBlock); TRS':Set{Transition},VAL:VarValuation,GCF:GlobalBehaviorConf,PHI:SymExpr)
+    => if L':Location in LS:Set{Location}then PHI'':SymExpr | transitionResult(L':Location,
+    RESULT:LocalBehaviorConf)else execTransSystem(L':Location,LS:Set{Location},TRS':Set{Transition},
+    VAL:VarValuation,global(RESULT:LocalBehaviorConf),PHI'':SymExpr)fi
+    if execAction(ACTION:ActionBlock,PHI:SymExpr | VAL:VarValuation | GCF:GlobalBehaviorConf)=>
+    PHI':SymExpr | RESULT:LocalBehaviorConf /\ PHI'':SymExpr := PHI':SymExpr and guardConstraint(
+    GUARD:TransGuard,VAL:VarValuation | GCF:GlobalBehaviorConf) [label trans] .
+endm

@@ -1,0 +1,25 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-env-semantics.maude
+
+----------------------------------------
+select TEST-TRANS .
+
+red x(t) = (v[t] * v[t]) + (c[x] + [[1]]) .
+
+red (x(t) = (v[t] * v[t]) + (c[x] + [[1]])) ; 
+    (y(s) = v[s] + ((c[x] - c[y]) * [[0.5]])) .
+  
+red d/dt[x] = (c[x] * c[y]) + [[1]] .
+
+red (d/dt[x] = (c[x] * c[y]) + [[1]]) ;
+    (d/dt[y] = c[y] - [[2]]) .
+
+
+red trans .
+
+red flows .
+

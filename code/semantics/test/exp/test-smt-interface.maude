@@ -1,0 +1,28 @@
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+select SMT-TRANS .
+
+red tr('`[_`]['-_['s_['0.Zero]]]) .
+
+red tr('_<_['_+_['`[_`]['_/_['s_^9['0.Zero],'s_^4['0.Zero]]],'-_['r['0.Zero]]],'`[_`]['0.Zero]]) .
+
+red tr('_?_:_['_>_['r['s_['0.Zero]],'r['s_['0.Zero]]],'_/_['`[_`][
+    '_/_['s_^2['0.Zero],'s_^5['0.Zero]]],'`[_`]['0.Zero]],'_+_['_*_['`[_`]['s_[
+    '0.Zero]],'`[_`]['_/_['s_^3['0.Zero],'s_^4['0.Zero]]]],'_*_['`[_`]['s_^2[
+    '0.Zero]],'r['s_['0.Zero]]]]]) .
+
+
+
+select SMT-CHECKSAT .
+
+red tr(upTerm(b("e.f",1) and r("a.b.c",1) < [2])) .
+
+red check-sat(r(0) < [3] and r(0) > [1/2]) .
+red check-sat(r(0) < [3/7] and r(0) > [1/2]) .
+
+red check-sat(r("a.b",0) < [3] and r("a.b",0) > [1/2]) .
+red check-sat(r("a",0) < [3/7] and r("b",0) > [1/2]) .
+red check-sat(r("a",0) < [3/7] and r("a",0) > [1/2]) .
+

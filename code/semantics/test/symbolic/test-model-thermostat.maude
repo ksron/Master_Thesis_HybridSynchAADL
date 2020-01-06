@@ -1,0 +1,34 @@
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+load ../syntax/module-thermostat.maude
+
+---------------------------------------------
+mod TEST-THERMOSTAT-SYSTEM-MOD is
+  including THERMOSTAT-SYSTEM .
+  including MODEL-TRANSITION-SYSTEM .
+
+  op initConst : -> BoolExp .
+  eq initConst =
+        [true] .
+
+  op initState : -> Object .
+  eq initState = initialize(model) .
+endm
+
+
+mod TEST-THERMOSTAT-SYSTEM is
+  including TEST-THERMOSTAT-SYSTEM-MOD .
+
+  eq @m@ = ['TEST-THERMOSTAT-SYSTEM-MOD] .
+endm
+
+red initState .
+
+red finalConst(initState) .
+
+
+search [,5] {initConst || initState, false} =>+ C:GlobalSystem .
+
+search [,5] {initConst || initState, true} =>+ C:GlobalSystem .
+

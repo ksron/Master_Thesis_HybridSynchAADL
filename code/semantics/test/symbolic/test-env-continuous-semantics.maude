@@ -1,0 +1,13 @@
+
+set show timing off .
+
+load ../../interpreter-symbolic.maude
+
+load module-env-semantics.maude
+
+
+----------------------------------------
+select TEST-ENV-CONTINUOUS-SEMANTICS .
+
+red execFlow([funcs], r("time",0), bcf) .
+

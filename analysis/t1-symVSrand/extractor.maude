@@ -1,0 +1,28 @@
+view PropSpec from TRIV to SPECIFICATION-LANGUAGE-SYNTAX is
+  sort Elt to PropSpec .
+endv
+
+mod PRINT-DATA is
+  protecting SPECIFICATION-LANGUAGE-SEMANTICS .
+  including SET{PropSpec} * (op _,_ : Set{PropSpec} Set{PropSpec} -> Set{PropSpec} to _;_) .
+  including SET{Exp} * (op _,_ : Set{Exp} Set{Exp} -> Set{Exp} to _;_) .
+
+
+  var PS : Set{PropSpec} .
+  vars PS1 PS2 : PropSpec .
+  vars COMPS REST : Configuration .
+  var ATTS : AttributeSet .
+  var E : Exp .
+  var B : BoolExp .
+    
+  op printData : Set{PropSpec} Configuration ~> Set{Exp} .
+  op printData : PropSpec Configuration ~> Exp .
+  ceq printData((PS1 ; PS), COMPS) = printData(PS1, COMPS) ;  printData(PS, COMPS) 
+   if PS =/= empty .
+  eq printData((PS1 ; PS), COMPS) = printData(PS1, COMPS) [owise].
+  eq printData(PS1, COMPS) = data(evalPS(normalize(nilComponentRef, PS1), COMPS)) .
+
+  op data : DataContent ~> Exp . 
+  eq data(E # B) = E .
+
+endm

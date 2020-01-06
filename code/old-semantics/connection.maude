@@ -1,0 +1,16 @@
+
+(fmod CONNECTION is
+  including FEATURE-REF .
+  including AADL-PROPERTY-ASSOCIATION .
+
+  sort Connection .
+  op _-->_ : FeatureRef FeatureRef -> Connection [ctor] .
+endfm)
+
+(view Connection from TRIV to CONNECTION is
+  sort Elt to Connection .
+endv)
+
+(fmod CONNECTION-SET is
+  including SET{Connection} * (op _`,_ to _;_) .
+endfm)

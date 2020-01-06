@@ -1,0 +1,1681 @@
+==========================================
+search [, 5] in TEST-SYMBOLIC-ANALYSIS : {lookup(initState, top . environment,
+    (c[e] < [[1.4300000000000001e+1]]) and (c[e] > [[1.5]])) || initState,
+    false} =>+ {B:BoolExp || OBJ:Object,false} such that check-sat(B:BoolExp
+    and lookup(OBJ:Object, top . environment, c[e] > [[3.3999999999999999]])) =
+    true .
+
+Solution 1 (state 1)
+states: 2  rewrites: 4608
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [30] < [15/2] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [2] and not [
+    39631676720860365/18014398509481984] < r("top.environment", 2) and not [
+    15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2] < [
+    10] and not r("top.environment", 2) < [0] and not r("top.environment", 3) <
+    r("top.environment", 2) and not b("top.environment", 0) and not b(
+    "top.environment", 1) and not b("top.environment", 3) and not b(
+    "top.environment", 4) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and [3/2] < r(
+    "top.environment", 1) and r("top.environment", 1) < [
+    4025092166962381/281474976710656] and b("top.environment", 2)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [false] > < temp : DataInPort |
+    properties : none,content : [0] # [false],cache : r("top.environment", 0) #
+    b("top.environment", 2) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/2] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [2] # [true] >),connections : empty,varGen :
+    < "top.controller",0,0 >,currState : loc([0]),completeStates : loc([0]),
+    variables : x : Real,transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(
+    v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(
+    v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]->
+    loc([0]) {skip}),loopBound : 0,transBound : 2 > < environment : Env |
+    properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 3),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    4),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 4) # b("top.environment", 5),envCache : r(
+    "top.environment", 4) # b("top.environment", 5),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + r(
+    "top.environment", 1) + r("top.environment", 1) # [true] > < e : Data |
+    properties : none,features : none,subcomponents : none,connections : empty,
+    value : r("top.environment", 1) # [true] >),connections : x ==> out,varGen
+    : < "top.environment",5,6 >,currMode : loc([0]),jumps : ((loc([0]) -[on]->
+    loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([1])) ;
+    loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e]) + (v[
+    t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) - (v[t]
+    * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response :
+    controller :(3,4) >),connections : (((controller .. on) --> (environment ..
+    on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 2 (state 2)
+states: 3  rewrites: 12909
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [30] < [15/2] + (b("top.environment", 2) ?
+    r("top.environment", 0) : [0]) / [2] and not [30] < [15/4] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [2] and not [39631676720860365/18014398509481984] < r("top.environment",
+    2) and not [39631676720860365/18014398509481984] < r("top.environment", 5)
+    and not [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0])
+    / [2] < [10] and not [15/4] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [4] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [2] < [10] and not r(
+    "top.environment", 2) < [0] and not r("top.environment", 3) < r(
+    "top.environment", 2) and not r("top.environment", 5) < [0] and not r(
+    "top.environment", 6) < r("top.environment", 5) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and not b(
+    "top.environment", 6) and not b("top.environment", 7) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and r("top.environment",
+    0) === [16] + [3602879701896397/18014398509481984] * r("top.environment",
+    2) + r("top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and [3/2] < r(
+    "top.environment", 1) and r("top.environment", 1) < [
+    4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [false] > < temp : DataInPort |
+    properties : none,content : [0] # [false],cache : r("top.environment", 4) #
+    b("top.environment", 5) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/4] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [4] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [2] # [true] >),
+    connections : empty,varGen : < "top.controller",0,0 >,currState : loc([0]),
+    completeStates : loc([0]),variables : x : Real,transitions : ((loc([0]) -[
+    on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x]
+    < c[lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]})
+    ; loc([1]) -[otherwise]-> loc([0]) {skip}),loopBound : 0,transBound : 2 > <
+    environment : Env | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 6),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    7),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 7) # b("top.environment", 8),envCache : r(
+    "top.environment", 7) # b("top.environment", 8),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) # [true] > < e : Data | properties : none,features
+    : none,subcomponents : none,connections : empty,value : r(
+    "top.environment", 1) # [true] >),connections : x ==> out,varGen : <
+    "top.environment",8,9 >,currMode : loc([0]),jumps : ((loc([0]) -[on]-> loc(
+    [1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([1])) ; loc([
+    1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e]) + (v[t] * [
+    [2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) - (v[t] * [[
+    1.0000000000000001e-1]]))]),sampling : controller :(0,2),response :
+    controller :(3,4) >),connections : (((controller .. on) --> (environment ..
+    on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 3 (state 3)
+states: 4  rewrites: 15653
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 7) and not [30]
+    < [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2]
+    and not [39631676720860365/18014398509481984] < r("top.environment", 2) and
+    not [39631676720860365/18014398509481984] < r("top.environment", 5) and not
+    [75660473739824333/18014398509481984] < r("top.environment", 6) and not [
+    15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2] < [
+    10] and not [15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [
+    0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not r("top.environment", 2) < [0]
+    and not r("top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < [3] and not
+    r("top.environment", 6) < r("top.environment", 5) and not r(
+    "top.environment", 7) < r("top.environment", 6) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and r("top.environment",
+    0) === [16] + [3602879701896397/18014398509481984] * r("top.environment",
+    2) + r("top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 7) === [5] and [30] < [
+    15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (
+    b("top.environment", 5) ? r("top.environment", 4) : r("top.environment",
+    0)) / [2] and [3/2] < r("top.environment", 1) and r("top.environment", 1) <
+    [4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 7)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 4) # b(
+    "top.environment", 5) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/4] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [4] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [2] # [true] >),
+    connections : empty,varGen : < "top.controller",0,0 >,currState : loc([0]),
+    completeStates : loc([0]),variables : x : Real,transitions : ((loc([0]) -[
+    on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x]
+    < c[lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]})
+    ; loc([1]) -[otherwise]-> loc([0]) {skip}),loopBound : 0,transBound : 2 > <
+    environment : Env | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 6),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    7),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 8) # b("top.environment", 8),envCache : r(
+    "top.environment", 8) # b("top.environment", 8),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 6) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 7) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) # [true] > < e : Data |
+    properties : none,features : none,subcomponents : none,connections : empty,
+    value : r("top.environment", 1) # [true] >),connections : x ==> out,varGen
+    : < "top.environment",9,9 >,currMode : loc([0]),jumps : ((loc([0]) -[on]->
+    loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([1])) ;
+    loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e]) + (v[
+    t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) - (v[t]
+    * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response :
+    controller :(3,4) >),connections : (((controller .. on) --> (environment ..
+    on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 4 (state 4)
+states: 5  rewrites: 26340
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 8) and not [5] <
+    r("top.environment", 9) and not [30] < [15/2] + (b("top.environment", 2) ?
+    r("top.environment", 0) : [0]) / [2] and not [30] < [15/4] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [2] and not [30] < [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] and not [39631676720860365/18014398509481984] < r("top.environment",
+    2) and not [39631676720860365/18014398509481984] < r("top.environment", 5)
+    and not [39631676720860365/18014398509481984] < r("top.environment", 8) and
+    not [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [
+    2] < [10] and not [15/4] + (b("top.environment", 2) ? r("top.environment",
+    0) : [0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] < [10] and not r("top.environment", 2) < [0] and not r(
+    "top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < r(
+    "top.environment", 5) and not r("top.environment", 8) < [0] and not r(
+    "top.environment", 9) < r("top.environment", 8) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and not b(
+    "top.environment", 6) and not b("top.environment", 7) and not b(
+    "top.environment", 9) and not b("top.environment", 10) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and r(
+    "top.environment", 7) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 9) === [5] and [3/2] < r("top.environment", 1) and
+    r("top.environment", 1) < [4025092166962381/281474976710656] and b(
+    "top.environment", 2) and b("top.environment", 5) and b("top.environment",
+    8)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [false] > < temp : DataInPort |
+    properties : none,content : [0] # [false],cache : r("top.environment", 7) #
+    b("top.environment", 8) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] # [true] >),connections : empty,varGen : < "top.controller",0,0 >,
+    currState : loc([0]),completeStates : loc([0]),variables : x : Real,
+    transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[
+    temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(v[x] > c[upper])off !)
+    end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]-> loc([0]) {skip}),
+    loopBound : 0,transBound : 2 > < environment : Env | properties : ((
+    TimingProperties::Period => {{5}}) ; HybridSynchAADL::MaxClockDeviation =>
+    {{1.0000000000000001e-1}}),features : (< on : EnvInPort | properties :
+    none,content : * # [false],envCache : * # b("top.environment", 9),target :
+    controller > < off : EnvInPort | properties : none,content : * # [false],
+    envCache : * # b("top.environment", 10),target : controller > < out :
+    EnvOutPort | properties : none,content : r("top.environment", 10) # b(
+    "top.environment", 11),envCache : r("top.environment", 10) # b(
+    "top.environment", 11),target : controller >),subcomponents : (< x : Data |
+    properties : DataModel::InitialValue => {{16}},features : none,
+    subcomponents : none,connections : empty,value : [16] + - r(
+    "top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    # [true] > < e : Data | properties : none,features : none,subcomponents :
+    none,connections : empty,value : r("top.environment", 1) # [true] >),
+    connections : x ==> out,varGen : < "top.environment",11,12 >,currMode :
+    loc([0]),jumps : ((loc([0]) -[on]-> loc([1])) ; (loc([0]) -[off]-> loc([
+    0])) ; (loc([1]) -[on]-> loc([1])) ; loc([1]) -[off]-> loc([0])),flows : ((
+    loc([0]) [x(t)= ((c[x] + c[e]) + (v[t] * [[2.0000000000000001e-1]]))]) ;
+    loc([1]) [x(t)= ((c[x] + c[e]) - (v[t] * [[1.0000000000000001e-1]]))]),
+    sampling : controller :(0,2),response : controller :(3,4) >),connections :
+    (((controller .. on) --> (environment .. on)) ; ((controller .. off) --> (
+    environment .. off)) ; (environment .. out) --> (controller .. temp)) >
+
+Solution 5 (state 5)
+states: 6  rewrites: 30673
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 8) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 10) and not [30]
+    < [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2]
+    and not [30] < [15/4] + (b("top.environment", 2) ? r("top.environment", 0)
+    : [0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] and not [39631676720860365/18014398509481984]
+    < r("top.environment", 2) and not [39631676720860365/18014398509481984] <
+    r("top.environment", 5) and not [39631676720860365/18014398509481984] < r(
+    "top.environment", 8) and not [75660473739824333/18014398509481984] < r(
+    "top.environment", 9) and not [15/2] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [2] < [10] and not [15/4] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [2] < [10] and not [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] < [10] and not r("top.environment", 2) < [0] and not r(
+    "top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < r(
+    "top.environment", 5) and not r("top.environment", 8) < [0] and not r(
+    "top.environment", 9) < [3] and not r("top.environment", 9) < r(
+    "top.environment", 8) and not r("top.environment", 10) < r(
+    "top.environment", 9) and not b("top.environment", 0) and not b(
+    "top.environment", 1) and not b("top.environment", 3) and not b(
+    "top.environment", 4) and not b("top.environment", 6) and not b(
+    "top.environment", 7) and (b("top.environment", 2) or b("top.environment",
+    5)) and (b("top.environment", 5) or b("top.environment", 8)) and r(
+    "top.environment", 0) === [16] + [3602879701896397/18014398509481984] * r(
+    "top.environment", 2) + r("top.environment", 1) and r("top.environment", 3)
+    === [5] and r("top.environment", 4) === [16] + - r("top.environment", 2) *
+    [3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and r(
+    "top.environment", 7) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 10) === [5] and [30] < [15/8] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [8] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [4] + (b("top.environment", 8) ? r("top.environment", 7) : r(
+    "top.environment", 4)) / [2] and [3/2] < r("top.environment", 1) and r(
+    "top.environment", 1) < [4025092166962381/281474976710656] and b(
+    "top.environment", 2) and b("top.environment", 5) and b("top.environment",
+    8) and b("top.environment", 10)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 7) # b(
+    "top.environment", 8) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] # [true] >),connections : empty,varGen : < "top.controller",0,0 >,
+    currState : loc([0]),completeStates : loc([0]),variables : x : Real,
+    transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[
+    temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(v[x] > c[upper])off !)
+    end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]-> loc([0]) {skip}),
+    loopBound : 0,transBound : 2 > < environment : Env | properties : ((
+    TimingProperties::Period => {{5}}) ; HybridSynchAADL::MaxClockDeviation =>
+    {{1.0000000000000001e-1}}),features : (< on : EnvInPort | properties :
+    none,content : * # [false],envCache : * # b("top.environment", 9),target :
+    controller > < off : EnvInPort | properties : none,content : * # [false],
+    envCache : * # b("top.environment", 10),target : controller > < out :
+    EnvOutPort | properties : none,content : r("top.environment", 11) # b(
+    "top.environment", 11),envCache : r("top.environment", 11) # b(
+    "top.environment", 11),target : controller >),subcomponents : (< x : Data |
+    properties : DataModel::InitialValue => {{16}},features : none,
+    subcomponents : none,connections : empty,value : [16] + - r(
+    "top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) # [true] > < e : Data | properties : none,
+    features : none,subcomponents : none,connections : empty,value : r(
+    "top.environment", 1) # [true] >),connections : x ==> out,varGen : <
+    "top.environment",12,12 >,currMode : loc([0]),jumps : ((loc([0]) -[on]->
+    loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([1])) ;
+    loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e]) + (v[
+    t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) - (v[t]
+    * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response :
+    controller :(3,4) >),connections : (((controller .. on) --> (environment ..
+    on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 6 (state 6)
+states: 7  rewrites: 45820
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 7) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 10) and not [5]
+    < r("top.environment", 11) and not [30] < [15/2] + (b("top.environment", 2)
+    ? r("top.environment", 0) : [0]) / [2] and not [
+    39631676720860365/18014398509481984] < r("top.environment", 2) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 5) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 9) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 6) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 10) and not [
+    15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2] < [
+    10] and not [15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [
+    0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [2] < [10] and not r("top.environment", 2) < [0] and not r(
+    "top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < [3] and not
+    r("top.environment", 6) < r("top.environment", 5) and not r(
+    "top.environment", 7) < r("top.environment", 6) and not r(
+    "top.environment", 9) < [0] and not r("top.environment", 10) < [3] and not
+    r("top.environment", 10) < r("top.environment", 9) and not r(
+    "top.environment", 11) < r("top.environment", 10) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and not b(
+    "top.environment", 6) and (b("top.environment", 2) or b("top.environment",
+    5)) and (b("top.environment", 5) or b("top.environment", 8)) and r(
+    "top.environment", 0) === [16] + [3602879701896397/18014398509481984] * r(
+    "top.environment", 2) + r("top.environment", 1) and r("top.environment", 3)
+    === [5] and r("top.environment", 4) === [16] + - r("top.environment", 2) *
+    [3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 7) === [5] and r(
+    "top.environment", 8) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 6) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 7) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) and r("top.environment", 11) === [5] and [30] < [
+    15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (
+    b("top.environment", 5) ? r("top.environment", 4) : r("top.environment",
+    0)) / [2] and [30] < [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [2] and [3/2] < r("top.environment", 1) and r("top.environment", 1) < [
+    4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 7) and b("top.environment",
+    8) and b("top.environment", 10)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 8) # b(
+    "top.environment", 8) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [2] # [true] >),connections : empty,varGen : < "top.controller",0,0 >,
+    currState : loc([0]),completeStates : loc([0]),variables : x : Real,
+    transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[
+    temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(v[x] > c[upper])off !)
+    end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]-> loc([0]) {skip}),
+    loopBound : 0,transBound : 2 > < environment : Env | properties : ((
+    TimingProperties::Period => {{5}}) ; HybridSynchAADL::MaxClockDeviation =>
+    {{1.0000000000000001e-1}}),features : (< on : EnvInPort | properties :
+    none,content : * # [false],envCache : * # b("top.environment", 9),target :
+    controller > < off : EnvInPort | properties : none,content : * # [false],
+    envCache : * # b("top.environment", 10),target : controller > < out :
+    EnvOutPort | properties : none,content : r("top.environment", 12) # b(
+    "top.environment", 11),envCache : r("top.environment", 12) # b(
+    "top.environment", 11),target : controller >),subcomponents : (< x : Data |
+    properties : DataModel::InitialValue => {{16}},features : none,
+    subcomponents : none,connections : empty,value : [16] + - r(
+    "top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 6) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 10) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 7) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) # [true] > < e : Data |
+    properties : none,features : none,subcomponents : none,connections : empty,
+    value : r("top.environment", 1) # [true] >),connections : x ==> out,varGen
+    : < "top.environment",13,12 >,currMode : loc([0]),jumps : ((loc([0]) -[
+    on]-> loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([
+    1])) ; loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e])
+    + (v[t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) -
+    (v[t] * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response
+    : controller :(3,4) >),connections : (((controller .. on) --> (environment
+    .. on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 7 (state 8)
+states: 9  rewrites: 67138
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 8) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 11) and not [5]
+    < r("top.environment", 12) and not [5] < r("top.environment", 13) and not [
+    30] < [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) /
+    [2] and not [30] < [15/4] + (b("top.environment", 2) ? r("top.environment",
+    0) : [0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] and not [30] < [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] and not [39631676720860365/18014398509481984] < r("top.environment",
+    2) and not [39631676720860365/18014398509481984] < r("top.environment", 5)
+    and not [39631676720860365/18014398509481984] < r("top.environment", 8) and
+    not [39631676720860365/18014398509481984] < r("top.environment", 11) and
+    not [75660473739824333/18014398509481984] < r("top.environment", 12) and
+    not [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [
+    2] < [10] and not [15/4] + (b("top.environment", 2) ? r("top.environment",
+    0) : [0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] < [10] and not [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 10) : r(
+    "top.environment", 7)) / [2] < [10] and not r("top.environment", 2) < [0]
+    and not r("top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < r(
+    "top.environment", 5) and not r("top.environment", 8) < [0] and not r(
+    "top.environment", 9) < r("top.environment", 8) and not r(
+    "top.environment", 11) < [0] and not r("top.environment", 12) < [3] and not
+    r("top.environment", 12) < r("top.environment", 11) and not r(
+    "top.environment", 13) < r("top.environment", 12) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and not b(
+    "top.environment", 6) and not b("top.environment", 7) and not b(
+    "top.environment", 9) and not b("top.environment", 10) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and (b("top.environment", 8) or b(
+    "top.environment", 11)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and r(
+    "top.environment", 7) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 9) === [5] and r("top.environment", 10) === [16] +
+    - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) and r("top.environment", 13) === [5] and [30] < [
+    15/16] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [16] +
+    (b("top.environment", 5) ? r("top.environment", 4) : r("top.environment",
+    0)) / [8] + (b("top.environment", 8) ? r("top.environment", 7) : r(
+    "top.environment", 4)) / [4] + (b("top.environment", 11) ? r(
+    "top.environment", 10) : r("top.environment", 7)) / [2] and [3/2] < r(
+    "top.environment", 1) and r("top.environment", 1) < [
+    4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 8) and b("top.environment",
+    11) and b("top.environment", 13)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 10) # b(
+    "top.environment", 11) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 10) : r(
+    "top.environment", 7)) / [2] # [true] >),connections : empty,varGen : <
+    "top.controller",0,0 >,currState : loc([0]),completeStates : loc([0]),
+    variables : x : Real,transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(
+    v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(
+    v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]->
+    loc([0]) {skip}),loopBound : 0,transBound : 2 > < environment : Env |
+    properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 12),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    13),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 14) # b("top.environment", 14),envCache : r(
+    "top.environment", 14) # b("top.environment", 14),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 11) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 12) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) # [true] > < e : Data | properties : none,features : none,subcomponents
+    : none,connections : empty,value : r("top.environment", 1) # [true] >),
+    connections : x ==> out,varGen : < "top.environment",15,15 >,currMode :
+    loc([0]),jumps : ((loc([0]) -[on]-> loc([1])) ; (loc([0]) -[off]-> loc([
+    0])) ; (loc([1]) -[on]-> loc([1])) ; loc([1]) -[off]-> loc([0])),flows : ((
+    loc([0]) [x(t)= ((c[x] + c[e]) + (v[t] * [[2.0000000000000001e-1]]))]) ;
+    loc([1]) [x(t)= ((c[x] + c[e]) - (v[t] * [[1.0000000000000001e-1]]))]),
+    sampling : controller :(0,2),response : controller :(3,4) >),connections :
+    (((controller .. on) --> (environment .. on)) ; ((controller .. off) --> (
+    environment .. off)) ; (environment .. out) --> (controller .. temp)) >
+
+Solution 8 (state 9)
+states: 10  rewrites: 88250
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 8) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 10) and not [5]
+    < r("top.environment", 12) and not [5] < r("top.environment", 13) and not [
+    5] < r("top.environment", 14) and not [30] < [15/2] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [2] and not [30] < [15/4] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [2] and not [39631676720860365/18014398509481984] < r("top.environment",
+    2) and not [39631676720860365/18014398509481984] < r("top.environment", 5)
+    and not [39631676720860365/18014398509481984] < r("top.environment", 8) and
+    not [39631676720860365/18014398509481984] < r("top.environment", 12) and
+    not [75660473739824333/18014398509481984] < r("top.environment", 9) and not
+    [75660473739824333/18014398509481984] < r("top.environment", 13) and not [
+    15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2] < [
+    10] and not [15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [
+    0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] < [10] and not [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 11) : r(
+    "top.environment", 7)) / [2] < [10] and not r("top.environment", 2) < [0]
+    and not r("top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < r(
+    "top.environment", 5) and not r("top.environment", 8) < [0] and not r(
+    "top.environment", 9) < [3] and not r("top.environment", 9) < r(
+    "top.environment", 8) and not r("top.environment", 10) < r(
+    "top.environment", 9) and not r("top.environment", 12) < [0] and not r(
+    "top.environment", 13) < [3] and not r("top.environment", 13) < r(
+    "top.environment", 12) and not r("top.environment", 14) < r(
+    "top.environment", 13) and not b("top.environment", 0) and not b(
+    "top.environment", 1) and not b("top.environment", 3) and not b(
+    "top.environment", 4) and not b("top.environment", 6) and not b(
+    "top.environment", 7) and not b("top.environment", 9) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and (b("top.environment", 8) or b(
+    "top.environment", 11)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and r(
+    "top.environment", 7) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 10) === [5] and r("top.environment", 11) === [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) and r(
+    "top.environment", 14) === [5] and [30] < [15/8] + (b("top.environment", 2)
+    ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] and [30] < [15/16] + (b("top.environment", 2) ? r("top.environment",
+    0) : [0]) / [16] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [8] + (b("top.environment", 8) ? r(
+    "top.environment", 7) : r("top.environment", 4)) / [4] + (b(
+    "top.environment", 11) ? r("top.environment", 11) : r("top.environment",
+    7)) / [2] and [3/2] < r("top.environment", 1) and r("top.environment", 1) <
+    [4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 8) and b("top.environment",
+    10) and b("top.environment", 11) and b("top.environment", 13)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 11) # b(
+    "top.environment", 11) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 11) : r(
+    "top.environment", 7)) / [2] # [true] >),connections : empty,varGen : <
+    "top.controller",0,0 >,currState : loc([0]),completeStates : loc([0]),
+    variables : x : Real,transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(
+    v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(
+    v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]->
+    loc([0]) {skip}),loopBound : 0,transBound : 2 > < environment : Env |
+    properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 12),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    13),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 15) # b("top.environment", 14),envCache : r(
+    "top.environment", 15) # b("top.environment", 14),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 12) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 13) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + [
+    3602879701896397/18014398509481984] * r("top.environment", 14) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) # [true] > < e : Data | properties : none,
+    features : none,subcomponents : none,connections : empty,value : r(
+    "top.environment", 1) # [true] >),connections : x ==> out,varGen : <
+    "top.environment",16,15 >,currMode : loc([0]),jumps : ((loc([0]) -[on]->
+    loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([1])) ;
+    loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e]) + (v[
+    t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) - (v[t]
+    * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response :
+    controller :(3,4) >),connections : (((controller .. on) --> (environment ..
+    on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 9 (state 10)
+states: 11  rewrites: 110512
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 7) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 10) and not [5]
+    < r("top.environment", 11) and not [5] < r("top.environment", 13) and not [
+    5] < r("top.environment", 14) and not [5] < r("top.environment", 15) and
+    not [30] < [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [
+    0]) / [2] and not [39631676720860365/18014398509481984] < r(
+    "top.environment", 2) and not [39631676720860365/18014398509481984] < r(
+    "top.environment", 5) and not [39631676720860365/18014398509481984] < r(
+    "top.environment", 9) and not [39631676720860365/18014398509481984] < r(
+    "top.environment", 13) and not [75660473739824333/18014398509481984] < r(
+    "top.environment", 6) and not [75660473739824333/18014398509481984] < r(
+    "top.environment", 10) and not [75660473739824333/18014398509481984] < r(
+    "top.environment", 14) and not [15/2] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [2] < [10] and not [15/4] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [4] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [2] < [10] and not [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [2] < [10] and not [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [2] < [10] and not r("top.environment", 2) < [0]
+    and not r("top.environment", 3) < r("top.environment", 2) and not r(
+    "top.environment", 5) < [0] and not r("top.environment", 6) < [3] and not
+    r("top.environment", 6) < r("top.environment", 5) and not r(
+    "top.environment", 7) < r("top.environment", 6) and not r(
+    "top.environment", 9) < [0] and not r("top.environment", 10) < [3] and not
+    r("top.environment", 10) < r("top.environment", 9) and not r(
+    "top.environment", 11) < r("top.environment", 10) and not r(
+    "top.environment", 13) < [0] and not r("top.environment", 14) < [3] and not
+    r("top.environment", 14) < r("top.environment", 13) and not r(
+    "top.environment", 15) < r("top.environment", 14) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and not b(
+    "top.environment", 6) and not b("top.environment", 9) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and (b("top.environment", 8) or b(
+    "top.environment", 11)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 7) === [5] and r(
+    "top.environment", 8) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 6) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 7) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) and r("top.environment", 11) === [5] and r(
+    "top.environment", 12) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 6) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 9) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 10) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 7) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 10) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 11) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 13) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) + r("top.environment", 1) and r("top.environment",
+    15) === [5] and [30] < [15/4] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [4] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [2] and [30] < [15/8] +
+    (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [8] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [4] + (b("top.environment", 8) ? r("top.environment", 8) : r(
+    "top.environment", 4)) / [2] and [30] < [15/16] + (b("top.environment", 2)
+    ? r("top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [2] and [3/2] < r("top.environment", 1) and r(
+    "top.environment", 1) < [4025092166962381/281474976710656] and b(
+    "top.environment", 2) and b("top.environment", 5) and b("top.environment",
+    7) and b("top.environment", 8) and b("top.environment", 10) and b(
+    "top.environment", 11) and b("top.environment", 13)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 12) # b(
+    "top.environment", 11) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [2] # [true] >),connections : empty,varGen : <
+    "top.controller",0,0 >,currState : loc([0]),completeStates : loc([0]),
+    variables : x : Real,transitions : ((loc([0]) -[on dispatch]-> loc([1]) {(
+    v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x] < c[lower])(on !) (elsif(
+    v[x] > c[upper])off !) end if ; c{curr} := v[x]}) ; loc([1]) -[otherwise]->
+    loc([0]) {skip}),loopBound : 0,transBound : 2 > < environment : Env |
+    properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 12),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    13),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 16) # b("top.environment", 14),envCache : r(
+    "top.environment", 16) # b("top.environment", 14),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 6) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 10) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 13) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 14) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 7) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + [
+    3602879701896397/18014398509481984] * r("top.environment", 14) + [
+    3602879701896397/18014398509481984] * r("top.environment", 15) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) # [true] > < e :
+    Data | properties : none,features : none,subcomponents : none,connections :
+    empty,value : r("top.environment", 1) # [true] >),connections : x ==> out,
+    varGen : < "top.environment",17,15 >,currMode : loc([0]),jumps : ((loc([0])
+    -[on]-> loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([
+    1])) ; loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e])
+    + (v[t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) -
+    (v[t] * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response
+    : controller :(3,4) >),connections : (((controller .. on) --> (environment
+    .. on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 10 (state 13)
+states: 14  rewrites: 167518
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 8) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 11) and not [5]
+    < r("top.environment", 12) and not [5] < r("top.environment", 13) and not [
+    5] < r("top.environment", 15) and not [5] < r("top.environment", 16) and
+    not [5] < r("top.environment", 17) and not [30] < [15/2] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [2] and not [30] <
+    [15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [4] +
+    (b("top.environment", 5) ? r("top.environment", 4) : r("top.environment",
+    0)) / [2] and not [30] < [15/8] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] and not [39631676720860365/18014398509481984] < r("top.environment",
+    2) and not [39631676720860365/18014398509481984] < r("top.environment", 5)
+    and not [39631676720860365/18014398509481984] < r("top.environment", 8) and
+    not [39631676720860365/18014398509481984] < r("top.environment", 11) and
+    not [39631676720860365/18014398509481984] < r("top.environment", 15) and
+    not [75660473739824333/18014398509481984] < r("top.environment", 12) and
+    not [75660473739824333/18014398509481984] < r("top.environment", 16) and
+    not [15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [
+    2] < [10] and not [15/4] + (b("top.environment", 2) ? r("top.environment",
+    0) : [0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] < [10] and not [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 10) : r(
+    "top.environment", 7)) / [2] < [10] and not [15/32] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 10) : r(
+    "top.environment", 7)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 14) : r("top.environment", 10)) / [2] < [10] and not r(
+    "top.environment", 2) < [0] and not r("top.environment", 3) < r(
+    "top.environment", 2) and not r("top.environment", 5) < [0] and not r(
+    "top.environment", 6) < r("top.environment", 5) and not r(
+    "top.environment", 8) < [0] and not r("top.environment", 9) < r(
+    "top.environment", 8) and not r("top.environment", 11) < [0] and not r(
+    "top.environment", 12) < [3] and not r("top.environment", 12) < r(
+    "top.environment", 11) and not r("top.environment", 13) < r(
+    "top.environment", 12) and not r("top.environment", 15) < [0] and not r(
+    "top.environment", 16) < [3] and not r("top.environment", 16) < r(
+    "top.environment", 15) and not r("top.environment", 17) < r(
+    "top.environment", 16) and not b("top.environment", 0) and not b(
+    "top.environment", 1) and not b("top.environment", 3) and not b(
+    "top.environment", 4) and not b("top.environment", 6) and not b(
+    "top.environment", 7) and not b("top.environment", 9) and not b(
+    "top.environment", 10) and not b("top.environment", 12) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and (b("top.environment", 8) or b(
+    "top.environment", 11)) and (b("top.environment", 11) or b(
+    "top.environment", 14)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and r(
+    "top.environment", 7) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 9) === [5] and r("top.environment", 10) === [16] +
+    - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) and r("top.environment", 13) === [5] and r(
+    "top.environment", 14) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 8) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 11) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 12) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 11) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 12) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 13) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 15) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 17) === [5] and [30] < [15/16] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [16] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [8] + (b("top.environment", 8) ? r("top.environment", 7) : r(
+    "top.environment", 4)) / [4] + (b("top.environment", 11) ? r(
+    "top.environment", 10) : r("top.environment", 7)) / [2] and [30] < [15/32]
+    + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [32] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [16] + (b("top.environment", 8) ? r("top.environment", 7) : r(
+    "top.environment", 4)) / [8] + (b("top.environment", 11) ? r(
+    "top.environment", 10) : r("top.environment", 7)) / [4] + (b(
+    "top.environment", 14) ? r("top.environment", 14) : r("top.environment",
+    10)) / [2] and [3/2] < r("top.environment", 1) and r("top.environment", 1)
+    < [4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 8) and b("top.environment",
+    11) and b("top.environment", 13) and b("top.environment", 14) and b(
+    "top.environment", 16)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 14) # b(
+    "top.environment", 14) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/32] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 10) : r(
+    "top.environment", 7)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 14) : r("top.environment", 10)) / [2] # [true] >),
+    connections : empty,varGen : < "top.controller",0,0 >,currState : loc([0]),
+    completeStates : loc([0]),variables : x : Real,transitions : ((loc([0]) -[
+    on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x]
+    < c[lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]})
+    ; loc([1]) -[otherwise]-> loc([0]) {skip}),loopBound : 0,transBound : 2 > <
+    environment : Env | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 15),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    16),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 18) # b("top.environment", 17),envCache : r(
+    "top.environment", 18) # b("top.environment", 17),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 11) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 12) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 15) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 16) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + [
+    3602879701896397/18014398509481984] * r("top.environment", 15) + [
+    3602879701896397/18014398509481984] * r("top.environment", 16) + [
+    3602879701896397/18014398509481984] * r("top.environment", 17) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) # [true] > < e : Data | properties : none,features :
+    none,subcomponents : none,connections : empty,value : r("top.environment",
+    1) # [true] >),connections : x ==> out,varGen : < "top.environment",19,18
+    >,currMode : loc([0]),jumps : ((loc([0]) -[on]-> loc([1])) ; (loc([0]) -[
+    off]-> loc([0])) ; (loc([1]) -[on]-> loc([1])) ; loc([1]) -[off]-> loc([
+    0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e]) + (v[t] * [[
+    2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) - (v[t] * [[
+    1.0000000000000001e-1]]))]),sampling : controller :(0,2),response :
+    controller :(3,4) >),connections : (((controller .. on) --> (environment ..
+    on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 11 (state 14)
+states: 15  rewrites: 196849
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 8) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 10) and not [5]
+    < r("top.environment", 12) and not [5] < r("top.environment", 13) and not [
+    5] < r("top.environment", 14) and not [5] < r("top.environment", 16) and
+    not [5] < r("top.environment", 17) and not [5] < r("top.environment", 18)
+    and not [30] < [15/2] + (b("top.environment", 2) ? r("top.environment", 0)
+    : [0]) / [2] and not [30] < [15/4] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [4] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [2] and not [
+    39631676720860365/18014398509481984] < r("top.environment", 2) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 5) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 8) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 12) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 16) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 9) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 13) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 17) and not [
+    15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2] < [
+    10] and not [15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [
+    0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] < [10] and not [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 11) : r(
+    "top.environment", 7)) / [2] < [10] and not [15/32] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 11) : r(
+    "top.environment", 7)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 15) : r("top.environment", 11)) / [2] < [10] and not r(
+    "top.environment", 2) < [0] and not r("top.environment", 3) < r(
+    "top.environment", 2) and not r("top.environment", 5) < [0] and not r(
+    "top.environment", 6) < r("top.environment", 5) and not r(
+    "top.environment", 8) < [0] and not r("top.environment", 9) < [3] and not
+    r("top.environment", 9) < r("top.environment", 8) and not r(
+    "top.environment", 10) < r("top.environment", 9) and not r(
+    "top.environment", 12) < [0] and not r("top.environment", 13) < [3] and not
+    r("top.environment", 13) < r("top.environment", 12) and not r(
+    "top.environment", 14) < r("top.environment", 13) and not r(
+    "top.environment", 16) < [0] and not r("top.environment", 17) < [3] and not
+    r("top.environment", 17) < r("top.environment", 16) and not r(
+    "top.environment", 18) < r("top.environment", 17) and not b(
+    "top.environment", 0) and not b("top.environment", 1) and not b(
+    "top.environment", 3) and not b("top.environment", 4) and not b(
+    "top.environment", 6) and not b("top.environment", 7) and not b(
+    "top.environment", 9) and not b("top.environment", 12) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and (b("top.environment", 8) or b(
+    "top.environment", 11)) and (b("top.environment", 11) or b(
+    "top.environment", 14)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 6) === [5] and r(
+    "top.environment", 7) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 8) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    and r("top.environment", 10) === [5] and r("top.environment", 11) === [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) and r(
+    "top.environment", 14) === [5] and r("top.environment", 15) === [16] + - r(
+    "top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 12) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 13) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + [
+    3602879701896397/18014398509481984] * r("top.environment", 14) + [
+    3602879701896397/18014398509481984] * r("top.environment", 16) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) and r(
+    "top.environment", 18) === [5] and [30] < [15/8] + (b("top.environment", 2)
+    ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [2] and [30] < [15/16] + (b("top.environment", 2) ? r("top.environment",
+    0) : [0]) / [16] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [8] + (b("top.environment", 8) ? r(
+    "top.environment", 7) : r("top.environment", 4)) / [4] + (b(
+    "top.environment", 11) ? r("top.environment", 11) : r("top.environment",
+    7)) / [2] and [30] < [15/32] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 11) : r(
+    "top.environment", 7)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 15) : r("top.environment", 11)) / [2] and [3/2] < r(
+    "top.environment", 1) and r("top.environment", 1) < [
+    4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 8) and b("top.environment",
+    10) and b("top.environment", 11) and b("top.environment", 13) and b(
+    "top.environment", 14) and b("top.environment", 16)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 15) # b(
+    "top.environment", 14) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/32] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 7) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 11) : r(
+    "top.environment", 7)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 15) : r("top.environment", 11)) / [2] # [true] >),
+    connections : empty,varGen : < "top.controller",0,0 >,currState : loc([0]),
+    completeStates : loc([0]),variables : x : Real,transitions : ((loc([0]) -[
+    on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x]
+    < c[lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]})
+    ; loc([1]) -[otherwise]-> loc([0]) {skip}),loopBound : 0,transBound : 2 > <
+    environment : Env | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 15),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    16),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 19) # b("top.environment", 17),envCache : r(
+    "top.environment", 19) # b("top.environment", 17),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 8) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 12) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 13) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 16) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 17) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 8) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 12) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + [
+    3602879701896397/18014398509481984] * r("top.environment", 14) + [
+    3602879701896397/18014398509481984] * r("top.environment", 16) + [
+    3602879701896397/18014398509481984] * r("top.environment", 17) + [
+    3602879701896397/18014398509481984] * r("top.environment", 18) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) + r("top.environment", 1) # [true] > < e : Data |
+    properties : none,features : none,subcomponents : none,connections : empty,
+    value : r("top.environment", 1) # [true] >),connections : x ==> out,varGen
+    : < "top.environment",20,18 >,currMode : loc([0]),jumps : ((loc([0]) -[
+    on]-> loc([1])) ; (loc([0]) -[off]-> loc([0])) ; (loc([1]) -[on]-> loc([
+    1])) ; loc([1]) -[off]-> loc([0])),flows : ((loc([0]) [x(t)= ((c[x] + c[e])
+    + (v[t] * [[2.0000000000000001e-1]]))]) ; loc([1]) [x(t)= ((c[x] + c[e]) -
+    (v[t] * [[1.0000000000000001e-1]]))]),sampling : controller :(0,2),response
+    : controller :(3,4) >),connections : (((controller .. on) --> (environment
+    .. on)) ; ((controller .. off) --> (environment .. off)) ; (environment ..
+    out) --> (controller .. temp)) >
+
+Solution 12 (state 15)
+states: 16  rewrites: 227688
+B:BoolExp --> not [5] < r("top.environment", 2) and not [5] < r(
+    "top.environment", 3) and not [5] < r("top.environment", 5) and not [5] <
+    r("top.environment", 6) and not [5] < r("top.environment", 7) and not [5] <
+    r("top.environment", 9) and not [5] < r("top.environment", 10) and not [5]
+    < r("top.environment", 11) and not [5] < r("top.environment", 13) and not [
+    5] < r("top.environment", 14) and not [5] < r("top.environment", 15) and
+    not [5] < r("top.environment", 17) and not [5] < r("top.environment", 18)
+    and not [5] < r("top.environment", 19) and not [30] < [15/2] + (b(
+    "top.environment", 2) ? r("top.environment", 0) : [0]) / [2] and not [
+    39631676720860365/18014398509481984] < r("top.environment", 2) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 5) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 9) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 13) and not [
+    39631676720860365/18014398509481984] < r("top.environment", 17) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 6) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 10) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 14) and not [
+    75660473739824333/18014398509481984] < r("top.environment", 18) and not [
+    15/2] + (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [2] < [
+    10] and not [15/4] + (b("top.environment", 2) ? r("top.environment", 0) : [
+    0]) / [4] + (b("top.environment", 5) ? r("top.environment", 4) : r(
+    "top.environment", 0)) / [2] < [10] and not [15/8] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [8] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [4] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [2] < [10] and not [15/16] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [2] < [10] and not [15/32] + (b("top.environment",
+    2) ? r("top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 16) : r("top.environment", 12)) / [2] < [10] and not r(
+    "top.environment", 2) < [0] and not r("top.environment", 3) < r(
+    "top.environment", 2) and not r("top.environment", 5) < [0] and not r(
+    "top.environment", 6) < [3] and not r("top.environment", 6) < r(
+    "top.environment", 5) and not r("top.environment", 7) < r(
+    "top.environment", 6) and not r("top.environment", 9) < [0] and not r(
+    "top.environment", 10) < [3] and not r("top.environment", 10) < r(
+    "top.environment", 9) and not r("top.environment", 11) < r(
+    "top.environment", 10) and not r("top.environment", 13) < [0] and not r(
+    "top.environment", 14) < [3] and not r("top.environment", 14) < r(
+    "top.environment", 13) and not r("top.environment", 15) < r(
+    "top.environment", 14) and not r("top.environment", 17) < [0] and not r(
+    "top.environment", 18) < [3] and not r("top.environment", 18) < r(
+    "top.environment", 17) and not r("top.environment", 19) < r(
+    "top.environment", 18) and not b("top.environment", 0) and not b(
+    "top.environment", 1) and not b("top.environment", 3) and not b(
+    "top.environment", 4) and not b("top.environment", 6) and not b(
+    "top.environment", 9) and not b("top.environment", 12) and (b(
+    "top.environment", 2) or b("top.environment", 5)) and (b("top.environment",
+    5) or b("top.environment", 8)) and (b("top.environment", 8) or b(
+    "top.environment", 11)) and (b("top.environment", 11) or b(
+    "top.environment", 14)) and r("top.environment", 0) === [16] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + r(
+    "top.environment", 1) and r("top.environment", 3) === [5] and r(
+    "top.environment", 4) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) and r("top.environment", 7) === [5] and r(
+    "top.environment", 8) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 6) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 7) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) and r("top.environment", 11) === [5] and r(
+    "top.environment", 12) === [16] + - r("top.environment", 2) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 6) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 9) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 10) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 7) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 10) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 11) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 13) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) + r("top.environment", 1) and r("top.environment",
+    15) === [5] and r("top.environment", 16) === [16] + - r("top.environment",
+    2) * [3602879701896397/18014398509481984] + - r("top.environment", 5) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 6) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 9) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 10) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 13) * [
+    3602879701896397/18014398509481984] + - r("top.environment", 14) * [
+    3602879701896397/18014398509481984] + [3602879701896397/18014398509481984]
+    * r("top.environment", 2) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 3) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 5) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 6) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 7) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 9) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 10) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 11) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 13) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 14) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 15) + [3602879701896397/18014398509481984] * r(
+    "top.environment", 17) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) and r("top.environment",
+    19) === [5] and [30] < [15/4] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [4] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [2] and [30] < [15/8] +
+    (b("top.environment", 2) ? r("top.environment", 0) : [0]) / [8] + (b(
+    "top.environment", 5) ? r("top.environment", 4) : r("top.environment", 0))
+    / [4] + (b("top.environment", 8) ? r("top.environment", 8) : r(
+    "top.environment", 4)) / [2] and [30] < [15/16] + (b("top.environment", 2)
+    ? r("top.environment", 0) : [0]) / [16] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [8] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [4] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [2] and [30] < [15/32] + (b("top.environment", 2)
+    ? r("top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 16) : r("top.environment", 12)) / [2] and [3/2] < r(
+    "top.environment", 1) and r("top.environment", 1) < [
+    4025092166962381/281474976710656] and b("top.environment", 2) and b(
+    "top.environment", 5) and b("top.environment", 7) and b("top.environment",
+    8) and b("top.environment", 10) and b("top.environment", 11) and b(
+    "top.environment", 13) and b("top.environment", 14) and b(
+    "top.environment", 16)
+OBJ:Object --> < top : System | properties : none,features : none,subcomponents
+    : (< controller : Thread | properties : ((TimingProperties::Period => {{
+    5}}) ; (HybridSynchAADL::SamplingTime => {{0.0 .. 2.0}}) ;
+    HybridSynchAADL::ResponseTime => {{3.0 .. 4.0}}),features : (< on :
+    DataOutPort | properties : none,content : * # [false] > < off : DataOutPort
+    | properties : none,content : * # [true] > < temp : DataInPort | properties
+    : none,content : [0] # [false],cache : r("top.environment", 16) # b(
+    "top.environment", 14) >),subcomponents : (< lower : Data | properties :
+    DataModel::InitialValue => {{10}},features : none,subcomponents : none,
+    connections : empty,value : [10] # [true] > < upper : Data | properties :
+    DataModel::InitialValue => {{30}},features : none,subcomponents : none,
+    connections : empty,value : [30] # [true] > < curr : Data | properties :
+    DataModel::InitialValue => {{15}},features : none,subcomponents : none,
+    connections : empty,value : [15/32] + (b("top.environment", 2) ? r(
+    "top.environment", 0) : [0]) / [32] + (b("top.environment", 5) ? r(
+    "top.environment", 4) : r("top.environment", 0)) / [16] + (b(
+    "top.environment", 8) ? r("top.environment", 8) : r("top.environment", 4))
+    / [8] + (b("top.environment", 11) ? r("top.environment", 12) : r(
+    "top.environment", 8)) / [4] + (b("top.environment", 14) ? r(
+    "top.environment", 16) : r("top.environment", 12)) / [2] # [true] >),
+    connections : empty,varGen : < "top.controller",0,0 >,currState : loc([0]),
+    completeStates : loc([0]),variables : x : Real,transitions : ((loc([0]) -[
+    on dispatch]-> loc([1]) {(v{x} := ((c[curr] + f[temp]) / [[2]])) ; if(v[x]
+    < c[lower])(on !) (elsif(v[x] > c[upper])off !) end if ; c{curr} := v[x]})
+    ; loc([1]) -[otherwise]-> loc([0]) {skip}),loopBound : 0,transBound : 2 > <
+    environment : Env | properties : ((TimingProperties::Period => {{5}}) ;
+    HybridSynchAADL::MaxClockDeviation => {{1.0000000000000001e-1}}),features :
+    (< on : EnvInPort | properties : none,content : * # [false],envCache : * #
+    b("top.environment", 15),target : controller > < off : EnvInPort |
+    properties : none,content : * # [false],envCache : * # b("top.environment",
+    16),target : controller > < out : EnvOutPort | properties : none,content :
+    r("top.environment", 20) # b("top.environment", 17),envCache : r(
+    "top.environment", 20) # b("top.environment", 17),target : controller >),
+    subcomponents : (< x : Data | properties : DataModel::InitialValue => {{
+    16}},features : none,subcomponents : none,connections : empty,value : [16]
+    + - r("top.environment", 2) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 5) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 6) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 9) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 10) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 13) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 14) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 17) * [3602879701896397/18014398509481984] + - r(
+    "top.environment", 18) * [3602879701896397/18014398509481984] + [
+    3602879701896397/18014398509481984] * r("top.environment", 2) + [
+    3602879701896397/18014398509481984] * r("top.environment", 3) + [
+    3602879701896397/18014398509481984] * r("top.environment", 5) + [
+    3602879701896397/18014398509481984] * r("top.environment", 6) + [
+    3602879701896397/18014398509481984] * r("top.environment", 7) + [
+    3602879701896397/18014398509481984] * r("top.environment", 9) + [
+    3602879701896397/18014398509481984] * r("top.environment", 10) + [
+    3602879701896397/18014398509481984] * r("top.environment", 11) + [
+    3602879701896397/18014398509481984] * r("top.environment", 13) + [
+    3602879701896397/18014398509481984] * r("top.environment", 14) + [
+    3602879701896397/18014398509481984] * r("top.environment", 15) + [
+    3602879701896397/18014398509481984] * r("top.environment", 17) + [
+    3602879701896397/18014398509481984] * r("top.environment", 18) + [
+    3602879701896397/18014398509481984] * r("top.environment", 19) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) +
+    r("top.environment", 1) + r("top.environment", 1) + r("top.environment", 1)
+    + r("top.environment", 1) + r("top.environment", 1) + r("top.environment",
+    1) + r("top.environment", 1) + r("top.environment", 1) + r(
+    "top.environment", 1) + r("top.environment", 1) + r("top.environment", 1) #
+    [true] > < e : Data | properties : none,features : none,subcomponents :
+    none,connections : empty,value : r("top.environment", 1) # [true] >),
+    connections : x ==> out,varGen : < "top.environment",21,18 >,currMode :
+    loc([0]),jumps : ((loc([0]) -[on]-> loc([1])) ; (loc([0]) -[off]-> loc([
+    0])) ; (loc([1]) -[on]-> loc([1])) ; loc([1]) -[off]-> loc([0])),flows : ((
+    loc([0]) [x(t)= ((c[x] + c[e]) + (v[t] * [[2.0000000000000001e-1]]))]) ;
+    loc([1]) [x(t)= ((c[x] + c[e]) - (v[t] * [[1.0000000000000001e-1]]))]),
+    sampling : controller :(0,2),response : controller :(3,4) >),connections :
+    (((controller .. on) --> (environment .. on)) ; ((controller .. off) --> (
+    environment .. off)) ; (environment .. out) --> (controller .. temp)) >
+
+No more solutions.
+states: 16  rewrites: 229605
+Bye.

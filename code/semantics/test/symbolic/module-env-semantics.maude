@@ -1,0 +1,95 @@
+
+
+mod TEST-TRANS is
+  inc ENV-TRANSITION-SEMANTICS .
+  inc BEHAVIOR-SYMBOLIC-LOCATION .
+  pr SMT-REAL-EXP .
+
+  ops x y : -> ComponentId .
+  ops t s : -> VarId .
+  ops on1 on2 off1 off2 : -> FeatureId .
+
+  op trans : -> Set{EnvJump} .
+  eq trans =
+    (loc([0]) -[  on1 ]-> loc([2])) ;
+    (loc([0]) -[  on2 ]-> loc([1])) ;
+    (loc([1]) -[  on1 ]-> loc([3])) ;
+    (loc([1]) -[ off2 ]-> loc([0])) ;
+    (loc([2]) -[ off1 ]-> loc([0])) ;
+    (loc([2]) -[  on2 ]-> loc([3])) ;
+    (loc([3]) -[ off1 ]-> loc([1])) ;
+    (loc([3]) -[  on2 ]-> loc([2])) .
+
+  op flows : -> Set{EnvFlow} .
+  eq flows =
+    (loc([0])[(x(t) = c[x] - (v[t] * [[0.1]])) ; (y(s) = c[y] - (v[s] * [[0.3]]))]) ;
+    (loc([1])[(x(t) = c[x] - (v[t] * [[0.1]])) ; (y(s) = c[y] + (v[s] * [[0.5]]))]) ;
+    (loc([2])[(x(t) = c[x] + (v[t] * [[0.2]])) ; (y(s) = c[y] - (v[s] * [[0.3]]))]) ;
+    (loc([3])[(x(t) = c[x] + (v[t] * [[0.2]])) ; (y(s) = c[y] + (v[s] * [[0.5]]))]) .
+endm
+
+
+mod TEST-ENV-FEATURE-OPERATION is
+  inc ENV-FEATURE-OPERATION .
+  pr SMT-VAR-GEN .
+  pr SMT-REAL-EXP .
+
+  ops a b c d e : -> FeatureId .
+  ops cr1 cr2 : -> ComponentId .
+endm
+
+
+mod TEST-ENV-CONTINUOUS-SEMANTICS is
+  inc ENV-CONTINUOUS-SEMANTICS .
+  inc DEFAULT-PROPERTIES .
+  inc TEST-ENV-FEATURE-OPERATION .
+  inc TEST-TRANS .
+  pr SMT-REAL-EXP .
+
+  op funcs : -> NeSet{AADLEnvFunc} .
+  eq funcs = 
+      (x(t) = (v[t] * v[t]) + (c[x] + ([[1]] + f[a]))) ; 
+      (y(s) = v[s] + ((c[x] - c[y]) * ([[0.5]] + p[TimingProperties::Period]))) .
+
+  op bcf : -> BehaviorConf .
+  eq bcf = 
+      feature(a |-> [100] # b(0) : [true]) 
+      data(((x |=> [3/4] # b(1)), (y |=> r("y",0) # [true]))) 
+      prop(TimingProperties::Period => {{60.1}}) 
+      const([true]) .
+endm
+
+
+mod TEST-ENV-TRANSITION-SEMANTICS is
+  inc ENV-TRANSITION-SEMANTICS .
+  inc DEFAULT-PROPERTIES .
+  inc TEST-TRANS .
+  inc TEST-ENV-FEATURE-OPERATION .
+  inc REAL-EXP-SIMPLIFICATION .
+  inc BOOL-EXP-SIMPLIFICATION .
+  inc COND-EXP-SIMPLIFICATION .
+  pr SMT-CHECKSAT .
+
+  op bcf : -> BehaviorConf .
+  eq bcf = 
+      feature((
+          (on1  |-> [0] # b(0) : [true]), 
+          (on2  |-> [0] # b(1) : [true]),
+          (off1 |-> [0] # b(2) : [true]),
+          (off2 |-> [0] # b(3) : [true])
+      ))
+      data((
+          (x |=> [3/4] # [true]), 
+          (y |=> r("y",0) # [true])
+      )) 
+      prop((TimingProperties::Period => {{5}}) ; (HybridSynchAADL::MaxClockDeviation => {{0.5}}))
+      const([true]) .
+  
+  op conx : -> Set{Connection} .
+  eq conx = (x ==> a) ; (y ==> b) .
+
+  op envports : -> Configuration .
+  eq envports =
+         < a : EnvOutPort | target : cr1, content : bot(Real), envCache : bot(Real) >
+         < b : EnvOutPort | target : cr2, content : bot(Real), envCache : bot(Real) > .
+endm

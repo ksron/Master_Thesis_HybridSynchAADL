@@ -1,0 +1,73 @@
+load ../smt/smt.maude
+load ../smt/smt-interface.maude
+load ../smt/smt-condition.maude
+
+load identifiers.maude
+load data-value.maude
+load behAnnexSyntax.maude
+
+---load behAnnexSemantics.maude
+
+***(
+fmod RAT-INTERFACE is
+	inc RAT .
+	
+	vars B1 B2 B3 : Bool .
+	vars R1 R2 R3 : Rat .
+
+	op tra : Rat -> Rat .
+	eq tra(R1 + R2) = tra(R1) + tra(R2) .
+	eq tra(R1 * R2) = tra(R1) * tra(R2) .
+	eq tra(R1 - R2) = tra(R1) - tra(R2) .
+
+	op tra : Bool -> Bool .
+
+	eq tra(R1 < R2) = tra(R1) < tra(R2) .
+	eq tra(R1 > R2) = tra(R2) > tra(R2) .
+	eq tra(R1 <= R2) = tra(R1) <= tra(R2) .
+	eq tra(R1 >= R2) = tra(R1) >= tra(R2) .
+--- eq tra(R1 / R2) = tra(R1) / tra(R2) .
+	eq tra(R1) = @#(R1) .
+
+	op @# : Rat -> Rat .
+endfm
+)
+
+
+fmod SYMTEST is
+    inc EXPRESSION-SYNTAX .
+	inc SMT-INTERFACE .
+
+	vars B1 B2 : Bool . vars I1 I2 : Int .
+	vars F1 F2 : Float . vars E1 E2 : SymExpr .
+	vars N : Nat .
+	
+	op tra : SymExpr -> Bool .
+
+	eq tra([B1]) = B1 .
+	
+	eq tra(E1 > E2) = (ta(E1)) > (ta(E2)) .
+	eq tra(E1 < E2) = (ta(E1)) < (ta(E2)) .
+	eq tra(E1 >= E2) = (ta(E1)) >= (ta(E2)) .
+	eq tra(E1 <= E2) = (ta(E1)) <= (ta(E2)) .
+
+	eq tra(E1 and E2) = (tra(E1)) and (tra(E2)) .
+	eq tra(E1 or E2) = (tra(E1)) or (tra(E2)) .
+
+	op ta : SymExpr -> Rat .
+
+	eq ta(E1 + E2) = ta(E1) + ta(E2) .
+---	eq ta(E1 - E2) = ta(E1) - ta(E2) .
+	eq ta(E1 * E2) = ta(E1) * ta(E2) .
+	eq ta([I1]) = I1 .
+	eq ta([F1]) = rat(F1) .
+
+endfm
+
+
+red tra((((i(2)+[1])>[1])and(((i(2)+[1])+[1])>[1]))and((((i(2)+[1])+[1])+[1])>[1])) .
+red upTerm(tra((((i(2)+[1])>[1])and(((i(2)+[1])+[1])>[1]))and((((i(2)+[1])+[1])+[1])>[1]))) .
+red tr(upTerm(tra((((i(2)+[1])>[1])and(((i(2)+[1])+[1])>[1]))and((((i(2)+[1])+[1])+[1])>[1])))) .
+red check-sat( tra((((i(2)+[1])>[1])and(((i(2)+[1])+[1])>[1]))and((((i(2)+[1])+[1])+[1])>[1]))) .
+
+

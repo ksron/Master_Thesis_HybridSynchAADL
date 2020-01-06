@@ -1,0 +1,430 @@
+--- Defines the syntax of the behavior annex language in AADL.
+--- Currently, we do not support arrays, structs, unions,
+--- and the corresponding AADL features.
+
+--- semantics for values
+(fmod BEHAVIOR-EXPRESSION-VALUE-SEMANTICS is
+  including EXPRESSION-SYNTAX .
+
+  vars V1 V2 : Expression .  vars B1 B2 : Bool .  vars I1 I2 : Int .
+  vars F1 F2 : Float .  vars S1 S2 : String .
+
+  eq [B1] and [B2] = [B1 and B2] .
+  eq [B1] or [B2]  = [B1 or B2] .
+  eq [B1] xor [B2] = [B1 xor B2] .
+
+  eq (V1 = V2)     = [V1 == V2] [owise] .
+  eq ([I1] = [F2]) = [float(I1) == F2] .
+  eq ([F1] = [I2]) = [F1 == float(I2)] .
+
+  eq [I1] < [I2] = [I1 < I2] .
+  eq [I1] < [F2] = [float(I1) < F2] .
+  eq [F1] < [I2] = [F1 < float(I2)] .
+  eq [F1] < [F2] = [F1 < F2] .
+
+  eq [I1] > [I2] = [I1 > I2] .
+  eq [I1] > [F2] = [float(I1) > F2] .
+  eq [F1] > [I2] = [F1 > float(I2)] .
+  eq [F1] > [F2] = [F1 > F2] .
+
+  eq (V1 != V2) = not (V1 = V2) .
+  eq (V1 <= V2) = not (V1 > V2) .
+  eq (V1 >= V2) = not (V1 < V2) .
+
+  eq [I1] + [I2] = [I1 + I2] .
+  eq [I1] + [F2] = [float(I1) + F2] .
+  eq [F1] + [I2] = [F1 + float(I2)] .
+  eq [F1] + [F2] = [F1 + F2] .
+
+  eq [I1] - [I2] = [I1 - I2] .
+  eq [I1] - [F2] = [float(I1) - F2] .
+  eq [F1] - [I2] = [F1 - float(I2)] .
+  eq [F1] - [F2] = [F1 - F2] .
+
+  eq [I1] * [I2] = [I1 * I2] .
+  eq [I1] * [F2] = [float(I1) * F2] .
+  eq [F1] * [I2] = [F1 * float(I2)] .
+  eq [F1] * [F2] = [F1 * F2] .
+
+  eq [I1] / [I2] = [float(I1) / float(I2)] .
+  eq [I1] / [F2] = [float(I1) / F2] .
+  eq [F1] / [I2] = [F1 / float(I2)] .
+  eq [F1] / [F2] = [F1 / F2] .
+
+  eq [I1] mod [I2] = [I1 rem I2] .  --- NOTE: difference from rem??
+  eq [I1] rem [I2] = [I1 rem I2] .
+
+  eq [I1] ** [I2] = [I1 ^ I2] .
+  eq [I1] ** [F2] = [float(I1) ^ F2] .
+  eq [F1] ** [I2] = [F1 ^ float(I2)] .
+  eq [F1] ** [F2] = [F1 ^ F2] .
+
+  eq not([B1]) = [not B1] .
+
+  eq plus([I1])   = [I1] .
+  eq plus([F1])   = [F1] .
+
+  eq minus([I1])   = [- I1] .
+  eq minus([F1])   = [- F1] .
+
+  eq abs([I1])   = [abs(I1)] .
+  eq abs([F1])   = [abs(F1)] .
+endfm)
+
+--- symbolic expressions
+(fmod BEHAVIOR-SYM-EXPRESSION is
+  including BEHAVIOR-EXPRESSION-VALUE-SEMANTICS .
+
+--- equation simplification
+  vars SE : SymExpr .  vars SI1 : SymIntVar .
+  vars SF1 : SymFloatVar .
+
+  eq [true] and SE = SE . eq  SE and [true] = SE .
+  eq [false] and SE = [false] .  eq SE and [false] = [false] .
+  eq [true] or SE = [true] . eq SE or [true] = [true] .
+  eq [false] or SE = SE . eq SE or [false] = SE .
+
+  eq plus(SI1) = SI1 .
+  eq plus(SF1) = SF1 .
+
+endfm)
+
+(fmod VAR-VALUATION is
+  including SET{VarId} * (op _`,_ to _;_) .
+  including MAP{VarId,DataContent} * (sort Map{VarId,DataContent} to VarValuation, op _`,_ to _;_) .
+
+  var VI : VarId . var VIS : Set{VarId} . var SDC : DataContent . vars VAL VAL' : VarValuation .
+
+--- an empty valuation where no actual values are assigned.
+  op defaultValuation : Set{VarId} -> VarValuation [format (m! o)] .
+  op defaultValuation : Set{VarId} VarValuation -> VarValuation [format (m! o)] .
+
+  eq defaultValuation(VIS) = defaultValuation(VIS, empty) .
+  eq defaultValuation(VI ; VIS, VAL) = defaultValuation(VIS, (VI |-> bot) ; VAL) .
+  eq defaultValuation(empty, VAL)    = VAL .
+endfm)
+
+
+(omod FEATURE-MAP is
+  including PORT .
+  including PARAMETER .
+  including MAP{FeatureId,DataContent} * (sort Map{FeatureId,DataContent} to FeatureMap) .
+
+  sort PortValue .
+  subsort PortValue < DataContent .
+  op _:_ : Value Bool -> PortValue [ctor] .  --- (value : fresh)
+
+  var FMAP : FeatureMap . vars FTS FTS' : Configuration .  var PI : FeatureId .
+  vars V : Value .  var DCL : List{DataContent} . var B : Bool .
+
+--- aux operator
+  sort Pair{Configuration,FeatureMap} .
+  op _|_ : Configuration FeatureMap -> Pair{Configuration,FeatureMap} [ctor] .
+
+--- create a feature valuation from features. For data input ports,
+--- only one item for a vector of values should be read.
+
+  op readFeature : Configuration -> Pair{Configuration,FeatureMap} [format (m! o)] .
+  op readFeature : Configuration Configuration FeatureMap -> Pair{Configuration,FeatureMap} [format (m! o)] .
+
+  eq readFeature(FTS) = readFeature(FTS, none, empty) .
+
+  eq readFeature(< PI : InPort | content : V DCL > FTS, FTS', FMAP)
+   = readFeature(FTS, < PI : InPort | content : DCL, cache : V > FTS', insert(PI, V : true, FMAP)) .
+
+  eq readFeature(< PI : InPort | content : bot DCL, cache : V > FTS, FTS', FMAP)
+   = readFeature(FTS, < PI : InPort | content : DCL > FTS', insert(PI, V : false, FMAP)) .
+
+  eq readFeature(< PI : InParameter | content : V > FTS, FTS', FMAP)
+   = readFeature(FTS, < PI : InParameter | content : bot > FTS', insert(PI, V, FMAP)) .
+
+  eq readFeature(< PI : OutPort | > FTS, FTS', FMAP)
+   = readFeature(FTS, < PI : OutPort | > FTS', insert(PI, bot, FMAP)) .
+
+  eq readFeature(< PI : OutParameter | > FTS, FTS', FMAP)
+   = readFeature(FTS, < PI : OutParameter | > FTS', insert(PI, bot, FMAP)) .
+
+  --- any input has never been received at PI
+  eq readFeature(< PI : InPort | content : bot DCL, cache : bot > FTS, FTS', FMAP)
+   = readFeature(FTS, < PI : InPort | content : DCL > FTS', FMAP) .
+
+  eq readFeature(none, FTS', FMAP) = FTS' | FMAP .
+
+--- output a feature valuation to features
+  op writeFeature : FeatureMap Configuration -> Configuration [format (m! o)] .
+  op writeFeature : FeatureMap Configuration Configuration -> Configuration [format (m! o)] .
+
+  eq writeFeature(FMAP, FTS) = writeFeature(FMAP, FTS, none) .
+
+  eq writeFeature(FMAP, < PI : OutPort | content : DCL > FTS, FTS')
+   = if $hasMapping(FMAP,PI) and FMAP[PI] :: Value
+     then writeFeature(FMAP, FTS, < PI : OutPort | content : DCL FMAP[PI] > FTS')
+     else writeFeature(FMAP, FTS, < PI : OutPort | content : DCL bot > FTS') fi .
+
+  eq writeFeature((PI |-> V, FMAP), < PI : OutParameter | content : bot > FTS, FTS')
+   = writeFeature(FMAP, FTS, < PI : OutParameter | content : V > FTS') .
+  eq writeFeature(FMAP, FTS, FTS') = FTS FTS' [owise] .
+endom)
+
+
+--- For a behavior annex language, a configuration consists of a set of local variables,
+--- a set of (data) subcomponents, a set of port/parameters, and a set of property values.
+(omod BEHAVIOR-CONF is
+  including VAR-VALUATION .
+  including FEATURE-MAP .
+  including DATA-COMPONENT .
+
+  --- features | data subcompnents | property values | constraints
+  sort GlobalBehaviorConf .
+  op _|_|_ : FeatureMap Configuration PropertyAssociation -> GlobalBehaviorConf [ctor] .
+
+
+  --- local variables | global behavior conf
+  sort LocalBehaviorConf .
+  op _|_ : VarValuation GlobalBehaviorConf -> LocalBehaviorConf [ctor] .
+endom)
+
+
+--- There is no side effect for expressions.  We assume that there is no ambiguity
+--- caused by duplicated identifiers.
+--- TEST : test_behAnnex.maude
+(omod BEHAVIOR-EXPRESSION-SEMANTICS is
+  protecting BEHAVIOR-CONF .
+  including BEHAVIOR-SYM-EXPRESSION .
+
+  var VAL : VarValuation .  var FMAP : FeatureMap . vars COMPS : Configuration .
+  var PROPS : PropertyAssociation .  vars V V1 V2 : SymExpr .  var B : Bool .
+  var LCF : LocalBehaviorConf . var GCF : GlobalBehaviorConf .
+  var CR : ComponentRef .  var PI : FeatureId .  var VI : VarId .
+  var PR : PropertyId .  var PV : PropertyValue .  vars E1 E2 : Expression .
+
+  --- eval(exp, local variables | features | data subcompnents | property values)
+  op eval : Expression LocalBehaviorConf -> SymExpr [format (m! o)] .
+
+  eq eval(V, LCF) = V . --- values
+
+--- variable expressions
+  eq eval([VI], (VI |-> V) ; VAL | GCF) = V . --- local variables
+
+  eq eval([PI], VAL | (PI |-> (V : B), FMAP) | COMPS | PROPS) = V . --- input ports
+  eq eval([PI], VAL | (PI |-> V, FMAP)       | COMPS | PROPS) = V . --- input parameters
+
+  eq eval([CR], VAL | FMAP | < CR : Data | value : V > COMPS | PROPS) = V . --- only basic values
+
+  eq eval([PR], VAL | FMAP | COMPS | (PR => PV) ; PROPS) = value(PV) . --- properties
+
+  eq eval(count(PI), VAL | (PI |-> (V : B), FMAP) | COMPS | PROPS) = [if B then 1 else 0 fi] .
+
+  eq eval(fresh(PI), VAL | (PI |-> (V : B), FMAP) | COMPS | PROPS) = [B] .
+
+--- logical binary expressions
+  eq eval(E1 and E2, LCF) = eval(E1, LCF) and eval(E2, LCF) .
+  eq eval(E1 or E2,  LCF) = eval(E1, LCF) or  eval(E2, LCF) .
+  eq eval(E1 xor E2, LCF) = eval(E1, LCF) xor eval(E2, LCF) .
+
+--- relational expressions
+  eq eval(E1 = E2, LCF)  = (eval(E1, LCF) = eval(E2, LCF)) .
+  eq eval(E1 != E2, LCF) = (eval(E1, LCF) != eval(E2, LCF)) .
+  eq eval(E1 < E2, LCF)  = (eval(E1, LCF) < eval(E2, LCF)) .
+  eq eval(E1 <= E2, LCF) = (eval(E1, LCF) <= eval(E2, LCF)) .
+  eq eval(E1 > E2, LCF)  = (eval(E1, LCF) > eval(E2, LCF)) .
+  eq eval(E1 >= E2, LCF) = (eval(E1, LCF) >= eval(E2, LCF)) .
+
+--- numeric binary expressions
+  eq eval(E1 + E2, LCF)   = (eval(E1, LCF) + eval(E2, LCF)) .
+  eq eval(E1 - E2, LCF)   = (eval(E1, LCF) - eval(E2, LCF)) .
+  eq eval(E1 * E2, LCF)   = (eval(E1, LCF) * eval(E2, LCF)) .
+  eq eval(E1 / E2, LCF)   = (eval(E1, LCF) / eval(E2, LCF)) .
+  eq eval(E1 mod E2, LCF) = (eval(E1, LCF) mod eval(E2, LCF)) .
+  eq eval(E1 rem E2, LCF) = (eval(E1, LCF) rem eval(E2, LCF)) .
+  eq eval(E1 ** E2, LCF)  = (eval(E1, LCF) ** eval(E2, LCF)) .
+
+--- unary operators
+  eq eval(not(E1), LCF)    = not(eval(E1, LCF)) .
+  eq eval(plus(E1), LCF)   = plus(eval(E1, LCF)) .
+  eq eval(minus(E1), LCF)  = minus(eval(E1, LCF)) .
+  eq eval(abs(E1), LCF)    = abs(eval(E1, LCF)) .
+
+endom)
+
+--- A behavior action may change data subcomponents or output features.
+(omod BEHAVIOR-ACTION-SEMANTICS is
+  including BEHAVIOR-ACTION-SYNTAX .
+  including BEHAVIOR-EXPRESSION-SEMANTICS .
+
+  var VAL : VarValuation .  var FMAP : FeatureMap . vars COMPS : Configuration .
+  var PROPS : PropertyAssociation .  var LCF LCF' : LocalBehaviorConf .
+  var SYMLCF : SymLocalBehaviorConf .
+  var CR : ComponentRef .  var PI : FeatureId .  var VI : VarId .
+  var A : Action .  vars AS AS' AS'' REST : ActionGroup .
+  var ASQ : ActionSequence .  var AST : ActionSet .
+  vars F F' : Float .  vars V : SymExpr .
+  vars E E' E'' : Expression .  var ELSIFS : ElseIfs .
+  var DC : DataContent . var ATTS : AttributeSet .
+  vars SB1 SB2 : SymBoolVar .  vars SV1 SV2 : SymVar .
+  vars PHI PHI' : SymExpr .
+
+--- pair for execAction return
+  sort SymLocalBehaviorConf .
+  subsort LocalBehaviorConf < SymLocalBehaviorConf .
+  op _|_ : SymExpr LocalBehaviorConf -> SymLocalBehaviorConf [ctor] .
+  ---eq ([true] ; LCF) = LCF .
+
+--- execAction(actions, local variables | features | data subcompnents | property values)
+  op execAction : Action SymLocalBehaviorConf  ~> SymLocalBehaviorConf [format (m! o)] .
+
+--- action blocks/sets/sequences
+  rl execAction({A & REST}, SYMLCF) => execAction({REST}, execAction(A, SYMLCF)) .
+  eq execAction({A ; REST}, SYMLCF) = execAction({REST}, execAction(A, SYMLCF)) .
+  eq execAction({A},        SYMLCF) = execAction(A, SYMLCF) .
+  eq execAction({skip},     SYMLCF) = SYMLCF . --- empty action
+
+--- assignment: local variables, output ports/params, and data (sub)components
+  eq execAction(({VI} := E), (PHI | ((VI |-> DC) ; VAL | FMAP | COMPS | PROPS)))
+   = ((PHI | (VI |-> eval(E, (VI |-> DC) ; VAL | FMAP | COMPS | PROPS)) ; VAL
+   | FMAP | COMPS | PROPS)) .
+
+  eq execAction(({PI} := E), (PHI | VAL | (PI |-> DC, FMAP) | COMPS | PROPS))
+   = (PHI | VAL
+   | (PI |-> eval(E, VAL | (PI |-> DC, FMAP) | COMPS | PROPS), FMAP)
+   | COMPS | PROPS) .   --- output data ports/parameters
+
+ --- only basic values.
+ --- NOTE: objects in matching conditions are not automatically translated.
+  eq execAction(({CR} := E), (PHI | VAL | FMAP | < CR : Data | value : DC > COMPS | PROPS))
+   = (PHI | VAL | FMAP
+   | < CR : Data | value : eval(E, VAL | FMAP | < CR : Data | value : DC > COMPS | PROPS) > COMPS
+   | PROPS) .
+
+  op target : VarExpression -> AssignmentTarget [format (m! o)] .
+  eq target([VI]) = {VI} .
+  eq target([PI]) = {PI} .
+  eq target([CR]) = {CR} .
+
+--- communication: only subprogram component/classifier call.
+--- Currently, we only consider predefined functions for subprogram calls.
+
+  ops MathLib::sqrt  MathLib::sin  MathLib::cos  MathLib::tan
+      MathLib::log  MathLib::angle  MathLib::min : -> ClassifierId [ctor] .
+
+--- sqrt should also be defined in SymExpr
+
+  eq execAction(MathLib::sqrt ! (E, E'), (PHI | LCF))
+   = execAction(target(E') := [sqrt(float(eval(E,LCF)))], (PHI | LCF)) .
+
+  eq execAction(MathLib::sin ! (E, E'), (PHI | LCF))
+   = execAction(target(E') := [sin(float(eval(E,LCF)))], (PHI | LCF)) .
+
+  eq execAction(MathLib::cos ! (E, E'), (PHI | LCF))
+   = execAction(target(E') := [cos(float(eval(E,LCF)))], (PHI | LCF)) .
+
+  eq execAction(MathLib::tan ! (E, E'), (PHI | LCF))
+   = execAction(target(E') := [tan(float(eval(E,LCF)))], (PHI | LCF)) .
+
+  eq execAction(MathLib::log ! (E, E'), (PHI | LCF))
+   = execAction(target(E') := [log(float(eval(E,LCF)))], (PHI | LCF)) .
+
+  eq execAction(MathLib::angle ! (E, E'), (PHI | LCF))
+   = execAction(target(E') := [angle(float(eval(E,LCF)))], (PHI | LCF)) .
+
+  eq execAction(MathLib::min ! (E, E', E''), (PHI | LCF))
+   = execAction(target(E'') := [min(float(eval(E,LCF)),float(eval(E',LCF)))], (PHI | LCF)) .
+
+  op angle : Float -> Float [format (m! o)] .
+  eq angle(F) = if F > 180.0 then angle(F - 360.0) else if F <= -180.0 then angle(F + 360.0) else F fi fi .
+
+--- branch action
+  crl execAction(if (E) AS end if, (PHI | LCF))
+    => execAction(AS, (PHI' | LCF))
+    if PHI' := PHI and (eval(E, LCF)) .
+
+  crl execAction(if (E) AS end if, (PHI | LCF))
+    => (PHI' | LCF)
+    if PHI' := PHI and not(eval(E, LCF)) .
+
+  crl execAction(if (E) AS else AS' end if, (PHI | LCF))
+    => execAction(AS, (PHI' | LCF))
+    if PHI' := PHI and (eval(E, LCF)) .
+
+  crl execAction(if (E) AS else AS' end if, (PHI | LCF))
+    => execAction(AS', (PHI' | LCF))
+    if PHI' := PHI and not(eval(E, LCF)) .
+
+  crl execAction(if (E) AS (elsif (E') AS') end if, (PHI | LCF))
+    => execAction(AS, (PHI' | LCF))
+    if PHI' := PHI and (eval(E, LCF)) .
+
+  crl execAction(if (E) AS (elsif (E') AS') end if, (PHI | LCF))
+    => execAction(if (E') AS' end if, (PHI' | LCF))
+    if PHI' := PHI and not(eval(E, LCF)) .
+
+  crl execAction(if (E) AS ((elsif (E') AS') ELSIFS) end if, (PHI | LCF))
+    => execAction(AS, (PHI' | LCF))
+    if PHI' := PHI and (eval(E, LCF)) .
+
+  crl execAction(if (E) AS ((elsif (E') AS') ELSIFS) end if, (PHI | LCF))
+    => execAction(if (E') AS' ELSIFS end if, (PHI' | LCF))
+    if PHI' := PHI and not(eval(E, LCF)) .
+
+  crl execAction(if (E) AS (elsif (E') AS') else AS'' end if, (PHI | LCF))
+    => execAction(AS, (PHI' | LCF))
+    if PHI' := PHI and (eval(E, LCF)) .
+
+  crl execAction(if (E) AS (elsif (E') AS') else AS'' end if, (PHI | LCF))
+    => execAction(if (E') AS' else AS'' end if, (PHI' | LCF))
+    if PHI' := PHI and not(eval(E, LCF)) .
+
+  crl execAction(if (E) AS ((elsif (E') AS') ELSIFS) else AS'' end if, (PHI | LCF))
+    => execAction(AS, (PHI' | LCF))
+    if PHI' := PHI and (eval(E, LCF)) .
+
+  crl execAction(if (E) AS ((elsif (E') AS') ELSIFS) else AS'' end if, (PHI | LCF))
+    => execAction(if (E') AS' ELSIFS else AS'' end if, (PHI' | LCF))
+    if PHI' := PHI and not(eval(E, LCF)) .
+
+endom)
+
+--- NOTE: we do not support a transition priority yet.
+(omod BEHAVIOR-TRANSITION-SEMANTICS is
+  including BEHAVIOR-TRANSITION-SET .
+  including BEHAVIOR-ACTION-SEMANTICS .
+
+  sort Tuple{Location,FeatureMap,Configuration} .
+  op _|_|_ : Location FeatureMap Configuration -> Tuple{Location,FeatureMap,Configuration} [ctor] .
+
+--- pair for transition output
+  sort SymTransitionTuple .
+  op _|_ : SymExpr Tuple{Location,FeatureMap,Configuration} -> SymTransitionTuple .
+
+  vars VAL VAL' : VarValuation .  var FMAP : FeatureMap . vars COMPS : Configuration .
+  var PROPS : PropertyAssociation .  vars GCF GCF' : GlobalBehaviorConf .  var LCF : LocalBehaviorConf .
+  vars TRS TRS' ETRS : Set{Transition} .  var GUARD : TransGuard .  var ACTION : ActionBlock .
+  var E : Expression . vars L L' L'' : Location . var LS : Set{Location} .
+  var RESULT : LocalBehaviorConf . var PHI PHI' PHI'' : SymExpr .
+
+--- execute (nondeterministic) transitions until reaching a complete state.
+  op execTransSystem : Location Set{Location} Set{Transition} VarValuation GlobalBehaviorConf SymExpr
+	~> SymTransitionTuple [format (m! o)] .
+
+  crl [trans]:
+     execTransSystem(L, LS, (L -[GUARD]-> L' ACTION) ; TRS', VAL, GCF, PHI)
+   =>
+     if L' in LS
+     then (PHI'' | transitionResult(L', RESULT))
+     else execTransSystem(L', LS, TRS', VAL, global(RESULT), PHI'') fi
+      if execAction(ACTION, (PHI | VAL | GCF)) => (PHI' | RESULT)
+      /\ PHI'' := PHI' and guardConstraint(GUARD, VAL | GCF) .
+
+  --- aux functions
+  op transitionResult : Location LocalBehaviorConf -> Tuple{Location,FeatureMap,Configuration} [format (m! o)] .
+  eq transitionResult(L, VAL | FMAP | COMPS | PROPS) = L | FMAP | COMPS .
+
+  op global : LocalBehaviorConf ~> GlobalBehaviorConf [format (m! o)] .
+  eq global(VAL | GCF) = GCF .
+
+  --- owise not yet implemented
+  op guardConstraint : TransGuard LocalBehaviorConf -> SymExpr .
+  eq guardConstraint(E, LCF) = eval(E,LCF) .
+  eq guardConstraint(on dispatch, LCF) = [true] .
+
+endom)

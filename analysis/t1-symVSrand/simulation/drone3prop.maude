@@ -1,0 +1,6 @@
+search printing({{cinitState, 000}, 0, &&&}, 
+    ((Drones3rendezvousInstance | drone1 . environment | c[x]) ; 
+     (Drones3rendezvousInstance | drone1 . environment | c[y]) 
+    )) 
+  =>*
+     result({C:ConfigWithRand, &&&, &&&},  E:Set{Exp}).

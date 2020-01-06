@@ -1,0 +1,107 @@
+
+mod ENV-CONF is
+  including BEHAVIOR-EXPRESSION-CONF .
+  including INTERACTION-TIMING-SET .
+  including ENV-JUMP-SET .
+  including ENV-FLOW-SET .
+  protecting ENV-PORT .
+  protecting CONNECTION-SET .
+  protecting ENV-CONNECTION .
+
+  op sampling : Set{InterTiming} -> BehaviorConfItem [ctor format (b! o)] .
+  op response : Set{InterTiming} -> BehaviorConfItem [ctor format (b! o)] .
+  op jumps : Set{EnvJump} -> BehaviorConfItem [ctor format (b! o)] .
+  op flows : Set{EnvFlow} -> BehaviorConfItem [ctor format (b! o)] .
+  op mode : Location -> BehaviorConfItem [ctor format (b! o)] .
+  op envcon : Set{Connection} Configuration -> BehaviorConfItem [ctor format (b! o)] .
+endm
+
+
+
+mod ENV-CONTINUOUS-SEMANTICS is
+  including BEHAVIOR-EXPRESSION-SEMANTICS .
+  including BEHAVIOR-ACTION-CONF .
+  including ENV-FLOW-SET .
+
+  var VI : VarId .
+  var AE : AADLExp .
+  var T : RealExp .
+  var D : DataContent .
+  var CR : ComponentRef .
+  var FUNCS : Set{AADLEnvFunc} . 
+  vars DATA : DataValuation .
+  var ECF : BehaviorConf .
+
+  ---NOTE: flow can use values in properties and data components. But it should not use
+  --- values in input ports, because ports values are not persistent in a round.
+
+  --- returns resulting values (to be added to the behavior conf later)
+  op execFlow : FlowItem RealExp BehaviorConf ~> DataValuation .
+  eq execFlow([FUNCS], T, ECF) = execFuncFlow(FUNCS, T, empty, ECF) .
+
+---
+  op execFuncFlow : Set{AADLEnvFunc} RealExp DataValuation BehaviorConf ~> DataValuation .
+
+ ceq execFuncFlow((CR(VI) = AE) ; FUNCS, T, DATA, ECF)
+   = execFuncFlow(FUNCS, T, insert(CR, D, DATA), ECF)
+  if D := eval(AE, local(VI |-> T # bool(true)) ECF) .
+
+  eq execFuncFlow(empty, T, DATA, ECF) = DATA .
+
+--- TODO: for ODE?
+endm
+
+
+
+mod ENV-TRANSITION-AUX is
+  including ENV-CONF .
+
+  var E : Exp .
+  var PI : FeatureId .
+  var PRS : Set{FeatureRef} .
+  var CI : ComponentId .
+  var CR : ComponentRef .
+  vars L L' : Location .
+  vars CONST B B' : BoolExp .
+  var FMAP : FeatureMap .
+  var DATA : DataValuation .
+  var CONXS : Set{Connection} .
+  var JUMPS : Set{EnvJump} .
+  var ECF : BehaviorConf .
+  var ATTS : AttributeSet .
+  var PORTS : Configuration .
+
+--- check if a port is present
+  op isPortPresent : FeatureId FeatureMap ~> BoolExp [format (m! o)] .
+  eq isPortPresent(PI, (PI |-> (E # B : B'), FMAP)) = B and B' .
+
+--- check if for each transition from L, the related port is absent, provided the port is connected to CR
+  op allPortsAbsent : Location Set{EnvJump} FeatureMap ComponentRef Configuration ~> BoolExp [format (m! o)] .
+  op allPortsAbsent : Location Set{EnvJump} FeatureMap ComponentRef Configuration BoolExp ~> BoolExp [format (m! o)] .
+
+  eq allPortsAbsent(L, JUMPS, FMAP, CR, PORTS) = allPortsAbsent(L, JUMPS, FMAP, CR, PORTS, bool(true)) .
+  eq allPortsAbsent(L, (L -[ PRS ]-> L') ; JUMPS, FMAP, CR, PORTS, CONST)
+   = allPortsAbsent(L, JUMPS, FMAP, CR, PORTS, CONST and allPortsAbsent(PRS, CR, PORTS, FMAP)) .
+  eq allPortsAbsent(L, JUMPS, FMAP, CR, PORTS, CONST) = CONST [owise] .
+
+  --- all ports with target CR whose ids are in PRS are absent
+  op allPortsAbsent : Set{FeatureRef} ComponentRef Configuration FeatureMap ~> BoolExp [format (m! o)] .
+  eq allPortsAbsent((PI, PRS), CR, < PI : C:EnvInPort | target : CR, ATTS > PORTS, FMAP) 
+   = not isPortPresent(PI,FMAP) and 
+     allPortsAbsent(PRS, CR, < PI : C:EnvInPort | target : CR, ATTS > PORTS, FMAP) .
+  eq allPortsAbsent(PRS, CR, PORTS, FMAP) = bool(true) .
+
+--- update the feature map according to the data and the connection
+--- only connections related to CR are considered!
+  op updateEnvFeature : Set{Connection} Configuration ComponentRef BehaviorConf ~> BehaviorConf .
+  eq updateEnvFeature((CI ==> PI) ; CONXS, < PI : C:EnvOutPort | target : CR, ATTS > PORTS, CR, 
+                      data(DATA) feature(FMAP) ECF)
+                      
+   = updateEnvFeature(CONXS, < PI : C:EnvOutPort | target : CR, ATTS > PORTS, CR, 
+                      data(DATA) feature(insert(PI, DATA[CI], FMAP)) ECF) .
+                      
+  eq updateEnvFeature(CONXS, PORTS, CR, ECF) = ECF [owise] .
+endm
+
+
+

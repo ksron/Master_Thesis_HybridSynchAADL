@@ -1,0 +1,21 @@
+(tomod MODEL-TRANSITION-SYSTEM is
+  including THREAD-DYNAMICS .
+  including ENSEMBLE-DYNAMICS .
+  including BUILTIN-INPUT-ADAPTOR-SEMANTICS .
+  including COLLAPSE-SINGLE-RATE .
+
+  var C : ComponentId . var PROPS : PropertyAssociation .
+  var T : Time . var OBJ : Object .
+  var PHI PHI' PHI'' : SymExpr .
+
+--- Assume that there is no port in the top-level component; otherwise,
+--- we need to clear the output ports for each step
+ crl [step]:
+      { (PHI || < C : System | features : none,
+                      properties : (TimingProperties::Period => {T}) ;
+                                   (HybridAADL::Synchronous => {true}) ; PROPS >) }
+   =>
+      { (PHI'' || OBJ) } in time T
+    if executeStep(PHI, < C : System | >) => (PHI' || OBJ)
+       /\ PHI'' := PHI and PHI' .
+endtom)

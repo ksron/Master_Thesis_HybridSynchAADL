@@ -1,0 +1,89 @@
+
+load mr-sync-aadl-interpreter.maude
+
+(tomod MODEL-TEST is
+ including MODEL-TRANSITION-SYSTEM .
+
+ vars CR : ComponentRef .
+ var P : FeatureId .
+ var N : Nat .
+ var NZ : NzNat .
+ vars OBJ OBJ' OBJ'' : Object .
+ vars COMPS COMPS' CONSTCONF : ConstConf .
+ var PROPS : PropertyAssociation .
+ var PHI PHI' PHI'' PHI''' : SymExpr .
+ var REST CONCONF : ConstConf .
+ var CONF : Configuration .
+
+ op top : -> Object .
+ ops thermostat controller ctrlThread data1 x upper lower : -> ComponentId [ctor] .
+ ops init state1 : -> Location [ctor] .
+ ops outData oPort1 : -> FeatureId [ctor] .
+ ops a b : -> VarId [ctor] .
+ ops init state1 : -> Location [ctor] .
+
+eq top = (< thermostat : System |
+				rate : 1,
+				features : (none),
+				subcomponents : (
+						< controller : System |
+						rate : 1,
+						features : ( < oPort1 : OutPort | content : [0.0],
+								properties : none > ),
+						subcomponents : (
+								< ctrlThread : Thread |
+								rate : 1,
+								features : (< outData : OutPort | content : nil,
+										properties : none >),
+								subcomponents : (< x : Data | value : i("x", 2),
+										features : (none),
+										subcomponents : (none),
+										properties : none,
+										connections : (empty) >
+										< upper : Data | value : [50],
+										features : (none),
+										subcomponents : (none),
+										properties : none,
+										connections : (empty) >
+										< lower : Data | value : [1],
+										features : (none),
+										subcomponents : (none),
+										properties : none,
+										connections : (empty) >),
+								properties : (
+                    (TimingProperties::Period => {20}) ;
+										(HybridAADL::Synchronous => {true})),
+								currState : (init),
+								completeStates : (init),
+								variables : (a ; b),
+								transitions : (
+										(init -[ on dispatch ]-> state1 {
+										 ({x} := [x] + [2])
+										 }) ;
+										(state1 -[ ([x] >= [upper]) ]-> init {
+										 ({x} := ([x] - [10])) ;
+										 ({outData} := [x])
+										 }) ;
+										(state1 -[ ([x] <= [lower]) ]-> init {
+										 ({x} := ([x] + [10])) ;
+										 ({outData} := [x])
+										}) ;
+										(state1 -[ ([x] > [lower]) and ([x] < [upper]) ]-> init {
+										 ({x} := [x] + [5]) ;
+										 ({outData} := [x])
+										})
+										) ,
+                connections : (empty) >),
+      			properties : (
+                    (TimingProperties::Period => {20}) ;
+      							(HybridAADL::Synchronous => {true})),
+      			connections : ((ctrlThread .. outData --> oPort1 )) >),
+			connections : (empty),
+			properties : (
+              (TimingProperties::Period => {20}) ;
+							(HybridAADL::Synchronous => {true})) >) .
+		endtom)
+
+( search [1] in MODEL-TEST : {(i("x",2) < [5] || top)} =>* {(S:SymExpr || O:Object)} such that check-sat(true,S:SymExpr) .)
+
+(search executeStep((i("x",2) < [5]), top) =>* (P:SymExpr || O:Object) .)

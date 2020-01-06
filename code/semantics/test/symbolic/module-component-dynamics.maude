@@ -1,0 +1,187 @@
+
+
+mod TEST-THREAD-DYNAMICS-MOD is
+  inc THREAD-DYNAMICS .
+  inc DATA-DYNAMICS .
+  inc BEHAVIOR-SYMBOLIC-LOCATION .
+  pr TRANSFER-INPUT .
+  pr TRANSFER-RESULTS .
+  inc REAL-EXP-SIMPLIFICATION .
+  inc BOOL-EXP-SIMPLIFICATION .
+  inc COND-EXP-SIMPLIFICATION .
+  pr SMT-VAR-GEN .
+  pr SMT-CHECKSAT .
+
+  ops obj1 obj2 : -> Object [ctor] .
+  ops c1 c2 x y z : -> ComponentId [ctor] .
+  ops inp outp : -> FeatureId [ctor] .
+  ops a b : -> VarId [ctor] .
+
+  eq obj1 
+   = < c1 : Thread |
+         features : 
+             < inp :   DataInPort | content : [0] # [false], cache : [0] # [false], properties : none >
+             < outp : DataOutPort | content : r(0) # [true], properties : none >,
+         subcomponents : 
+             < x : Data | value : r(1) # [true], features : none, subcomponents : none, properties : none, connections : empty >
+             < y : Data | value : [1] # [true],  features : none, subcomponents : none, properties : none, connections : empty >,
+         properties : none,
+         currState : loc([0]),
+         completeStates : loc([0]),
+         variables : (a : Real) ; (b : Real),
+         transitions : 
+             (loc([0]) -[ on dispatch ]-> loc([1]) {
+                 (c{x} := c[x] + [[1]]) ;
+                 (v{a} := f[inp]) ;
+                 (c{y} := v[a])
+             }) 
+             ;
+             (loc([1]) -[ (c[x] > c[y]) ]-> loc([0]) {
+                 (v{b} := c[y] + [[1]]) ;
+                 (f{outp} := v[b] + [[1]])
+             }),
+         loopBound : 10,
+         transBound : 10,
+         varGen : < "c1", 1, 2 >,
+         connections : (empty) > .
+
+  eq obj2 
+   = < c2 : Thread |
+         features : 
+             < inp :   DataInPort | content : [0] # [false], cache : [0] # [false], properties : none >
+             < outp : DataOutPort | content : r(2) # [true], properties : none >,
+         subcomponents : 
+             < z : Data | value : r(3) # [true], features : none, subcomponents : none, properties : none, connections : empty >,
+         properties : none,
+         currState : loc([0]),
+         completeStates : loc([0]) loc([2]),
+         variables : (a : Real),
+         transitions : 
+             (loc([0]) -[ on dispatch ]-> loc([1]) {
+                 (v{a} := f[inp]) ;
+                 if (v[a] > [[0]])
+                   (c{z} := v[a] * [[0.5]])
+                 end if 
+                 ---( check with nonlinear Yice2
+                 ;
+                 (c{z} := c[z] * c[z])
+                 ---)
+             }) 
+             ;
+             (loc([1]) -[ (c[z] > [[2]]) ]-> loc([2]) {
+                 (f{outp} := c[z] + [[1]])
+             })
+             ;
+             (loc([1]) -[ otherwise ]-> loc([2]) {
+                 (f{outp} := c[z] - [[2]])
+             })
+             ;
+             (loc([2]) -[ on dispatch ]-> loc([0]) {
+                 skip
+             })
+             ,
+         loopBound : 10,
+         transBound : 10,
+         varGen : < "c2", 10, 20 >,
+         connections : (empty) > .
+endm
+
+
+mod TEST-ENSEMBLE-DYNAMICS-MOD is
+  including TEST-THREAD-DYNAMICS-MOD .
+  including ENSEMBLE-DYNAMICS .
+
+  op c3 : -> ComponentId [ctor] .
+
+  op conn : -> Set{Connection} .
+  eq conn =
+    (c1 .. outp --> c2 .. inp) ; 
+    (c2 .. outp --> c1 .. inp) ; 
+    (c2 .. outp --> outp)
+  .
+
+  op obj3 : -> Object [ctor] .
+  eq obj3
+   = < c3 : System |
+         features : 
+             < outp : DataOutPort | content : [0] # [false], properties : none >,
+         subcomponents : 
+             obj1 obj2,
+         properties : none,
+         connections : conn > .
+endm
+
+
+mod TEST-ENV-DYNAMICS-MOD is
+  including ENV-DYNAMICS .
+  inc REAL-EXP-SIMPLIFICATION .
+  inc BOOL-EXP-SIMPLIFICATION .
+  inc COND-EXP-SIMPLIFICATION .
+  pr SMT-VAR-GEN .
+  pr SMT-CHECKSAT .
+
+  ops x y cr1 cr2 e : -> ComponentId .
+  ops t s : -> VarId .
+  ops a b on1 on2 off1 off2 : -> FeatureId .
+
+  ops env1 env2 : -> Object .
+
+  eq env1
+   = < e : Env |
+         features : 
+             < on1  :  EnvInPort | content : [0] # b(1), envCache : r(0) # b(0), target : cr1 >
+             < a    : EnvOutPort | content : bot(Real), envCache : r("b",0) # [true], target : cr1 >,
+         subcomponents :
+             < x : Data | value : [1] # [true],  features : none, subcomponents : none, properties : none, connections : empty >,
+         connections :
+             (x ==> a),
+         properties : (HybridSynchAADL::MaxClockDeviation => {{0.5}}) ; (TimingProperties::Period => {{5}}),
+         currMode : loc([0]),
+         jumps : 
+             (loc([0]) -[  on1 ]-> loc([0])),
+         flows : 
+             (loc([0])[(x(t) = c[x] + (v[t] * [[0.2]]))]),
+         sampling : ((cr1 : (0,1))), 
+         response : ((cr1 : (2,3))),
+         varGen : < "e1", 5, 5 >
+     > .
+
+  eq env2
+   = < e : Env |
+         features : 
+             < on1  :  EnvInPort | content : [0] # b(0), envCache : r(0) # b(0), target : cr1 >
+             < on2  :  EnvInPort | content : [0] # b(1), envCache : r(1) # b(1), target : cr2 >
+             < off1 :  EnvInPort | content : [true] # b(2), envCache : b(2) # b(2), target : cr1 >
+             < off2 :  EnvInPort | content : * # b(3), envCache : * # b(3), target : cr2 >
+             < a    : EnvOutPort | content : bot(Real), envCache : r("a",0) # [true], target : cr1 >
+             < b    : EnvOutPort | content : bot(Real), envCache : r("b",0) # [true], target : cr2 >,
+         subcomponents :
+             < x : Data | value : r(1) # [true], features : none, subcomponents : none, properties : none, connections : empty >
+             < y : Data | value : [1] # [true],  features : none, subcomponents : none, properties : none, connections : empty >,
+         connections :
+             (x ==> a) ; (y ==> b),
+         properties : (HybridSynchAADL::MaxClockDeviation => {{0.5}}) ; (TimingProperties::Period => {{5}}),
+         currMode : loc(r("mode",0)), 
+         jumps : 
+             (loc([0]) -[  on1 ]-> loc([2])) ;
+             (loc([0]) -[  on2 ]-> loc([1])) ;
+             (loc([1]) -[  on1 ]-> loc([3])) ;
+             (loc([1]) -[ off2 ]-> loc([0])) ;
+             (loc([2]) -[ off1 ]-> loc([0])) ;
+             (loc([2]) -[  on2 ]-> loc([3])) ;
+             (loc([3]) -[ off1 ]-> loc([1])) ;
+             (loc([3]) -[  on2 ]-> loc([2])),
+         flows : 
+             (loc([0])[(x(t) = c[x] - (v[t] * [[0.1]])) ; (y(s) = c[y] - (v[s] * [[0.3]]))]) ;
+             (loc([1])[(x(t) = c[x] - (v[t] * [[0.1]])) ; (y(s) = c[y] + (v[s] * [[0.5]]))]) ;
+             (loc([2])[(x(t) = c[x] + (v[t] * [[0.2]])) ; (y(s) = c[y] - (v[s] * [[0.3]]))]) ;
+             (loc([3])[(x(t) = c[x] + (v[t] * [[0.2]])) ; (y(s) = c[y] + (v[s] * [[0.5]]))]),
+         sampling : ((cr1 : (0,1)),   (cr2 : (3/2,5/2))), 
+         response : ((cr1 : (3,4)), (cr2 : (7/2, 9/2))),
+         varGen : < "e2", 5, 5 >
+     > .
+endm
+
+
+
+

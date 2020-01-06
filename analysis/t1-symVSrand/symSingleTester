@@ -1,0 +1,31 @@
+#!/bin/bash
+MAUDE_DIR=/home/ksron/maude-z3
+MAUDE_BIN=maude
+MAUDE_COM="$MAUDE_DIR/$MAUDE_BIN -no-advise -no-prelude -no-banner $MAUDE_DIR/prelude.maude $MAUDE_DIR/smt.maude"
+
+file=$1
+analFile=$2
+RESULT_DIR=$3
+OUTPUT_FILE=${2#./analysis/}
+RESULT_FILE=${RESULT_DIR}/${OUTPUT_FILE%.*}
+
+[ -z $file ] && echo "file missing"
+[ -z $analFile ] && echo "analfile missing"
+
+echo $analFile
+ST=`date +%s%3N`
+echo "quit" | timeout 1h $MAUDE_COM $file ${analFile} > ${RESULT_FILE}.expected
+END=`date +%s%3N`
+ELLAPSE=`expr $END - $ST`
+
+if grep -q Solution ${RESULT_FILE}.expected 
+then
+#  grep Solution ${RESULT_FILE}.expected >> ${RESULT_FILE}.result
+  echo "SOLUTION=FOUND" >> ${RESULT_FILE}.result
+else
+  echo "SOLUTION=NONE" >> ${RESULT_FILE}.result
+fi
+
+SSTATES=$(grep "states" ${RESULT_FILE}.expected | awk '{SUM += $2} END {print SUM}')
+echo "SEARCHED_STATES=${SSTATES}" >> ${RESULT_FILE}.result
+echo "EXEC_TIME=${ELLAPSE}ms" >> ${RESULT_FILE}.result

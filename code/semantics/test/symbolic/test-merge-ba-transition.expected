@@ -1,0 +1,74 @@
+==========================================
+reduce in TEST-BEHAVIOR-TRANSITION-SEMANTICS-META : execTransMerge(location(
+    loc([0])) complete(loc([0])) bcf trans(trans1)) .
+rewrites: 638
+result BATransResult: loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(0)
+    + [-1] # [true] | cr |=> r(0) + r(0) + r(1) + r(2) + [
+    8739798026865869/140737488355328] # [true] | b(0) and b(1) and b(2) and [3]
+    < r(0) and [4] < r(0) | < "a.b",100,200 >
+==========================================
+reduce in TEST-BEHAVIOR-TRANSITION-SEMANTICS-META : execTransMerge(location(
+    loc([0])) complete(loc([0])) bcf trans(trans2)) .
+rewrites: 876
+result BATransResult: loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(
+    "a.b", 101) # b("a.b", 200) | cr |=> r("a.b", 100) # [true] | not b("a.b",
+    200) and (b(0) and b(1) and r("a.b", 100) === - r(1) + r(0) and r(0) < [-1]
+    or b(0) and b(1) and (not b(0) or not r(0) < [-1]) and (not b(0) or not [4]
+    < r(0)) and r("a.b", 100) === r(0) + r(1)) and r("a.b", 101) === [0] or b(
+    0) and b(1) and b(2) and r("a.b", 100) === r(0) + r(1) + r(2) + [2] and r(
+    "a.b", 101) === r(0) + [-1] and [3] < r(0) and [4] < r(0) and b("a.b", 200)
+    | < "a.b",102,201 >
+==========================================
+reduce in TEST-BEHAVIOR-TRANSITION-SEMANTICS-META : execTransMerge(location(
+    loc([0])) complete(loc([0])) bcf trans(trans3)) .
+rewrites: 19611
+result BATransResult: loc([0]) | a |-> (r(2) + [1] # b(2) : [true]), b |-> r(
+    "a.b", 100) # b("a.b", 200) | cr |=> r(0) + r(1) # [true] | not [4] < r(0)
+    + [1] and not b("a.b", 200) and b(0) and b(1) and r("a.b", 100) === [0] or
+    not [4] < r(0) + r(1) + r(2) + [2] and b(0) and b(1) and b(2) and r("a.b",
+    100) === r(0) + [-1] and [3] < r(0) and [4] < r(0) + [1] and b("a.b", 200)
+    or not [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and b(0) and b(1) and
+    b(2) and r("a.b", 100) === r(0) + [-1] and [3] < r(0) and [4] < r(0) + [1]
+    and [4] < r(0) + r(1) + r(2) + [2] and b("a.b", 200) or not [4] < r(0) + r(
+    1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4] and b(0) and b(1) and b(2) and
+    r("a.b", 100) === r(0) + [-1] and [3] < r(0) and [4] < r(0) + [1] and [4] <
+    r(0) + r(1) + r(2) + [2] and [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3]
+    and b("a.b", 200) or not [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(2) + r(
+    2) + r(2) + r(2) + [5] and b(0) and b(1) and b(2) and r("a.b", 100) === r(
+    0) + [-1] and [3] < r(0) and [4] < r(0) + [1] and [4] < r(0) + r(1) + r(2)
+    + [2] and [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and [4] < r(0) + r(
+    1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4] and b("a.b", 200) or not [4] <
+    r(0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2)
+    + [6] and b(0) and b(1) and b(2) and r("a.b", 100) === r(0) + [-1] and [3]
+    < r(0) and [4] < r(0) + [1] and [4] < r(0) + r(1) + r(2) + [2] and [4] < r(
+    0) + r(1) + r(1) + r(2) + r(2) + [3] and [4] < r(0) + r(1) + r(1) + r(1) +
+    r(2) + r(2) + r(2) + [4] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(2)
+    + r(2) + r(2) + r(2) + [5] and b("a.b", 200) or not [4] < r(0) + r(1) + r(
+    1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + r(2) +
+    [7] and b(0) and b(1) and b(2) and r("a.b", 100) === r(0) + [-1] and [3] <
+    r(0) and [4] < r(0) + [1] and [4] < r(0) + r(1) + r(2) + [2] and [4] < r(0)
+    + r(1) + r(1) + r(2) + r(2) + [3] and [4] < r(0) + r(1) + r(1) + r(1) + r(
+    2) + r(2) + r(2) + [4] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(2) +
+    r(2) + r(2) + r(2) + [5] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(1)
+    + r(2) + r(2) + r(2) + r(2) + r(2) + [6] and b("a.b", 200) or not [4] < r(
+    0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) +
+    r(2) + r(2) + r(2) + r(2) + [8] and b(0) and b(1) and b(2) and r("a.b",
+    100) === r(0) + [-1] and [3] < r(0) and [4] < r(0) + [1] and [4] < r(0) +
+    r(1) + r(2) + [2] and [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and [4]
+    < r(0) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4] and [4] < r(0) + r(
+    1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + [5] and [4] < r(0) +
+    r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + [6]
+    and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(
+    2) + r(2) + r(2) + r(2) + [7] and b("a.b", 200) or not [4] < r(0) + r(1) +
+    r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2)
+    + r(2) + r(2) + r(2) + r(2) + [9] and b(0) and b(1) and b(2) and r("a.b",
+    100) === r(0) + [-1] and [3] < r(0) and [4] < r(0) + [1] and [4] < r(0) +
+    r(1) + r(2) + [2] and [4] < r(0) + r(1) + r(1) + r(2) + r(2) + [3] and [4]
+    < r(0) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + [4] and [4] < r(0) + r(
+    1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + [5] and [4] < r(0) +
+    r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + [6]
+    and [4] < r(0) + r(1) + r(1) + r(1) + r(1) + r(1) + r(1) + r(2) + r(2) + r(
+    2) + r(2) + r(2) + r(2) + [7] and [4] < r(0) + r(1) + r(1) + r(1) + r(1) +
+    r(1) + r(1) + r(1) + r(2) + r(2) + r(2) + r(2) + r(2) + r(2) + r(2) + [8]
+    and b("a.b", 200) | < "a.b",101,201 >
+Bye.
